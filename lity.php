@@ -44,7 +44,7 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 
 			$options = ( new WP_Lity_Options )->get_lity_options();
 
-			if ( in_array( get_the_ID(), $options['disabled_on'] ) ) {
+			if ( in_array( get_the_ID(), $options['disabled_on'], true ) ) {
 
 				return;
 
