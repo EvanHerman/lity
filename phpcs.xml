@@ -48,7 +48,6 @@
 
 	<!-- Check for PHP cross-version compatibility. -->
 	<config name="testVersion" value="5.6-"/>
-	<rule ref="PHPCompatibilityWP"/>
 
 	<!--
 	To get the optimal benefits of using WPCS, we should add a couple of
