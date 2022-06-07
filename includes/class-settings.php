@@ -278,7 +278,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 						<?php
 						foreach ( $post_ids as $post_id ) {
 							$post_title = get_the_title( $post_id );
-							$selected   = in_array( $post_id, $options['disabled_on'], true ) ? ' selected="selected" ' : '';
+							$selected   = in_array( $post_id, $options['disabled_on'], false ) ? ' selected="selected" ' : '';
 							?>
 							<option value="<?php echo esc_attr( $post_id ); ?>" <?php echo esc_attr( $selected ); ?>>
 								<?php echo empty( $post_title ) ? esc_html__( '- (no title)', 'lity' ) : esc_html( $post_title ); ?>
