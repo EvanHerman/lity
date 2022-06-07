@@ -1,33 +1,38 @@
 <?php
 /**
- * Plugin Name: Lity - Responsive Lightbox
- * Description: Ensure when an image is clicked in the post content it opens in a responsive lightbox.
- * Author: Evan Herman
- * Author URI: https://www.evan-herman.com
- * Version: 1.0.0
- * Text Domain: lity
- * Domain Path: /languages
- * Tested up to: 6.0
+ * Lity Options Class
+ *
+ * @package Lity
+ * @since   1.0.0
  */
 
-// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 
 	exit;
 
 }
 
-if ( ! class_exists( 'WP_Lity_Options' ) ) {
+if ( ! class_exists( 'Lity_Options' ) ) {
 
 	/**
 	 * Lity Options Class.
 	 *
 	 * @since 1.0.0
 	 */
-	final class WP_Lity_Options {
+	final class Lity_Options {
 
+		/**
+		 * Default options.
+		 *
+		 * @var array
+		 */
 		public $default_options;
 
+		/**
+		 * Lity options class constructor.
+		 *
+		 * @since 1.0.0
+		 */
 		public function __construct() {
 
 			$this->default_options = array(
@@ -64,28 +69,32 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 
 			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
-			add_action( "admin_print_styles-${submenu}", function() use ( $suffix ) {
+			add_action(
+				"admin_print_styles-${submenu}",
+				function() use ( $suffix ) {
+					wp_enqueue_style( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/css/slimselect/slimselect${suffix}.css", array(), LITY_SLIMSELECT_VERSION, 'all' );
+				}
+			);
 
-				wp_enqueue_style( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/css/slimselect/slimselect${suffix}.css", array(), SLIMSELECT_VERSION, 'all' );
+			add_action(
+				"admin_print_scripts-${submenu}",
+				function() use ( $suffix ) {
 
-			} );
+					wp_enqueue_script( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/js/slimselect/slimselect${suffix}.js", array( 'jquery' ), LITY_SLIMSELECT_VERSION, true );
 
-			add_action( "admin_print_scripts-${submenu}", function() use( $suffix ) {
+					$script = "jQuery( document ).on( 'ready', function() {
+						const slimSelect  = new SlimSelect( {
+							select: '#disabled_on',
+							onChange: ( info ) => {
+								console.log( info.value );
+							}
+						} );
+					} );";
 
-				wp_enqueue_script( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/js/slimselect/slimselect${suffix}.js", array( 'jquery' ), SLIMSELECT_VERSION, true );
+					wp_add_inline_script( 'slimselect', $script, 'after' );
 
-				$script = "jQuery( document ).on( 'ready', function() {
-					const slimSelect  = new SlimSelect( {
-						select: '#disabled_on',
-						onChange: ( info ) => {
-							console.log( info.value );
-						}
-					} );
-				} );";
-
-				wp_add_inline_script( 'slimselect', $script, 'after' );
-
-			} );
+				}
+			);
 
 		}
 
@@ -102,6 +111,8 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 
 		/**
 		 * Return a specific lity option by name.
+		 *
+		 * @param string $name The name of the option to retrieve.
 		 *
 		 * @return string Lity option value, or empty if not found.
 		 */
@@ -157,7 +168,7 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 						/* translators: %s is 'not' wrapped in a strong tag. */
 						__( 'Select specific posts or pages that Lity should %s load on.', 'lity' ),
 						'<strong>' . esc_html__( 'not', 'lity' ) . '</strong>'
-					)
+					),
 				)
 			);
 
@@ -191,7 +202,7 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 		/**
 		 * Show full size dropdown callback.
 		 *
-		 * @param array $args
+		 * @param array $args Field args.
 		 */
 		public function lity_show_full_size_dropdown( $args ) {
 
@@ -220,7 +231,7 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 		/**
 		 * Show full size dropdown callback.
 		 *
-		 * @param array $args
+		 * @param array $args Field args.
 		 */
 		public function lity_show_disabled_on_input( $args ) {
 
@@ -251,7 +262,6 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 					$posts[ get_post_type() ][] = get_the_ID();
 
 				}
-
 			}
 
 			// Strip post types with no posts.
@@ -268,16 +278,16 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 						<?php
 						foreach ( $post_ids as $post_id ) {
 							$post_title = get_the_title( $post_id );
-							$selected = in_array( $post_id, $options['disabled_on'], true ) ? ' selected="selected" ' : '';
+							$selected   = in_array( $post_id, $options['disabled_on'], true ) ? ' selected="selected" ' : '';
 							?>
 							<option value="<?php echo esc_attr( $post_id ); ?>" <?php echo esc_attr( $selected ); ?>>
-								<?php echo empty( $post_title ) ? esc_html( '- (no title)', 'lity' ) : esc_html( $post_title ); ?>
+								<?php echo empty( $post_title ) ? esc_html__( '- (no title)', 'lity' ) : esc_html( $post_title ); ?>
 							</option>
 							<?php
 						}
 						?>
 					</optgroup>
-				<?php
+					<?php
 				}
 				?>
 			</select>
@@ -293,7 +303,7 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 		/**
 		 * Show full size dropdown callback.
 		 *
-		 * @param array $args
+		 * @param array $args Field args.
 		 */
 		public function lity_show_element_selector_textarea( $args ) {
 
@@ -347,4 +357,4 @@ if ( ! class_exists( 'WP_Lity_Options' ) ) {
 
 }
 
-new WP_Lity_Options();
+new Lity_Options();

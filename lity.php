@@ -8,6 +8,8 @@
  * Text Domain: lity
  * Domain Path: /languages
  * Tested up to: 6.0
+ *
+ * @package Lity
  */
 
 // Exit if accessed directly.
@@ -18,22 +20,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'LITY_VERSION', '2.4.1' );
-define( 'SLIMSELECT_VERSION', '1.27.1' );
+define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
 
-if ( ! class_exists( 'WP_Lity' ) ) {
+if ( ! class_exists( 'Lity' ) ) {
 
 	/**
 	 * Main Lity Class.
 	 *
 	 * @since 1.0.0
 	 */
-	final class WP_Lity {
+	final class Lity {
 
+		/**
+		 * Lity plugin constructor.
+		 *
+		 * @since 1.0.0
+		 */
 		public function __construct() {
 
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 
-			add_filter( 'wp_enqueue_scripts', [ $this, 'enqueue_lity' ], PHP_INT_MAX );
+			add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
 		}
 
@@ -42,7 +49,7 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 		 */
 		public function enqueue_lity() {
 
-			$options = ( new WP_Lity_Options )->get_lity_options();
+			$options = ( new Lity_Options() )->get_lity_options();
 
 			if ( in_array( get_the_ID(), $options['disabled_on'], true ) ) {
 
@@ -52,7 +59,7 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 
 			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
-			// Style
+			// Style.
 			wp_enqueue_style( 'lity', plugin_dir_url( __FILE__ ) . "assets/css/lity/lity${suffix}.css", array(), LITY_VERSION, 'all' );
 
 			$style = 'img[data-lity]:hover {
@@ -61,7 +68,7 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 
 			wp_add_inline_style( 'lity', $style );
 
-			// Script
+			// Script.
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
 
 			$img_selectors = ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img';
@@ -70,7 +77,7 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 				jQuery( '${img_selectors}' ).attr( 'data-lity', '' );
 			} );";
 
-			// Add an attribute to link to the full size image
+			// Add an attribute to link to the full size image.
 			if ( 'yes' === $options['show_full_size'] ) {
 
 				$script .= "jQuery( document ).on( 'ready', function() {
@@ -90,4 +97,4 @@ if ( ! class_exists( 'WP_Lity' ) ) {
 
 }
 
-new WP_Lity();
+new Lity();
