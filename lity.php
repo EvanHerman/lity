@@ -51,7 +51,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$options = ( new Lity_Options() )->get_lity_options();
 
-			if ( in_array( get_the_ID(), $options['disabled_on'], true ) ) {
+			if ( in_array( get_the_ID(), $options['disabled_on'], false ) ) {
 
 				return;
 
