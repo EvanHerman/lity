@@ -71,10 +71,11 @@ if ( ! class_exists( 'Lity' ) ) {
 			// Script.
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
 
-			$img_selectors = ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img';
+			$img_selectors              = ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img';
+			$excluded_element_selectors = $options['excluded_element_selectors'];
 
 			$script = "jQuery( document ).on( 'ready', function() {
-				jQuery( '${img_selectors}' ).attr( 'data-lity', '' );
+				jQuery( '${img_selectors}' ).not( '$excluded_element_selectors' ).attr( 'data-lity', '' );
 			} );";
 
 			// Add an attribute to link to the full size image.
