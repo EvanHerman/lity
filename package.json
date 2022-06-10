@@ -12,6 +12,6 @@
 		"url": "https://github.com/EvanHerman/lity/issues"
 	},
 	"scripts": {
-		"build": "rm -rf build/* && rsync -av --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/."
+		"build": "rm -rf build/* && rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/."
 	}
 }
