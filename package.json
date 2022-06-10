@@ -1,0 +1,17 @@
+{
+	"name": "lity",
+	"title": "Lity",
+	"description": "Lity is a lightweight responsive lightbox plugin that allows for any and/or all images on your site open in a lightbox.",
+	"version": "1.0.0",
+	"tested_up_to": "6.0",
+	"author": "Evan Herman",
+	"license": "GPL-2.0",
+	"repository": "godaddy-wordpress/coblocks",
+	"homepage": "https://wordpress.org/plugins/lity/",
+	"bugs": {
+		"url": "https://github.com/EvanHerman/lity/issues"
+	},
+	"scripts": {
+		"build": "rm -rf build/* && rsync -av --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/."
+	}
+}
