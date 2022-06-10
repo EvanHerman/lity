@@ -252,7 +252,7 @@ if ( ! class_exists( 'Lity' ) ) {
 					'url'     => $image_src[0],
 					'title'   => get_the_title( $image_id ),
 					'caption' => get_the_excerpt( $image_id ),
-					'altText' =>get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+					'altText' => get_post_meta( $image_id, '_wp_attachment_image_alt', true );
 				);
 
 			}
