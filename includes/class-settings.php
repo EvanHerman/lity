@@ -36,10 +36,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		public function __construct() {
 
 			$this->default_options = array(
-				'show_full_size'    => 'yes',
-				'show_image_info'   => 'no',
-				'disabled_on'       => array(),
-				'element_selectors' => '',
+				'show_full_size'             => 'yes',
+				'show_image_info'            => 'no',
+				'disabled_on'                => array(),
+				'element_selectors'          => '',
+				'excluded_element_selectors' => '',
 			);
 
 			if ( ! is_admin() ) {
@@ -197,6 +198,18 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				)
 			);
 
+			add_settings_field(
+				'excluded_element_selectors',
+				__( 'Excluded Element Selectors', 'lity' ),
+				array( $this, 'lity_excluded_element_selector_textarea' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'excluded_element_selectors',
+					'description' => __( 'Specify element selectors that should be excluded from opening in a lightbox.', 'lity' ),
+				)
+			);
+
 		}
 
 		/**
@@ -343,7 +356,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		}
 
 		/**
-		 * Show full size dropdown callback.
+		 * Show the element selector textarea.
 		 *
 		 * @param array $args Field args.
 		 */
@@ -354,6 +367,31 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			?>
 
 			<textarea id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]" cols="80" rows="10" style="resize: vertical; max-height: 300px;"><?php echo esc_html( $options['element_selectors'] ); ?></textarea>
+
+			<p class="description">
+				<?php echo wp_kses_post( $args['description'] ); ?>
+			</p>
+
+			<p class="description">
+				<strong><?php esc_html_e( 'Note:', 'lity' ); ?></strong> <?php esc_html_e( 'Multiple element selectors should be separated by a comma.' ); ?>
+			</p>
+
+			<?php
+
+		}
+
+		/**
+		 * Show the excluded element selector textarea.
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_excluded_element_selector_textarea( $args ) {
+
+			$options = $this->get_lity_options();
+
+			?>
+
+			<textarea id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]" cols="80" rows="10" style="resize: vertical; max-height: 300px;"><?php echo esc_html( $options['excluded_element_selectors'] ); ?></textarea>
 
 			<p class="description">
 				<?php echo wp_kses_post( $args['description'] ); ?>
