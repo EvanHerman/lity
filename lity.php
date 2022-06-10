@@ -40,12 +40,16 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 
-			add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
+
+			add_action( 'init', array( $this, 'lity_get_media' ), PHP_INT_MAX );
+
+			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
 
 		}
 
 		/**
-		 * Enqueue Lity assets.
+		 * Enqueue Lity assets and create lightbox with inline script.
 		 */
 		public function enqueue_lity() {
 
@@ -66,8 +70,6 @@ if ( ! class_exists( 'Lity' ) ) {
 				cursor: pointer;
 			}';
 
-			wp_add_inline_style( 'lity', $style );
-
 			// Script.
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
 
@@ -84,13 +86,175 @@ if ( ! class_exists( 'Lity' ) ) {
 				$script .= "jQuery( document ).on( 'ready', function() {
 					jQuery( '${img_selectors}' ).each( function( img ) {
 						let imgSrc = jQuery( this ).attr( 'src' );
-						jQuery( this ).attr( 'data-lity-target', imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' ) );
+						let fullsizeImgSrc = imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' );
+
+						// make lity lightboxes show full sized versions of the image
+						jQuery( this ).attr( 'data-lity-target', fullsizeImgSrc );
 					} );
 				} );";
 
 			}
 
+			$media_data = get_transient( 'lity_media' );
+
+			if ( false !== $media_data && 'yes' === $options['show_image_info'] ) {
+
+				$style .= '.lity-content {
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+				}
+				.lity-info {
+					background: #4c4c4c63;
+					vertical-align: middle;
+					display: -webkit-inline-flex;
+					-webkit-box-orient: vertical;
+					-webkit-box-direction: normal;
+					-webkit-flex-direction: column;
+					-webkit-box-pack: center;
+					-webkit-flex-pack: center;
+					-webkit-justify-content: center;
+					-webkit-flex-align: center;
+					-webkit-align-items: center;
+					height: 100vh;
+					max-width: 33%;
+					padding: 0 2em 0 1em;
+				}
+				.lity-info > * {
+					width: 100%;
+					color: #fafafa;
+				}
+				.lity-info > h4 {
+					margin: 0 0 0.2em 0;
+					text-decoration: underline;
+				}';
+
+				$script .= "jQuery( document ).on( 'ready', function() {
+					jQuery( '${img_selectors}' ).each( function( img ) {
+						let imgSrc = jQuery( this ).attr( 'src' );
+						let fullsizeImgSrc = imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' );
+
+						let imgObj = ${media_data}.filter( media => media.url == fullsizeImgSrc );
+
+						if ( imgObj.length ) {
+
+							if ( !! imgObj[0].title ) {
+
+								jQuery( this ).attr( 'data-lity-title', imgObj[0].title );
+
+							}
+
+							if ( !! imgObj[0].caption ) {
+
+								jQuery( this ).attr( 'data-lity-description', imgObj[0].caption );
+
+							}
+						}
+					} );
+				} );";
+
+				$script .= "jQuery( document ).on( 'lity:ready', function( event, lightbox ) {
+					const triggerElement = lightbox.opener();
+					const title = triggerElement.data( 'lity-title' );
+					const description = triggerElement.data( 'lity-description' );
+
+					if ( !! title || !! description ) {
+
+						jQuery( '.lity-content' ).append( '<div class=lity-info></div>' );
+
+					}
+
+					if ( !! title ) {
+
+						jQuery( '.lity-info' ).append( '<h4>' + triggerElement.data( 'lity-title' ) + '</h4>' );
+
+					}
+
+					if ( !! description ) {
+
+						jQuery( '.lity-info' ).append( '<p>' + triggerElement.data( 'lity-description' ) + '</p>' );
+
+					}
+
+				} );";
+
+			}
+
+			wp_add_inline_style( 'lity', $style );
 			wp_add_inline_script( 'lity', $script, 'after' );
+
+		}
+
+		/**
+		 * Create a transient to track media data.
+		 *
+		 * @since 1.0.0
+		 */
+		public function lity_get_media() {
+
+			if ( is_admin() || 'no' === ( new Lity_Options() )->get_lity_option( 'show_image_info' ) ) {
+
+				return;
+
+			}
+
+			$media = get_transient( 'lity_media' );
+
+			if ( false !== $media ) {
+
+				return;
+
+			}
+
+			$media_query = new \WP_Query(
+				array(
+					'post_type'      => 'attachment',
+					'posts_per_page' => '-1',
+					'post_status'    => 'inherit',
+				)
+			);
+
+			if ( ! $media_query->have_posts() ) {
+
+				return;
+
+			}
+
+			$media = array();
+
+			while ( $media_query->have_posts() ) {
+
+				$media_query->the_post();
+
+				$image_id  = get_the_ID();
+				$image_src = wp_get_attachment_image_src( $image_id, 'full' );
+
+				if ( false === $image_src || count( $image_src ) < 1 ) {
+
+					continue;
+
+				}
+
+				$media[] = array(
+					'url'     => $image_src[0],
+					'title'   => get_the_title( $image_id ),
+					'caption' => get_the_excerpt( $image_id ),
+				);
+
+			}
+
+			set_transient( 'lity_media', json_encode( $media ), WEEK_IN_SECONDS );
+
+		}
+
+		/**
+		 * Clear the lity media transient when a new image is uploaded.
+		 *
+		 * @since 1.0.0
+		 */
+		public function clear_lity_media_transient() {
+
+			delete_transient( 'lity_media' );
 
 		}
 
