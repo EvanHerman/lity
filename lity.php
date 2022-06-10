@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
+session_start();
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
 
@@ -31,6 +32,9 @@ if ( ! class_exists( 'Lity' ) ) {
 	 */
 	final class Lity {
 
+
+		public $data;
+
 		/**
 		 * Lity plugin constructor.
 		 *
@@ -42,6 +46,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
+			add_action( 'init', array( $this, 'lity_get_media') );
 		}
 
 		/**
@@ -83,7 +88,20 @@ if ( ! class_exists( 'Lity' ) ) {
 				$script .= "jQuery( document ).on( 'ready', function() {
 					jQuery( '${img_selectors}' ).each( function( img ) {
 						let imgSrc = jQuery( this ).attr( 'src' );
+
+						// make lity lightboxes show full sized versions of the image
 						jQuery( this ).attr( 'data-lity-target', imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' ) );
+
+						let imgIDClass = jQuery( this ).attr('class');
+						let classes = imgIDClass.split(/\s+/);
+						if ( classes.length > 1 ) {
+							// fill in later
+						} else {
+							let the_ID = imgIDClass.split('-')[2];
+							console.log('id: ' + the_ID);
+							console.log('" . $this->data . "');
+						}
+
 					} );
 				} );";
 
@@ -91,6 +109,13 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			wp_add_inline_script( 'lity', $script, 'after' );
 
+		}
+
+		public function lity_get_media() {
+			if ( get_transient( 'lity_media' ) == false ) {
+				set_transient( 'lity_media', file_get_contents("http://localhost:8888/wordpress/wp-json/wp/v2/media"), 3600 );
+			}
+			$this->data = get_transient( 'lity_media' );
 		}
 
 	}
