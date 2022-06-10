@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
-session_start();
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
 
@@ -32,7 +31,11 @@ if ( ! class_exists( 'Lity' ) ) {
 	 */
 	final class Lity {
 
-
+		/**
+		 *  Variable to track media data.
+		 *
+		 * @since 1.0.0
+		 */
 		public $data;
 
 		/**
@@ -50,7 +53,7 @@ if ( ! class_exists( 'Lity' ) ) {
 		}
 
 		/**
-		 * Enqueue Lity assets.
+		 * Enqueue Lity assets and create lightbox with inline script.
 		 */
 		public function enqueue_lity() {
 
@@ -111,6 +114,11 @@ if ( ! class_exists( 'Lity' ) ) {
 
 		}
 
+		/**
+		 * Create a transient to track media data
+		 *
+		 * @since 1.0.0
+		 */
 		public function lity_get_media() {
 			if ( get_transient( 'lity_media' ) == false ) {
 				set_transient( 'lity_media', file_get_contents("http://localhost:8888/wordpress/wp-json/wp/v2/media"), 3600 );
