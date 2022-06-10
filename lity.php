@@ -149,6 +149,12 @@ if ( ! class_exists( 'Lity' ) ) {
 								jQuery( this ).attr( 'data-lity-description', imgObj[0].caption );
 
 							}
+
+							if ( !! imgObj[0].altText ) {
+
+								jQuery( this ).attr( 'data-lity-description', imgObj[0].altText );
+
+							}
 						}
 					} );
 				} );";
@@ -167,6 +173,12 @@ if ( ! class_exists( 'Lity' ) ) {
 					if ( !! title ) {
 
 						jQuery( '.lity-info' ).append( '<h4>' + triggerElement.data( 'lity-title' ) + '</h4>' );
+
+					}
+
+					if ( !! altText ) {
+
+						jQuery( '.lity-info' ).append( '<p>' + triggerElement.data( 'lity-altText' ) + '</p>' );
 
 					}
 
@@ -239,6 +251,7 @@ if ( ! class_exists( 'Lity' ) ) {
 					'url'     => $image_src[0],
 					'title'   => get_the_title( $image_id ),
 					'caption' => get_the_excerpt( $image_id ),
+					'altText' =>get_post_meta( $image_id, '_wp_attachment_image_alt', true );
 				);
 
 			}
