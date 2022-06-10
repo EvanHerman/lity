@@ -161,6 +161,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 				$script .= "jQuery( document ).on( 'lity:ready', function( event, lightbox ) {
 					const triggerElement = lightbox.opener();
+					const altText = triggerElement.data( 'lity-altText' );
 					const title = triggerElement.data( 'lity-title' );
 					const description = triggerElement.data( 'lity-description' );
 
