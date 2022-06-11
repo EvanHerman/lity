@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
+define( 'LITY_PLUGIN_VERSION', '1.0.0' );
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
 
@@ -64,139 +65,23 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
-			// Style.
+			// Styles.
 			wp_enqueue_style( 'lity', plugin_dir_url( __FILE__ ) . "assets/css/lity/lity${suffix}.css", array(), LITY_VERSION, 'all' );
+			wp_enqueue_style( 'lity-styles', plugin_dir_url( __FILE__ ) . "assets/css/lity-styles.css", array( 'lity' ), LITY_PLUGIN_VERSION, 'all' );
 
-			$style = 'img[data-lity]:hover {
-				cursor: pointer;
-			}';
-
-			// Script.
+			// Scripts.
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
+			wp_enqueue_script( 'lity-script', plugin_dir_url( __FILE__ ) . "assets/js/lity-script.js", array( 'lity' ), LITY_PLUGIN_VERSION, true );
 
-			$img_selectors              = ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img';
-			$excluded_element_selectors = $options['excluded_element_selectors'];
-
-			$script = "jQuery( document ).on( 'ready', function() {
-				jQuery( '${img_selectors}' ).not( '$excluded_element_selectors' ).attr( 'data-lity', '' );
-			} );";
-
-			// Add an attribute to link to the full size image.
-			if ( 'yes' === $options['show_full_size'] ) {
-
-				$script .= "jQuery( document ).on( 'ready', function() {
-					jQuery( '${img_selectors}' ).each( function( img ) {
-						let imgSrc = jQuery( this ).attr( 'src' );
-
-						let imgObj = [];
-
-						${media_data}.forEach( ( media, index ) => {
-							if ( media.urls.includes( imgSrc ) ) {
-								imgObj.push( ${media_data}[index] );
-							}
-						} );
-
-						if ( imgObj.length ) {
-
-							// make lity lightboxes show full sized versions of the image
-							jQuery( this ).attr( 'data-lity-target', imgObj[0].urls[0] );
-
-						}
-					} );
-				} );";
-
-			}
-
-			if ( 'yes' === $options['show_image_info'] ) {
-
-				$style .= '.lity-content {
-					display: inline-flex;
-					align-items: center;
-					justify-content: center;
-				}
-				.lity-info {
-					background: #4c4c4c63;
-					vertical-align: middle;
-					display: -webkit-inline-flex;
-					-webkit-box-orient: vertical;
-					-webkit-box-direction: normal;
-					-webkit-flex-direction: column;
-					-webkit-box-pack: center;
-					-webkit-flex-pack: center;
-					-webkit-justify-content: center;
-					-webkit-flex-align: center;
-					-webkit-align-items: center;
-					height: 100vh;
-					max-width: 33%;
-					padding: 0 2em 0 1em;
-				}
-				.lity-info > * {
-					width: 100%;
-					color: #fafafa;
-				}
-				.lity-info > h4 {
-					margin: 0 0 0.2em 0;
-					text-decoration: underline;
-				}';
-
-				$script .= "jQuery( document ).on( 'ready', function() {
-					jQuery( '${img_selectors}' ).each( function( img ) {
-						let imgSrc = jQuery( this ).attr( 'src' );
-
-						let imgObj = [];
-
-						${media_data}.forEach( ( media, index ) => {
-							if ( media.urls.includes( imgSrc ) ) {
-								imgObj.push( ${media_data}[index] );
-							}
-						} );
-
-						if ( imgObj.length ) {
-
-							if ( !! imgObj[0].title ) {
-
-								jQuery( this ).attr( 'data-lity-title', imgObj[0].title );
-
-							}
-
-							if ( !! imgObj[0].caption ) {
-
-								jQuery( this ).attr( 'data-lity-description', imgObj[0].caption );
-
-							}
-						}
-					} );
-				} );";
-
-				$script .= "jQuery( document ).on( 'lity:ready', function( event, lightbox ) {
-					const triggerElement = lightbox.opener();
-					const title = triggerElement.data( 'lity-title' );
-					const description = triggerElement.data( 'lity-description' );
-
-					if ( !! title || !! description ) {
-
-						jQuery( '.lity-content' ).append( '<div class=lity-info></div>' );
-
-					}
-
-					if ( !! title ) {
-
-						jQuery( '.lity-info' ).append( '<h4>' + triggerElement.data( 'lity-title' ) + '</h4>' );
-
-					}
-
-					if ( !! description ) {
-
-						jQuery( '.lity-info' ).append( '<p>' + triggerElement.data( 'lity-description' ) + '</p>' );
-
-					}
-
-				} );";
-
-			}
-
-			wp_add_inline_style( 'lity', $style );
-			wp_add_inline_script( 'lity', $script, 'after' );
+			wp_localize_script(
+				'lity-script',
+				'lityScriptData',
+				array(
+					'options'      => $options,
+					'imgSelectors' => ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img',
+					'mediaData'    => get_transient( 'lity_media' ),
+				)
+			);
 
 		}
 
