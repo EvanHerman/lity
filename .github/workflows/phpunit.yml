@@ -25,7 +25,7 @@ jobs:
         run: yarn install:tests
 
       - name: Composer install
-        run: composer install
+        run: composer install -o
 
       - name: PHPUnit Tests
         run: yarn test:php
