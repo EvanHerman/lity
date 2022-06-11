@@ -25,7 +25,10 @@ jobs:
         run: yarn install:tests
 
       - name: Check Dirs
-        run: ls -la /tmp
+        run: |
+          ls -la /tmp
+          ls -la /tmp/wordpress-tests-lib/
+          ls -la /tmp/wordpress-tests-lib/includes/
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
