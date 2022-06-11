@@ -18,7 +18,6 @@
 		"min": "yarn min:css && yarn min:js"
 	},
 	"devDependencies": {
-		"css-minify": "^2.0.0",
 		"minify": "^9.1.0"
 	}
 }
