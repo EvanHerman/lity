@@ -92,7 +92,13 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function lity_get_media() {
 
-			if ( is_admin() || 'no' === ( new Lity_Options() )->get_lity_option( 'show_image_info' ) ) {
+			if (
+				is_admin() ||
+				(
+					'no' === ( new Lity_Options() )->get_lity_option( 'show_full_size' ) &&
+					'no' === ( new Lity_Options() )->get_lity_option( 'show_image_info' )
+				)
+			) {
 
 				return;
 
