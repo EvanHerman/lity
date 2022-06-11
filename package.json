@@ -6,12 +6,21 @@
 	"tested_up_to": "6.0",
 	"author": "Evan Herman",
 	"license": "GPL-2.0",
-	"repository": "godaddy-wordpress/coblocks",
+	"repository": "EvanHerman/lity",
 	"homepage": "https://wordpress.org/plugins/lity/",
 	"bugs": {
 		"url": "https://github.com/EvanHerman/lity/issues"
 	},
 	"scripts": {
-		"build": "rm -rf build/* && rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/."
+		"build": "yarn min && rm -rf build/* && rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/.",
+		"min:css": "minify ./assets/css/lity-styles.css > ./assets/css/lity-styles.min.css",
+		"min:js": "minify ./assets/js/lity-script.js > ./assets/js/lity-script.min.js",
+		"min": "yarn min:css && yarn min:js",
+		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test root password 127.0.0.1 latest",
+		"test:php": "./vendor/bin/phpunit --coverage-text",
+		"test:php-coverage": "./vendor/bin/phpunit --coverage-html .dev/tests/php/coverage/"
+	},
+	"devDependencies": {
+		"minify": "^9.1.0"
 	}
 }

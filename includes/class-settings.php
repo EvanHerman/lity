@@ -43,12 +43,6 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				'excluded_element_selectors' => '',
 			);
 
-			if ( ! is_admin() ) {
-
-				return;
-
-			}
-
 			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
 
 			add_action( 'admin_init', array( $this, 'options_init' ) );
