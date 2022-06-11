@@ -3,7 +3,7 @@ name: PHPUnit Tests
 on: [push]
 
 jobs:
-  build-test:
+  phpunit:
     runs-on: ubuntu-latest
 
     services:
@@ -33,11 +33,5 @@ jobs:
       - name: Composer Install
         run: sudo composer install
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v2
-        env:
-          TEST_NAME: Scarlett
-        with:
-          bootstrap: .dev/tests/php/bootstrap.php
-          configuration: phpunit.xml
-          args: --coverage-text
+      - name: Run unit tests
+        run: test:php
