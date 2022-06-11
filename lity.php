@@ -252,10 +252,9 @@ if ( ! class_exists( 'Lity' ) ) {
 
 				global $_wp_additional_image_sizes;
 
-				$image_sizes = array_keys( $_wp_additional_image_sizes );
-				$image_urls  = array();
+				$image_urls = array();
 
-				foreach ( $image_sizes as $image_size ) {
+				foreach ( array_keys( $_wp_additional_image_sizes ) as $image_size ) {
 
 					$image_urls[] = wp_get_attachment_image_url( $image_id, $image_size );
 
