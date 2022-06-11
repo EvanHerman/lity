@@ -11,6 +11,9 @@ jobs:
 
       - uses: php-actions/composer@v5
 
+      - name: Install Tests
+        run: yarn install:tests
+
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
         env:
