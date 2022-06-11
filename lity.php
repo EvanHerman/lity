@@ -67,11 +67,11 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			// Styles.
 			wp_enqueue_style( 'lity', plugin_dir_url( __FILE__ ) . "assets/css/lity/lity${suffix}.css", array(), LITY_VERSION, 'all' );
-			wp_enqueue_style( 'lity-styles', plugin_dir_url( __FILE__ ) . "assets/css/lity-styles.css", array( 'lity' ), LITY_PLUGIN_VERSION, 'all' );
+			wp_enqueue_style( 'lity-styles', plugin_dir_url( __FILE__ ) . "assets/css/lity-styles${suffix}.css", array( 'lity' ), LITY_PLUGIN_VERSION, 'all' );
 
 			// Scripts.
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
-			wp_enqueue_script( 'lity-script', plugin_dir_url( __FILE__ ) . "assets/js/lity-script.js", array( 'lity' ), LITY_PLUGIN_VERSION, true );
+			wp_enqueue_script( 'lity-script', plugin_dir_url( __FILE__ ) . "assets/js/lity-script${suffix}.js", array( 'lity' ), LITY_PLUGIN_VERSION, true );
 
 			wp_localize_script(
 				'lity-script',
