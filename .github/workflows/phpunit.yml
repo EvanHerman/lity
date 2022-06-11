@@ -31,7 +31,6 @@ jobs:
           ls -la /tmp/wordpress-tests-lib/includes/
 
       - name: PHPUnit Tests
-        run: ls -la /tmp/wordpress-tests-lib/includes/
         uses: php-actions/phpunit@v2
         env:
           TEST_NAME: Scarlett
