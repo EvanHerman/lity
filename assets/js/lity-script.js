@@ -1,5 +1,4 @@
 ( function( $ ) {
-
 	const lityMediaData = JSON.parse( lityScriptData.mediaData );
 
 	/**
@@ -120,5 +119,4 @@
 	$( document ).on( 'ready', lityScript.fullSizeImages );
 	$( document ).on( 'ready', lityScript.appendImageInfo );
 	$( document ).on( 'lity:ready', lityScript.showImageInfo );
-
 } )( jQuery );
