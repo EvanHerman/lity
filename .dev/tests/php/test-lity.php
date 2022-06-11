@@ -191,7 +191,7 @@ class Test_Lity extends WP_UnitTestCase {
 		( new Lity() )->lity_get_media();
 
 		$this->assertFalse(
-			get_transient( 'lity_media'),
+			get_transient( 'lity_media' ),
 			"The lity_media transient is being set when it shouldn't be."
 		);
 
@@ -238,7 +238,7 @@ class Test_Lity extends WP_UnitTestCase {
 		( new Lity() )->lity_get_media();
 
 		$this->assertEquals(
-			get_transient( 'lity_media'),
+			get_transient( 'lity_media' ),
 			'[]',
 			'The lity_media transient does not match the expected empty json string.'
 		);
@@ -265,10 +265,10 @@ class Test_Lity extends WP_UnitTestCase {
 
 		( new Lity() )->lity_get_media();
 
-		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions"}]';
+		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","custom_data":[]}]';
 
 		$this->assertEquals(
-			get_transient( 'lity_media'),
+			get_transient( 'lity_media' ),
 			$expected,
 			'The lity_media transient does not match the expected value.'
 		);
@@ -285,7 +285,7 @@ class Test_Lity extends WP_UnitTestCase {
 		( new Lity() )->clear_lity_media_transient();
 
 		$this->assertFalse(
-			get_transient( 'lity_media'),
+			get_transient( 'lity_media' ),
 			'The lity_media transient is still set, even though it was cleared.'
 		);
 

@@ -46,6 +46,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			add_action( 'init', array( $this, 'lity_get_media' ), PHP_INT_MAX );
 
 			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
+			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 
 		}
 
@@ -141,11 +142,10 @@ if ( ! class_exists( 'Lity' ) ) {
 
 				}
 
-				global $_wp_additional_image_sizes;
+				$image_urls  = array();
+				$image_sizes = get_intermediate_image_sizes();
 
-				$image_urls = array();
-
-				foreach ( array_keys( $_wp_additional_image_sizes ) as $image_size ) {
+				foreach ( $image_sizes as $image_size ) {
 
 					$image_urls[] = wp_get_attachment_image_url( $image_id, $image_size );
 
@@ -154,11 +154,50 @@ if ( ! class_exists( 'Lity' ) ) {
 				// Ensure 'full' image size is first in the array.
 				array_unshift( $image_urls, wp_get_attachment_image_url( $image_id, 'full' ) );
 
-				$media[] = array(
-					'urls'    => array_values( array_unique( $image_urls ) ),
-					'title'   => get_the_title( $image_id ),
-					'caption' => get_the_excerpt( $image_id ),
+				/**
+				 * Filter lity_image_info to allow alterations to the image info before the transient is set.
+				 *
+				 * @var array
+				 */
+				$image_info = (array) apply_filters(
+					'lity_image_info',
+					array(
+						'urls'    => array_values( array_unique( $image_urls ) ),
+						'title'   => get_the_title( $image_id ),
+						'caption' => get_the_excerpt( $image_id ),
+					),
+					$image_id
 				);
+
+				/**
+				 * Filter lity_image_info_custom_data to allow users to set custom data before the transient is set.
+				 *
+				 * Expected custom_data format:
+				 * array(
+				 *   'class-name' => array(
+				 *     'element_wrap' => 'p',
+				 *     'content'      => 'Custom Content'
+				 *   ),
+				 * );
+				 *
+				 * @var array
+				 */
+				$image_info['custom_data'] = apply_filters( 'lity_image_info_custom_data', array(), $image_id );
+
+				// Filter out any custom_data that contains no content.
+				foreach ( $image_info['custom_data'] as $class => &$custom_data ) {
+
+					if ( ! empty( $custom_data['content'] ) ) {
+
+						continue;
+
+					}
+
+					unset( $image_info['custom_data'][ $class ] );
+
+				}
+
+				$media[] = $image_info;
 
 			}
 
