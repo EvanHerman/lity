@@ -85,7 +85,6 @@ if ( ! class_exists( 'Lity' ) ) {
 			if ( 'yes' === $options['show_full_size'] ) {
 
 				$script .= "jQuery( document ).on( 'ready', function() {
-
 					jQuery( '${img_selectors}' ).each( function( img ) {
 						let imgSrc = jQuery( this ).attr( 'src' );
 
