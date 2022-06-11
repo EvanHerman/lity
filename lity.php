@@ -93,8 +93,6 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function lity_get_media() {
 
-			delete_transient( 'lity_media' );
-
 			if (
 				is_admin() ||
 				(
