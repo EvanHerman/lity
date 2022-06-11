@@ -16,7 +16,7 @@
 		"min:css": "minify ./assets/css/lity-styles.css > ./assets/css/lity-styles.min.css",
 		"min:js": "minify ./assets/js/lity-script.js > ./assets/js/lity-script.min.js",
 		"min": "yarn min:css && yarn min:js",
-		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test user password 172.18.0.1 latest",
+		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test root password 127.0.0.1 latest",
 		"test:php": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/coblocks/phpunit.xml.dist --verbose'"
 	},
 	"devDependencies": {
