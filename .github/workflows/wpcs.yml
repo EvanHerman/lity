@@ -1,6 +1,6 @@
 name: WPCS Check
 
-on: pull_request
+on: [pull_request,push]
 
 jobs:
   wpcs:

@@ -4,6 +4,7 @@
 	/**
 	 * Lity Scripts
 	 *
+	 * @type {Object}
 	 * @since 1.0.0
 	 */
 	const lityScript = {
@@ -83,6 +84,15 @@
 					if ( !! imgObj[0].caption ) {
 						$( this ).attr( 'data-lity-description', imgObj[0].caption );
 					}
+
+					if ( !! imgObj[0].custom_data && Object.keys( imgObj[0].custom_data ).length ) {
+
+						for (const [ key, value ] of Object.entries( imgObj[0].custom_data )) {
+							$( this ).attr( `data-lity-custom-${key}`, `${value.element_wrap}:${value.content}` );
+						}
+
+					}
+
 				}
 			} );
 
@@ -98,6 +108,7 @@
 			const triggerElement = lightbox.opener();
 			const title = triggerElement.data( 'lity-title' );
 			const description = triggerElement.data( 'lity-description' );
+			const customData = helpers.getImageCustomData( triggerElement );
 
 			if ( !! title || !! description ) {
 				$( '.lity-content' ).addClass( 'lity-image-info' ).append( '<div class=lity-info></div>' );
@@ -110,6 +121,38 @@
 			if ( !! description ) {
 				$( '.lity-info' ).append( '<p>' + triggerElement.data( 'lity-description' ) + '</p>' );
 			}
+
+			if ( customData.length ) {
+				customData.forEach( data => {
+					$( '.lity-info' ).append( `<${data.element} class="${data.class}">${data.content}</${data.element}>` );
+				} );
+			}
+
+		}
+
+	};
+
+	/**
+	 * Helper methods.
+	 *
+	 * @type {Object}
+	 * @since 1.0.0
+	 */
+	const helpers = {
+
+		getImageCustomData: function( $element ) {
+			let elementData = $element.data();
+			let customData = [];
+
+			for ( const [key, value] of Object.entries( elementData ) ) {
+				if ( ! key.includes( 'lityCustom' ) ) {
+					continue;
+				}
+				let split = value.split( ':' );
+				customData.push( { class: key, element: split[0], content: split[1] } );
+			}
+
+			return customData;
 
 		}
 
