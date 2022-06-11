@@ -125,7 +125,6 @@ if ( ! class_exists( 'Lity' ) ) {
 					color: #fafafa;
 				}
 				.lity-info > h4 {
-					margin: 0 0 0.2em 0;
 					text-decoration: underline;
 				}';
 
@@ -152,7 +151,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 							if ( !! imgObj[0].altText ) {
 
-								jQuery( this ).attr( 'data-lity-description', imgObj[0].altText );
+								jQuery( this ).attr( 'data-lity-alt-text', imgObj[0].altText );
 
 							}
 						}
@@ -161,7 +160,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 				$script .= "jQuery( document ).on( 'lity:ready', function( event, lightbox ) {
 					const triggerElement = lightbox.opener();
-					const altText = triggerElement.data( 'lity-altText' );
+					const altText = triggerElement.data( 'lity-alt-text' );
 					const title = triggerElement.data( 'lity-title' );
 					const description = triggerElement.data( 'lity-description' );
 
@@ -204,6 +203,8 @@ if ( ! class_exists( 'Lity' ) ) {
 		 * @since 1.0.0
 		 */
 		public function lity_get_media() {
+
+			delete_transient( 'lity_media' );
 
 			if ( is_admin() || 'no' === ( new Lity_Options() )->get_lity_option( 'show_image_info' ) ) {
 
