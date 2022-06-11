@@ -69,7 +69,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			$style = 'img[data-lity]:hover {
 				cursor: pointer;
 			}
-			body.logged-in {
+			body.logged-in .lity-close {
 				top: 32px!important;
 			}';
 
