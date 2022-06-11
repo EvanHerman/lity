@@ -156,22 +156,22 @@ if ( ! class_exists( 'Lity' ) ) {
 				array_unshift( $image_urls, wp_get_attachment_image_url( $image_id, 'full' ) );
 
 				/**
-				 * lity_image_info filter to allow alterations to the image info before the transient is set.
+				 * Filter lity_image_info to allow alterations to the image info before the transient is set.
 				 *
 				 * @var array
 				 */
 				$image_info = (array) apply_filters(
- 					'lity_image_info',
- 					array(
- 						'urls'    => array_values( array_unique( $image_urls ) ),
- 						'title'   => get_the_title( $image_id ),
- 						'caption' => get_the_excerpt( $image_id ),
- 					),
- 					$image_id
- 				);
+					'lity_image_info',
+					array(
+						'urls'    => array_values( array_unique( $image_urls ) ),
+						'title'   => get_the_title( $image_id ),
+						'caption' => get_the_excerpt( $image_id ),
+					),
+					$image_id
+				);
 
 				/**
-				 * lity_image_info_custom_data filter to allow users to set custom data before the transient is set.
+				 * Filter lity_image_info_custom_data to allow users to set custom data before the transient is set.
 				 *
 				 * Expected custom_data format:
 				 * array(
