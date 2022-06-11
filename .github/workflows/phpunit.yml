@@ -24,6 +24,9 @@ jobs:
       - name: Install Tests
         run: yarn install:tests
 
+      - name: Check Dirs
+        run: ls -la /tmp
+
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
         env:
