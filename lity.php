@@ -68,6 +68,9 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$style = 'img[data-lity]:hover {
 				cursor: pointer;
+			}
+			body.logged-in .lity-close {
+				top: 32px!important;
 			}';
 
 			// Script.
@@ -192,16 +195,6 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
-			if ( is_user_logged_in() == true ) {
-				$top = '.lity-close {
-					top: 32px!important;
-				}';
-			} else {
-				$top = '.lity-close {
-					top: 0px!important;
-				}';
-			}
-			wp_add_inline_style( 'lity', $top);
 			wp_add_inline_style( 'lity', $style );
 			wp_add_inline_script( 'lity', $script, 'after' );
 
