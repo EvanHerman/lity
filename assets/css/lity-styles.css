@@ -33,3 +33,7 @@ img[data-lity]:hover {
 .lity-info > h4 {
 	text-decoration: underline;
 }
+
+body.logged-in .lity-close {
+	top: 32px;
+}
