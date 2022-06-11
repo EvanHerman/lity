@@ -24,17 +24,8 @@ jobs:
       - name: Install Tests
         run: yarn install:tests
 
-      - name: Check Dirs
-        run: |
-          ls -la /tmp
-          ls -la /tmp/wordpress-tests-lib/
-          ls -la /tmp/wordpress-tests-lib/includes/
+      - name: Composer install
+        run: composer install
 
       - name: PHPUnit Tests
-        uses: php-actions/phpunit@v2
-        env:
-          TEST_NAME: Scarlett
-        with:
-          bootstrap: .dev/tests/php/bootstrap.php
-          configuration: phpunit.xml
-          args: --coverage-text
+        run: yarn test:php
