@@ -53,9 +53,10 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function enqueue_lity() {
 
-			$options = ( new Lity_Options() )->get_lity_options();
+			$options    = ( new Lity_Options() )->get_lity_options();
+			$media_data = get_transient( 'lity_media' );
 
-			if ( in_array( get_the_ID(), $options['disabled_on'], false ) ) {
+			if ( false === $media_data || in_array( get_the_ID(), $options['disabled_on'], false ) ) {
 
 				return;
 
@@ -84,20 +85,30 @@ if ( ! class_exists( 'Lity' ) ) {
 			if ( 'yes' === $options['show_full_size'] ) {
 
 				$script .= "jQuery( document ).on( 'ready', function() {
+
 					jQuery( '${img_selectors}' ).each( function( img ) {
 						let imgSrc = jQuery( this ).attr( 'src' );
-						let fullsizeImgSrc = imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' );
 
-						// make lity lightboxes show full sized versions of the image
-						jQuery( this ).attr( 'data-lity-target', fullsizeImgSrc );
+						let imgObj = [];
+
+						${media_data}.forEach( ( media, index ) => {
+							if ( media.urls.includes( imgSrc ) ) {
+								imgObj.push( ${media_data}[index] );
+							}
+						} );
+
+						if ( imgObj.length ) {
+
+							// make lity lightboxes show full sized versions of the image
+							jQuery( this ).attr( 'data-lity-target', imgObj[0].urls[0] );
+
+						}
 					} );
 				} );";
 
 			}
 
-			$media_data = get_transient( 'lity_media' );
-
-			if ( false !== $media_data && 'yes' === $options['show_image_info'] ) {
+			if ( 'yes' === $options['show_image_info'] ) {
 
 				$style .= '.lity-content {
 					display: inline-flex;
@@ -132,9 +143,14 @@ if ( ! class_exists( 'Lity' ) ) {
 				$script .= "jQuery( document ).on( 'ready', function() {
 					jQuery( '${img_selectors}' ).each( function( img ) {
 						let imgSrc = jQuery( this ).attr( 'src' );
-						let fullsizeImgSrc = imgSrc.replace( /(?:[-_]?[0-9]+x[0-9]+)+/g, '' );
 
-						let imgObj = ${media_data}.filter( media => media.url == fullsizeImgSrc );
+						let imgObj = [];
+
+						${media_data}.forEach( ( media, index ) => {
+							if ( media.urls.includes( imgSrc ) ) {
+								imgObj.push( ${media_data}[index] );
+							}
+						} );
 
 						if ( imgObj.length ) {
 
@@ -235,8 +251,22 @@ if ( ! class_exists( 'Lity' ) ) {
 
 				}
 
+				global $_wp_additional_image_sizes;
+
+				$image_sizes = array_keys( $_wp_additional_image_sizes );
+				$image_urls  = array();
+
+				foreach ( $image_sizes as $image_size ) {
+
+					$image_urls[] = wp_get_attachment_image_url( $image_id, $image_size );
+
+				}
+
+				// Ensure 'full' image size is first in the array.
+				array_unshift( $image_urls, wp_get_attachment_image_url( $image_id, 'full' ) );
+
 				$media[] = array(
-					'url'     => $image_src[0],
+					'urls'    => array_values( array_unique( $image_urls ) ),
 					'title'   => get_the_title( $image_id ),
 					'caption' => get_the_excerpt( $image_id ),
 				);
