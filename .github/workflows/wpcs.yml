@@ -1,9 +1,9 @@
-name: WPCS check
+name: WPCS Check
 
 on: pull_request
 
 jobs:
-  phpcs:
+  wpcs:
       name: WPCS
       runs-on: ubuntu-latest
       steps:
