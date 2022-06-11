@@ -6,7 +6,7 @@
 	"tested_up_to": "6.0",
 	"author": "Evan Herman",
 	"license": "GPL-2.0",
-	"repository": "godaddy-wordpress/coblocks",
+	"repository": "EvanHerman/lity",
 	"homepage": "https://wordpress.org/plugins/lity/",
 	"bugs": {
 		"url": "https://github.com/EvanHerman/lity/issues"
