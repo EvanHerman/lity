@@ -30,6 +30,9 @@ jobs:
           ls -la /tmp/wordpress-tests-lib/
           ls -la /tmp/wordpress-tests-lib/includes/
 
+      - name: Composer Install
+        run: sudo composer install
+
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
         env:
