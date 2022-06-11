@@ -24,12 +24,6 @@ jobs:
       - name: Install Tests
         run: yarn install:tests
 
-      - name: Check Dirs
-        run: |
-          ls -la /tmp
-          ls -la /tmp/wordpress-tests-lib/
-          ls -la /tmp/wordpress-tests-lib/includes/
-
       - name: Composer Install
         run: sudo composer install
 
