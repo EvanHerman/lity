@@ -26,7 +26,6 @@ jobs:
           zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest
-        options: --user root
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: latest
