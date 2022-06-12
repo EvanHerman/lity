@@ -25,10 +25,10 @@ jobs:
           rm -rf build/*
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          cd ./build && ls -la && zip -r lity.zip lity/.
+          cd ./build && sudo zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          files: build/lity.zip
+          files: ./build/lity.zip
