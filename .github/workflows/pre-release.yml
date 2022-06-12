@@ -24,8 +24,8 @@ jobs:
           yarn min
           rm -rf build/*
           sudo mkdir -p ./build/lity
-          rsync -av --exclude-from .distignore --delete . build/lity/ && cd build/
-          zip -r lity.zip lity/.
+          sudo rsync -av --exclude-from .distignore --delete . build/lity/
+          cd ./build && ls -la && zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
