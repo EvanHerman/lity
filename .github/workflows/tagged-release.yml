@@ -18,7 +18,12 @@ jobs:
         run: yarn install
 
       - name: Build the plugin
-        run: yarn build
+        run: |
+          yarn min
+          rm -rf build/*
+          sudo mkdir -p /build/lity
+          rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/
+          zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
