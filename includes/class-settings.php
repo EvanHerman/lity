@@ -47,7 +47,22 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			add_action( 'admin_init', array( $this, 'options_init' ) );
 
-			add_action( 'admin_init', array( $this, 'clear_lity_transient_submit' ) );
+			add_filter( 'removable_query_args', array( $this, 'removable_query_args' ) );
+
+		}
+
+		/**
+		 * Add lity-action to the removable query args array.
+		 *
+		 * @param  array $args Core removable query args array.
+		 *
+		 * @return array       Filtered removable query args array.
+		 */
+		public function removable_query_args( $args ) {
+
+			$args[] = 'lity-action';
+
+			return $args;
 
 		}
 
@@ -217,16 +232,6 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 					'description' => __( "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly.", 'lity' ),
 				)
 			);
-
-		}
-
-		public function clear_lity_transient_submit() {
-
-			if ( isset( $_GET['clear-lity-transient'] ) ) {
-
-				wp_die( 'test' );
-
-			}
 
 		}
 
@@ -431,8 +436,9 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		public function lity_clear_transient_button( $args ) {
 
 			printf(
-				'<a href="#" class="button delete">%s</a>
-				<p class="description">%s</p>',
+				'<a href="%1$s" class="button delete">%2$s</a>
+				<p class="description">%3$s</p>',
+				esc_url( add_query_arg( 'lity-action', 'lity-clear-transient', admin_url( 'options-general.php?page=lity_options' ) ) ),
 				esc_html__( 'Clear Lity Transient', 'lity' ),
 				esc_html( $args['description'] )
 			);
@@ -447,6 +453,27 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 
 				return;
+
+			}
+
+			$lity_action = filter_input( INPUT_GET, 'lity-action' );
+
+			if ( false !== $lity_action && 'lity-clear-transient' === $lity_action ) {
+
+				( new Lity() )->clear_lity_media_transient();
+
+				$class   = 'notice notice-success';
+				$message = __( 'Lity transient data successfully cleared.', 'lity' );
+
+				printf(
+					'<div class="%1$s">
+						<p>
+							<strong>%2$s</strong>
+						</p>
+					</div>',
+					esc_attr( $class ),
+					esc_html( $message )
+				);
 
 			}
 
