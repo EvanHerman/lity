@@ -47,6 +47,8 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			add_action( 'admin_init', array( $this, 'options_init' ) );
 
+			add_action( 'admin_init', array( $this, 'clear_lity_transient_submit' ) );
+
 		}
 
 		/**
@@ -203,6 +205,28 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 					'description' => __( 'Specify element selectors that should be excluded from opening in a lightbox.', 'lity' ),
 				)
 			);
+
+			add_settings_field(
+				'delete_lity_transient',
+				__( 'Clear Lity Transient Data', 'lity' ),
+				array( $this, 'lity_clear_transient_button' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'excluded_element_selectors',
+					'description' => __( "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly.", 'lity' ),
+				)
+			);
+
+		}
+
+		public function clear_lity_transient_submit() {
+
+			if ( isset( $_GET['clear-lity-transient'] ) ) {
+
+				wp_die( 'test' );
+
+			}
 
 		}
 
@@ -396,6 +420,22 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			</p>
 
 			<?php
+
+		}
+
+		/**
+		 * Button to clear the lity_media transient .
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_clear_transient_button( $args ) {
+
+			printf(
+				'<a href="#" class="button delete">%s</a>
+				<p class="description">%s</p>',
+				esc_html__( 'Clear Lity Transient', 'lity' ),
+				esc_html( $args['description'] )
+			);
 
 		}
 
