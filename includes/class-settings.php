@@ -318,14 +318,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			$query = new WP_Query(
 				array(
 					'posts_per_page' => -1,
-					'post_type'      => (array) apply_filters(
-						'lity_disabled_on_post_types',
-						array(
-							'post',
-							'page',
-							'product',
-						)
-					),
+					'post_type'      => 'any',
 				)
 			);
 
@@ -365,7 +358,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 							?>
 
 							<option value="<?php echo esc_attr( $post_id ); ?>" <?php echo esc_attr( $selected ); ?>>
-								<?php echo empty( $post_title ) ? esc_html__( '- (no title)', 'lity' ) : esc_html( $post_title ); ?>
+								<?php echo empty( $post_title ) ? esc_html__( '(no title)', 'lity' ) : esc_html( $post_title ); ?>
 							</option>
 
 							<?php
