@@ -47,6 +47,23 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			add_action( 'admin_init', array( $this, 'options_init' ) );
 
+			add_filter( 'removable_query_args', array( $this, 'removable_query_args' ) );
+
+		}
+
+		/**
+		 * Add lity-action to the removable query args array.
+		 *
+		 * @param  array $args Core removable query args array.
+		 *
+		 * @return array       Filtered removable query args array.
+		 */
+		public function removable_query_args( $args ) {
+
+			$args[] = 'lity-action';
+
+			return $args;
+
 		}
 
 		/**
@@ -204,6 +221,18 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				)
 			);
 
+			add_settings_field(
+				'delete_lity_transient',
+				__( 'Clear Lity Transient Data', 'lity' ),
+				array( $this, 'lity_clear_transient_button' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'excluded_element_selectors',
+					'description' => __( "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly.", 'lity' ),
+				)
+			);
+
 		}
 
 		/**
@@ -321,18 +350,26 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" multiple>
 				<?php
 				foreach ( $posts as $post_type => $post_ids ) {
+
 					$post_type_obj = get_post_type_object( $post_type );
+
 					?>
+
 					<optgroup label="<?php echo esc_attr( $post_type_obj->labels->name ); ?>">
 						<?php
 						foreach ( $post_ids as $post_id ) {
+
 							$post_title = get_the_title( $post_id );
 							$selected   = in_array( $post_id, $options['disabled_on'], false ) ? ' selected="selected" ' : '';
+
 							?>
+
 							<option value="<?php echo esc_attr( $post_id ); ?>" <?php echo esc_attr( $selected ); ?>>
 								<?php echo empty( $post_title ) ? esc_html__( '- (no title)', 'lity' ) : esc_html( $post_title ); ?>
 							</option>
+
 							<?php
+
 						}
 						?>
 					</optgroup>
@@ -400,6 +437,23 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		}
 
 		/**
+		 * Button to regenerate the lity_media transient.
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_clear_transient_button( $args ) {
+
+			printf(
+				'<a href="%1$s" class="button delete">%2$s</a>
+				<p class="description">%3$s</p>',
+				esc_url( add_query_arg( 'lity-action', 'lity-regenerate-transient', admin_url( 'options-general.php?page=lity_options' ) ) ),
+				esc_html__( 'Clear Lity Transient', 'lity' ),
+				esc_html( $args['description'] )
+			);
+
+		}
+
+		/**
 		 * Lity options page markup.
 		 */
 		public function lity_options_page() {
@@ -407,6 +461,25 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 
 				return;
+
+			}
+
+			$lity_action = filter_input( INPUT_GET, 'lity-action' );
+
+			if ( false !== $lity_action && 'lity-regenerate-transient' === $lity_action ) {
+
+				$lity = new Lity();
+				$lity->clear_lity_media_transient();
+				$lity->set_media_transient();
+
+				printf(
+					'<div class="notice notice-success">
+						<p>
+							<strong>%1$s</strong>
+						</p>
+					</div>',
+					esc_html__( 'Lity transient data successfully regenerated.', 'lity' )
+				);
 
 			}
 
@@ -430,5 +503,3 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 	}
 
 }
-
-new Lity_Options();

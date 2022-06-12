@@ -1,9 +1,10 @@
 name: PHPUnit Tests
 
-on: [pull_request,push]
+on: push
 
 jobs:
   phpunit:
+    name: PHPUnit
     runs-on: ubuntu-latest
 
     services:

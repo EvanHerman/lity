@@ -188,7 +188,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		update_option( 'lity_options', $options );
 
-		( new Lity() )->lity_get_media();
+		( new Lity() )->set_media_transient();
 
 		$this->assertFalse(
 			get_transient( 'lity_media' ),
@@ -204,7 +204,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->lity_get_media();
+		( new Lity() )->set_media_transient();
 
 		$this->assertEquals( get_transient( 'lity_media' ), $this->media_data );
 
@@ -215,7 +215,7 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	function testLityGetMediaReturnsWhenNoAttachmentsOnSite() {
 
-		( new Lity() )->lity_get_media();
+		( new Lity() )->set_media_transient();
 
 		$this->assertFalse( get_transient( 'lity_media' ) );
 
@@ -235,7 +235,7 @@ class Test_Lity extends WP_UnitTestCase {
 			]
 		);
 
-		( new Lity() )->lity_get_media();
+		( new Lity() )->set_media_transient();
 
 		$this->assertEquals(
 			get_transient( 'lity_media' ),
@@ -263,7 +263,7 @@ class Test_Lity extends WP_UnitTestCase {
 			return array( 'http://example.org/wp-content/uploads/2022/06/image-1.jpg', '1800', '1224' );
 		}, 10, 4 );
 
-		( new Lity() )->lity_get_media();
+		( new Lity() )->set_media_transient();
 
 		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","custom_data":[]}]';
 
