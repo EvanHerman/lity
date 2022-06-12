@@ -119,10 +119,10 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
-			$media_query = new \WP_Query(
+			$media_query = new WP_Query(
 				array(
 					'post_type'      => 'attachment',
-					'posts_per_page' => '-1',
+					'posts_per_page' => -1,
 					'post_status'    => 'inherit',
 				)
 			);
