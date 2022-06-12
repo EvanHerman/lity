@@ -4,6 +4,7 @@ on: push
 
 jobs:
   phpunit:
+    name: PHPUnit
     runs-on: ubuntu-latest
 
     services:
