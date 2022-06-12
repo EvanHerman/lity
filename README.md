@@ -1,9 +1,21 @@
-# Lity
+<h1 align="center">Lity
+	<a href="https://github.com/EvanHerman/Lity/releases/latest/">
+		<img src="https://img.shields.io/static/v1?lityVersion=&message=v1.0.0&label=&color=999&style=flat-square">
+	</a>
+</h1>
 
-A lightweight WordPress plugin to allow for all images to be opened in a lightbox.
+<h4 align="center">A lightweight, accessible and responsive <a href="https://wordpress.org" target="_blank">WordPress</a> lightbox plugin.</h4>
 
-- Lightweight and highly configurable.
-- Localized and ready for translations.
+<p align="center">
+	![PHPUnit Badge](https://github.com/EvanHerman/Lity/actions/workflows/phpunit.yml/badge.svg)
+	![WPCS Badge](https://github.com/EvanHerman/Lity/actions/workflows/wpcs.yml/badge.svg)
+</p>
+
+- Lightweight
+- Accessible
+- Responsive
+- Support for Lightbox Captions
+- Translation Ready
 
 ## Installation
 - Download the .zip from this Github repository.
@@ -17,7 +29,7 @@ A lightweight WordPress plugin to allow for all images to be opened in a lightbo
 
 This software uses the following open source packages:
 
-- [Lity](https://sorgalla.com/lity/)
+- [Lity](https://sorgalla.com/lity/) by Jan Sorgalla
 
 ## License
 
@@ -31,6 +43,6 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 Copyright © 2022 Evan Herman. All Rights Reserved.
 
-[godaddy.com](https://www.evan-herman.com) &nbsp;&middot;&nbsp;
+[EvanHerman.com](https://www.evan-herman.com) &nbsp;&middot;&nbsp;
 GitHub [@EvanHerman](https://github.com/EvanHerman) &nbsp;&middot;&nbsp;
 Twitter [@EvanMHerman](https://twitter.com/EvanMHerman)

@@ -11,9 +11,6 @@ jobs:
     name: Pre Release
     runs-on: ubuntu-latest
 
-    container:
-      options: --user root
-
     steps:
       - uses: actions/checkout@v2
 
@@ -24,6 +21,7 @@ jobs:
         run: yarn build
 
       - uses: marvinpinto/action-automatic-releases@latest
+        options: --user root
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: latest
