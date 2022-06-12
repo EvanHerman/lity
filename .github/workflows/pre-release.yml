@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Install yarn dependencies
-        run: yarn install
+        run: ls -la && yarn install
 
       - name: Build the plugin
         run: yarn build
