@@ -1,6 +1,6 @@
 name: PHPUnit Tests
 
-on: [pull_request,push]
+on: push
 
 jobs:
   phpunit:
