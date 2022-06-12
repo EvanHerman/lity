@@ -429,7 +429,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		}
 
 		/**
-		 * Button to clear the lity_media transient .
+		 * Button to regenerate the lity_media transient.
 		 *
 		 * @param array $args Field args.
 		 */
@@ -438,7 +438,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			printf(
 				'<a href="%1$s" class="button delete">%2$s</a>
 				<p class="description">%3$s</p>',
-				esc_url( add_query_arg( 'lity-action', 'lity-clear-transient', admin_url( 'options-general.php?page=lity_options' ) ) ),
+				esc_url( add_query_arg( 'lity-action', 'lity-regenerate-transient', admin_url( 'options-general.php?page=lity_options' ) ) ),
 				esc_html__( 'Clear Lity Transient', 'lity' ),
 				esc_html( $args['description'] )
 			);
@@ -458,21 +458,19 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			$lity_action = filter_input( INPUT_GET, 'lity-action' );
 
-			if ( false !== $lity_action && 'lity-clear-transient' === $lity_action ) {
+			if ( false !== $lity_action && 'lity-regenerate-transient' === $lity_action ) {
 
-				( new Lity() )->clear_lity_media_transient();
-
-				$class   = 'notice notice-success';
-				$message = __( 'Lity transient data successfully cleared.', 'lity' );
+				$lity = new Lity();
+				$lity->clear_lity_media_transient();
+				$lity->set_media_transient();
 
 				printf(
-					'<div class="%1$s">
+					'<div class="notice notice-success">
 						<p>
-							<strong>%2$s</strong>
+							<strong>%1$s</strong>
 						</p>
 					</div>',
-					esc_attr( $class ),
-					esc_html( $message )
+					esc_html__( 'Lity transient data successfully regenerated.', 'lity' )
 				);
 
 			}
@@ -497,5 +495,3 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 	}
 
 }
-
-new Lity_Options();

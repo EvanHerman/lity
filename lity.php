@@ -33,6 +33,13 @@ if ( ! class_exists( 'Lity' ) ) {
 	final class Lity {
 
 		/**
+		 * Options class instance.
+		 *
+		 * @var object
+		 */
+		private $lity_options;
+
+		/**
 		 * Lity plugin constructor.
 		 *
 		 * @since 1.0.0
@@ -41,9 +48,11 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 
+			$this->lity_options = new Lity_Options();
+
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
-			add_action( 'init', array( $this, 'lity_get_media' ), PHP_INT_MAX );
+			add_action( 'init', array( $this, 'set_media_transient' ), PHP_INT_MAX );
 
 			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
@@ -55,7 +64,7 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function enqueue_lity() {
 
-			$options    = ( new Lity_Options() )->get_lity_options();
+			$options    = $this->lity_options->get_lity_options();
 			$media_data = get_transient( 'lity_media' );
 
 			if ( false === $media_data || in_array( get_the_ID(), $options['disabled_on'], false ) ) {
@@ -91,14 +100,11 @@ if ( ! class_exists( 'Lity' ) ) {
 		 *
 		 * @since 1.0.0
 		 */
-		public function lity_get_media() {
+		public function set_media_transient() {
 
 			if (
-				is_admin() ||
-				(
-					'no' === ( new Lity_Options() )->get_lity_option( 'show_full_size' ) &&
-					'no' === ( new Lity_Options() )->get_lity_option( 'show_image_info' )
-				)
+				'no' === $this->lity_options->get_lity_option( 'show_full_size' ) &&
+				'no' === $this->lity_options->get_lity_option( 'show_image_info' )
 			) {
 
 				return;
