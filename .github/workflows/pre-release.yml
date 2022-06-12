@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: GuillaumeFalourd/setup-rsync@v1
+
       - name: Install yarn dependencies
         run: yarn install
 
@@ -21,8 +23,7 @@ jobs:
         run: |
           yarn min
           rm -rf build/*
-          sudo mkdir -p /build/lity
-          rsync -av --exclude-from .distignore --delete . build/lity/ && cd build/
+          rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/
           zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest

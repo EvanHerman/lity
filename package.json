@@ -12,7 +12,7 @@
 		"url": "https://github.com/EvanHerman/lity/issues"
 	},
 	"scripts": {
-		"build": "yarn min && rm -rf build/* && mkdir -p /build/lity && rsync -av --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/.",
+		"build": "yarn min && rm -rf build/* && rsync -av --mkpath --exclude-from .distignore --delete . build/lity/ && cd build/ && zip -r lity.zip lity/.",
 		"min:css": "minify ./assets/css/lity-styles.css > ./assets/css/lity-styles.min.css",
 		"min:js": "minify ./assets/js/lity-script.js > ./assets/js/lity-script.min.js",
 		"min": "yarn min:css && yarn min:js",
