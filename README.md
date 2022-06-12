@@ -7,8 +7,21 @@
 <h4 align="center">A lightweight, accessible and responsive <a href="https://wordpress.org" target="_blank">WordPress</a> lightbox plugin.</h4>
 
 <p align="center">
-	![PHPUnit Badge](https://github.com/EvanHerman/Lity/actions/workflows/phpunit.yml/badge.svg)
-	![WPCS Badge](https://github.com/EvanHerman/Lity/actions/workflows/wpcs.yml/badge.svg)
+	<a href="https://github.com/EvanHerman/lity/actions/workflows/phpunit.yml" target="_blank">
+		<img src="https://github.com/EvanHerman/Lity/actions/workflows/phpunit.yml/badge.svg">
+	</a>
+	<a href="https://github.com/EvanHerman/lity/actions/workflows/wpcs.yml" target="_blank">
+		<img src="https://github.com/EvanHerman/Lity/actions/workflows/wpcs.yml/badge.svg">
+	</a>
+</p>
+
+<p align="center">
+	<a href="https://wordpress.org/" target="_blank">
+		<img src="https://img.shields.io/static/v1?label=&message=5.0+-+6.0&color=blue&style=flat-square&logo=wordpress&logoColor=white" alt="WordPress Versions">
+	</a>
+	<a href="https://www.php.net/" target="_blank">
+		<img src="https://img.shields.io/static/v1?label=&message=5.6+-+8.0&color=777bb4&style=flat-square&logo=php&logoColor=white" alt="PHP Versions">
+	</a>
 </p>
 
 - Lightweight
