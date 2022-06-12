@@ -22,10 +22,10 @@ jobs:
       - name: Build the plugin
         run: |
           yarn min
-          rm -rf build/*
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . build/lity/
-          cd ./build && sudo zip -r lity.zip lity/.
+          cd ./build
+          sudo zip -r lity.zip lity/.
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
