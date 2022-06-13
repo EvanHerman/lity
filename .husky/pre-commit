@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "testing"
+echo -e "\033[0;32mTesting\033[0m"
 
 # PHPCS Check
 ./vendor/bin/phpcs .
