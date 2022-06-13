@@ -36,17 +36,10 @@
 					return;
 				}
 
-				let imgSrc = $( this ).attr( 'src' );
-				let imgObj = [];
-
-				lityMediaData.forEach( ( media, index ) => {
-					if ( media.urls.includes( imgSrc ) ) {
-						imgObj.push( lityMediaData[ index ] );
-					}
-				} );
+				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( imgObj.length ) {
-					// make lity lightboxes show full sized versions of the image
+					// Ensure lity lightboxes show full sized versions of the image.
 					$( this ).attr( 'data-lity-target', imgObj[0].urls[0] );
 				}
 			} );
@@ -77,20 +70,13 @@
 		 */
 		appendImageInfo: function() {
 
-			if ( 'no' === lityScriptData.options.show_image_info ) {
+			if ( 'no' === lityScriptData.options.show_image_info || ! lityMediaData ) {
 				return;
 			}
 
 			$( lityScriptData.imgSelectors ).each( function( img ) {
-				let imgSrc = $( this ).attr( 'src' );
 
-				let imgObj = [];
-
-				lityMediaData.forEach( ( media, index ) => {
-					if ( media.urls.includes( imgSrc ) ) {
-						imgObj.push( lityMediaData[ index ] );
-					}
-				} );
+				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( imgObj.length ) {
 
@@ -170,6 +156,21 @@
 			}
 
 			return customData;
+
+		},
+
+		findImageObj: function( imageSrc ) {
+
+			let imgObj = [];
+
+			for ( var i = 0; i < lityMediaData.length; i++ ) {
+				if ( lityMediaData[i].urls.includes( imageSrc ) ) {
+					imgObj.push( lityMediaData[i] );
+					break;
+				}
+			}
+
+			return imgObj;
 
 		}
 
