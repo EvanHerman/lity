@@ -54,6 +54,21 @@
 		},
 
 		/**
+		 * Add a HTML element to display the selected image as the background, in a nicer way.
+		 *
+		 * @since 1.0.0
+		 */
+		fullSizeImages: function() {
+
+			if ( 'no' === lityScriptData.options.use_background_image ) {
+				return;
+			}
+
+			console.log( 'testing' );
+
+		},
+
+		/**
 		 * Append title and caption image info.
 		 *
 		 * @since 1.0.0
