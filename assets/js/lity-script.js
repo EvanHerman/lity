@@ -55,7 +55,7 @@
 
 			const triggerElement = lightbox.opener();
 
-			$( '.lity-wrap' ).before( `<div class="lity-lightbox__background" style="background-image: url(${triggerElement[0].currentSrc});"></div>` );
+			$( '.lity-wrap' ).before( `<div class="lity-lightbox-background" style="background-image: url(${triggerElement[0].currentSrc});"></div>` );
 
 		},
 

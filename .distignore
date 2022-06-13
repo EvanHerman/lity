@@ -5,6 +5,8 @@
 .gitignore
 .dev
 .husky
+.stylelintrc.json
+.stylelintignore
 build/
 node_modules/
 vendor/
