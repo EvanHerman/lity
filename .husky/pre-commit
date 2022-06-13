@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# PHPCS Check
+./vendor/bin/phpcs .
+
+# PHPUnit Test
 composer run test
-phpcs .
