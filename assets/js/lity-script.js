@@ -54,6 +54,23 @@
 		},
 
 		/**
+		 * Add a HTML element to display the selected image as the background, in a nicer way.
+		 *
+		 * @since 1.0.0
+		 */
+		backgroundImages: function( event, lightbox ) {
+
+			if ( 'no' === lityScriptData.options.use_background_image ) {
+				return;
+			}
+
+			const triggerElement = lightbox.opener();
+
+			$( '.lity-wrap' ).before( `<div class="lity-lightbox__background" style="background-image: url(${triggerElement[0].currentSrc});"></div>` );
+
+		},
+
+		/**
 		 * Append title and caption image info.
 		 *
 		 * @since 1.0.0
@@ -162,4 +179,5 @@
 	$( document ).on( 'ready', lityScript.fullSizeImages );
 	$( document ).on( 'ready', lityScript.appendImageInfo );
 	$( document ).on( 'lity:ready', lityScript.showImageInfo );
+	$( document ).on( 'lity:open', lityScript.backgroundImages );
 } )( jQuery );

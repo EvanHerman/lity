@@ -37,6 +37,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			$this->default_options = array(
 				'show_full_size'             => 'yes',
+				'use_background_image'       => 'yes',
 				'show_image_info'            => 'no',
 				'disabled_on'                => array(),
 				'element_selectors'          => '',
@@ -170,6 +171,18 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			);
 
 			add_settings_field(
+				'use_background_image',
+				__( 'Usge Background Image', 'lity' ),
+				array( $this, 'lity_use_background_image_dropdown' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'use_background_image',
+					'description' => __( 'Should the lightbox use the selected image as a background?', 'lity' ),
+				)
+			);
+
+			add_settings_field(
 				'show_image_info',
 				__( 'Show Image Info', 'lity' ),
 				array( $this, 'lity_show_image_info_dropdown' ),
@@ -283,6 +296,35 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 * @param array $args Field args.
 		 */
 		public function lity_show_image_info_dropdown( $args ) {
+
+			$options = $this->get_lity_options();
+
+			?>
+
+			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
+				<option value="yes" <?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
+					<?php esc_html_e( 'Yes', 'lity' ); ?>
+				</option>
+
+				<option value="no" <?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
+					<?php esc_html_e( 'No', 'lity' ); ?>
+				</option>
+			</select>
+
+			<p class="description">
+				<?php echo esc_html( $args['description'] ); ?>
+			</p>
+
+			<?php
+
+		}
+
+		/**
+		 * Show use_image_background dropdown callback.
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_use_background_image_dropdown( $args ) {
 
 			$options = $this->get_lity_options();
 
