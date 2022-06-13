@@ -12,5 +12,7 @@ module.exports = {
 	"parserOptions": {
 		"ecmaVersion": "latest"
 	},
-	"rules": {}
+	"rules": {
+		"no-extra-boolean-cast": "off"
+	}
 }
