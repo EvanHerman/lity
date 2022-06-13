@@ -58,13 +58,15 @@
 		 *
 		 * @since 1.0.0
 		 */
-		fullSizeImages: function() {
+		backgroundImages: function( event, lightbox ) {
 
 			if ( 'no' === lityScriptData.options.use_background_image ) {
 				return;
 			}
 
-			console.log( 'testing' );
+			const triggerElement = lightbox.opener();
+
+			$( '.lity-wrap' ).before( `<div class="lity-lightbox__background" style="background-image: url(${triggerElement[0].currentSrc});"></div>` );
 
 		},
 
@@ -177,4 +179,5 @@
 	$( document ).on( 'ready', lityScript.fullSizeImages );
 	$( document ).on( 'ready', lityScript.appendImageInfo );
 	$( document ).on( 'lity:ready', lityScript.showImageInfo );
+	$( document ).on( 'lity:open', lityScript.backgroundImages );
 } )( jQuery );
