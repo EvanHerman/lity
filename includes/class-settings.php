@@ -98,10 +98,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 					$script = "jQuery( document ).on( 'ready', function() {
 						const slimSelect  = new SlimSelect( {
-							select: '#disabled_on',
-							onChange: ( info ) => {
-								console.log( info.value );
-							}
+							select: '#disabled_on'
 						} );
 					} );";
 
