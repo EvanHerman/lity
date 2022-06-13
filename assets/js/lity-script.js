@@ -31,7 +31,7 @@
 				return;
 			}
 
-			$( lityScriptData.imgSelectors ).each( function() {
+			$( lityScriptData.imgSelectors ).each( function( img ) {
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( Object.keys( imgObj ).length > 0 ) {
