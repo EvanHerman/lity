@@ -56,6 +56,6 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 Copyright © 2022 Evan Herman. All Rights Reserved.
 
-[EvanHerman.com](https://www.evan-herman.com) &nbsp;&middot;&nbsp;
+[Evan-Herman.com](https://www.evan-herman.com) &nbsp;&middot;&nbsp;
 GitHub [@EvanHerman](https://github.com/EvanHerman) &nbsp;&middot;&nbsp;
 Twitter [@EvanMHerman](https://twitter.com/EvanMHerman)
