@@ -1,0 +1,20 @@
+---
+name: ESLint
+
+on: push
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: php-actions/composer@v5
+
+      - name: Composer Install
+        run: sudo composer install
+
+      - name: Run unit eslint
+        run: yarn lint:js
