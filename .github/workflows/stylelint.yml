@@ -13,8 +13,8 @@ jobs:
 
       - uses: php-actions/composer@v5
 
-      - name: Composer Install
-        run: sudo composer install
+      - name: Yarn Install
+        run: yarn install
 
       - name: Run unit eslint
         run: yarn lint:css
