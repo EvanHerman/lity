@@ -27,20 +27,16 @@
 		 */
 		fullSizeImages: function() {
 
-			if ( 'no' === lityScriptData.options.show_full_size ) {
+			if ( 'no' === lityScriptData.options.show_full_size || ! lityMediaData ) {
 				return;
 			}
 
 			$( lityScriptData.imgSelectors ).each( function( img ) {
-				if ( ! lityMediaData ) {
-					return;
-				}
-
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
-				if ( imgObj.length ) {
+				if ( Object.keys( imgObj ).length > 0 ) {
 					// Ensure lity lightboxes show full sized versions of the image.
-					$( this ).attr( 'data-lity-target', imgObj[0].urls[0] );
+					$( this ).attr( 'data-lity-target', imgObj.urls[0] );
 				}
 			} );
 
@@ -78,19 +74,19 @@
 
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
-				if ( imgObj.length ) {
+				if ( Object.keys( imgObj ).length > 0 ) {
 
-					if ( !! imgObj[0].title ) {
-						$( this ).attr( 'data-lity-title', imgObj[0].title );
+					if ( !! imgObj.title ) {
+						$( this ).attr( 'data-lity-title', imgObj.title );
 					}
 
-					if ( !! imgObj[0].caption ) {
-						$( this ).attr( 'data-lity-description', imgObj[0].caption );
+					if ( !! imgObj.caption ) {
+						$( this ).attr( 'data-lity-description', imgObj.caption );
 					}
 
-					if ( !! imgObj[0].custom_data && Object.keys( imgObj[0].custom_data ).length ) {
+					if ( !! imgObj.custom_data && Object.keys( imgObj.custom_data ).length ) {
 
-						for (const [ key, value ] of Object.entries( imgObj[0].custom_data )) {
+						for ( const [ key, value ] of Object.entries( imgObj.custom_data ) ) {
 							$( this ).attr( `data-lity-custom-${key}`, `${value.element_wrap}:${value.content}` );
 						}
 
@@ -143,6 +139,15 @@
 	 */
 	const helpers = {
 
+		/**
+		 * Retreive custom image data from the image markup.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  {Object} $element
+		 *
+		 * @return {array} Custom image data array.
+		 */
 		getImageCustomData: function( $element ) {
 			let elementData = $element.data();
 			let customData = [];
@@ -159,18 +164,24 @@
 
 		},
 
+		/**
+		 * Find an image object based on the image URL.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  {string} Image src value.
+		 *
+		 * @return {array} Image object array.
+		 */
 		findImageObj: function( imageSrc ) {
-
-			let imgObj = [];
 
 			for ( var i = 0; i < lityMediaData.length; i++ ) {
 				if ( lityMediaData[i].urls.includes( imageSrc ) ) {
-					imgObj.push( lityMediaData[i] );
-					break;
+					return lityMediaData[i];
 				}
 			}
 
-			return imgObj;
+			return {};
 
 		}
 
