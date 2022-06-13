@@ -37,3 +37,20 @@ img[data-lity]:hover {
 body.logged-in .lity-close {
 	top: 32px;
 }
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	.lity-content.lity-image-info {
+		display: inline;
+	}
+
+	.lity-info {
+		height: inherit;
+		max-width: 100%;
+		padding: 2em;
+		width: 100%;
+	}
+
+		.lity-info > h4 {
+			margin-top: 0;
+		}
+}
