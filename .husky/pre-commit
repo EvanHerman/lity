@@ -3,11 +3,15 @@
 
 # Stylelint Test
 echo "\033[0;32mRunning Stylelint...\033[0m"
-yarn stylelint "assets/css/*.css"
+yarn lint:css
+
+# JSLint Test
+echo "\033[0;32mRunning JSLint...\033[0m"
+yarn lint:js
 
 # PHPCS Check
 echo "\033[0;32mRunning WPCS checks...\033[0m"
-./vendor/bin/phpcs .
+yarn phpcs
 
 # PHPUnit Test
 echo "\033[0;32mRunning PHPUnit Tests...\033[0m"

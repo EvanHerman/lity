@@ -31,7 +31,7 @@
 				return;
 			}
 
-			$( lityScriptData.imgSelectors ).each( function( img ) {
+			$( lityScriptData.imgSelectors ).each( function() {
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( Object.keys( imgObj ).length > 0 ) {
@@ -70,21 +70,21 @@
 				return;
 			}
 
-			$( lityScriptData.imgSelectors ).each( function( img ) {
+			$( lityScriptData.imgSelectors ).each( function() {
 
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( Object.keys( imgObj ).length > 0 ) {
 
-					if ( !! imgObj.title ) {
+					if ( ! imgObj.title ) {
 						$( this ).attr( 'data-lity-title', imgObj.title );
 					}
 
-					if ( !! imgObj.caption ) {
+					if ( ! imgObj.caption ) {
 						$( this ).attr( 'data-lity-description', imgObj.caption );
 					}
 
-					if ( !! imgObj.custom_data && Object.keys( imgObj.custom_data ).length ) {
+					if ( ! imgObj.custom_data && Object.keys( imgObj.custom_data ).length ) {
 
 						for ( const [ key, value ] of Object.entries( imgObj.custom_data ) ) {
 							$( this ).attr( `data-lity-custom-${key}`, `${value.element_wrap}:${value.content}` );
@@ -109,15 +109,15 @@
 			const description = triggerElement.data( 'lity-description' );
 			const customData = helpers.getImageCustomData( triggerElement );
 
-			if ( !! title || !! description ) {
+			if ( ! title || ! description ) {
 				$( '.lity-content' ).addClass( 'lity-image-info' ).append( '<div class=lity-info></div>' );
 			}
 
-			if ( !! title ) {
+			if ( ! title ) {
 				$( '.lity-info' ).append( '<h4>' + triggerElement.data( 'lity-title' ) + '</h4>' );
 			}
 
-			if ( !! description ) {
+			if ( ! description ) {
 				$( '.lity-info' ).append( '<p>' + triggerElement.data( 'lity-description' ) + '</p>' );
 			}
 
