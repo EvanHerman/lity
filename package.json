@@ -19,11 +19,19 @@
 		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test root password 127.0.0.1 latest",
 		"test:php": "./vendor/bin/phpunit --coverage-text",
 		"test:php-coverage": "./vendor/bin/phpunit --coverage-html .dev/tests/php/coverage/",
-		"watch": "npm-watch"
+		"lint": "yarn lint:css && yarn lint:js",
+		"lint:js": "yarn eslint 'assets/js/*.js'",
+		"lint:css": "yarn stylelint assets/css/*.css",
+		"phpcs": "./vendor/bin/phpcs .",
+		"watch": "npm-watch",
+		"prepare": "husky install"
 	},
 	"watch": {
 		"min": {
-			"patterns": ["assets/js", "assets/css"],
+			"patterns": [
+				"assets/js",
+				"assets/css"
+			],
 			"extensions": "js,css",
 			"quiet": true,
 			"runOnChangeOnly": true,
@@ -31,7 +39,11 @@
 		}
 	},
 	"devDependencies": {
+		"eslint": "^8.17.0",
+		"husky": "^8.0.1",
 		"minify": "^9.1.0",
-		"npm-watch": "^0.11.0"
+		"npm-watch": "^0.11.0",
+		"stylelint": "^14.9.1",
+		"stylelint-config-standard": "^26.0.0"
 	}
 }

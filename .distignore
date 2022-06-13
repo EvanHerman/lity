@@ -4,6 +4,10 @@
 .DS_Store
 .gitignore
 .dev
+.husky
+.stylelintrc.json
+.stylelintignore
+.eslintrc.js
 build/
 node_modules/
 vendor/
