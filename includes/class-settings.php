@@ -395,7 +395,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 						foreach ( $post_ids as $post_id ) {
 
 							$post_title = get_the_title( $post_id );
-							$selected   = in_array( $post_id, $options['disabled_on'], false ) ? ' selected="selected" ' : '';
+							$selected   = in_array( (string) $post_id, $options['disabled_on'], true ) ? ' selected="selected" ' : '';
 
 							?>
 

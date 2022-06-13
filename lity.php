@@ -67,7 +67,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			$options    = $this->lity_options->get_lity_options();
 			$media_data = get_transient( 'lity_media' );
 
-			if ( false === $media_data || in_array( get_the_ID(), $options['disabled_on'], false ) ) {
+			if ( false === $media_data || in_array( (string) get_the_ID(), $options['disabled_on'], true ) ) {
 
 				return;
 
