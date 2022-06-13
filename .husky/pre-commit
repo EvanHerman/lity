@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo -e "\033[0;32mTesting\033[0m"
+echo "\033[0;32mRunning WPCS checks...\033[0m"
 
 # PHPCS Check
 ./vendor/bin/phpcs .
+
+echo "\033[0;32mRunning PHPUnit Tests...\033[0m"
 
 # PHPUnit Test
 composer run test
