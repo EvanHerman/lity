@@ -17,14 +17,17 @@
 		"min:js": "minify ./assets/js/lity-script.js > ./assets/js/lity-script.min.js",
 		"min:css": "minify ./assets/css/lity-styles.css > ./assets/css/lity-styles.min.css",
 		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test root password 127.0.0.1 latest",
-		"test:php": "./vendor/bin/phpunit --coverage-text",
+		"install:tests-local": ".dev/scripts/install-wp-tests.sh wordpress_test '' password 127.0.0.1 latest",
+		"test:php": "./vendor/bin/phpunit",
 		"test:php-coverage": "./vendor/bin/phpunit --coverage-html .dev/tests/php/coverage/",
+		"test:php-coverage-text": "./vendor/bin/phpunit --coverage-text",
 		"lint": "yarn lint:css && yarn lint:js",
 		"lint:js": "yarn eslint 'assets/js/*.js'",
 		"lint:css": "yarn stylelint assets/css/*.css",
 		"phpcs": "./vendor/bin/phpcs .",
 		"watch": "npm-watch",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"postinstall": "composer install"
 	},
 	"watch": {
 		"min": {
