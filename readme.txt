@@ -18,8 +18,8 @@ Lity is a lightweight plugin to allow for all images to be opened in a responsiv
 == Screenshots ==
 
 1. Lity settings page.
-1. Lightbox with image.
-1. Lightbox with image and image title and caption.
+2. Lightbox with image.
+3. Lightbox with image and image title and caption.
 
 == Installation ==
 
