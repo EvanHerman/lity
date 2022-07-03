@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'LITY_PLUGIN_VERSION', '1.0.0' );
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
+define( 'LITY_TAGIFY_VERSION', '4.12.0' );
 
 if ( ! class_exists( 'Lity' ) ) {
 
@@ -87,9 +88,10 @@ if ( ! class_exists( 'Lity' ) ) {
 				'lity-script',
 				'lityScriptData',
 				array(
-					'options'      => $options,
-					'imgSelectors' => ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img',
-					'mediaData'    => get_transient( 'lity_media' ),
+					'options'                    => $options,
+					'element_selectors'          => empty( $this->lity_options->get_lity_option( 'element_selectors' ) ) ? 'img' : implode( ',', $this->lity_options->get_lity_option( 'element_selectors' ) ),
+					'excluded_element_selectors' => implode( ',', $this->lity_options->get_lity_option( 'excluded_element_selectors' ) ),
+					'mediaData'                  => get_transient( 'lity_media' ),
 				)
 			);
 

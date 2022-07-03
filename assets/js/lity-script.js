@@ -16,7 +16,9 @@
 		 */
 		init: function() {
 
-			$( lityScriptData.imgSelectors ).not( lityScriptData.options.excluded_element_selectors ).attr( 'data-lity', '' );
+			console.log( lityScriptData.element_selectors );
+
+			$( lityScriptData.element_selectors ).not( lityScriptData.excluded_element_selectors ).attr( 'data-lity', '' );
 
 		},
 
@@ -31,7 +33,7 @@
 				return;
 			}
 
-			$( lityScriptData.imgSelectors ).each( function() {
+			$( lityScriptData.element_selectors ).each( function() {
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
 				if ( Object.keys( imgObj ).length > 0 ) {
@@ -70,7 +72,7 @@
 				return;
 			}
 
-			$( lityScriptData.imgSelectors ).each( function() {
+			$( lityScriptData.element_selectors ).each( function() {
 
 				let imgObj = helpers.findImageObj( $( this ).attr( 'src' ) );
 
