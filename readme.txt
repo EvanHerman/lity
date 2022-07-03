@@ -1,4 +1,4 @@
-=== Lity - Responsive Lightbox ===
+=== Lity - Responsive Lightboxes ===
 Author URI: https://www.evanherman.com
 Contributors: eherman24
 Tags: responsive, lightbox, captions
@@ -24,8 +24,8 @@ Lity is a lightweight plugin to allow for all images to be opened in a responsiv
 == Installation ==
 
 1. Upload the `lity` folder to your `/wp-content/plugins/` directory or alternatively upload the lity.zip file via the plugin page of WordPress by clicking 'Add New' and selecting the zip from your computer.
-2. Activate the Lity - Responsive Lightbox WordPress plugin through the 'Plugins' menu in WordPress.
-4. Navigate to 'Settings > Lity - Responsive Lightbox' to alter the plugin settings.
+2. Activate the Lity - Responsive Lightboxes WordPress plugin through the 'Plugins' menu in WordPress.
+4. Navigate to 'Settings > Lity - Responsive Lightboxes' to alter the plugin settings.
 
 == Frequently Asked Questions ==
 
