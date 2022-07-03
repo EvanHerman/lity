@@ -9,22 +9,11 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	private $media_data;
 
-	private $default_options;
-
 	function setUp(): void {
 
 		parent::setUp();
 
 		$this->media_data = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-1536x1044.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-600x408.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-100x100.jpg"],"title":"Image 5","caption":"Image description"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-100x100.jpg"],"title":"Image 4","caption":"hello"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-100x100.jpg"],"title":"Image 3","caption":"Image description"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-100x100.jpg"],"title":"Image 2","caption":"This is the image caption."},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-1536x1044.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-600x408.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-100x100.jpg"],"title":"","caption":""}]';
-
-		$this->default_options = array(
-			'show_full_size'             => 'yes',
-			'use_background_image'       => 'yes',
-			'show_image_info'            => 'no',
-			'disabled_on'                => array(),
-			'element_selectors'          => 'img',
-			'excluded_element_selectors' => '',
-		);
 
 		require_once dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/lity.php';
 
