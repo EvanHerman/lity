@@ -22,26 +22,23 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 	final class Lity_WooCommerce {
 
 		/**
+		 * Options class instance.
+		 *
+		 * @var object
+		 */
+		private $lity_options;
+
+		/**
 		 * Lity options class constructor.
 		 *
 		 * @since 1.0.0
 		 */
 		public function __construct() {
 
-			if ( ! function_exists( 'is_plugin_active' ) ) {
-
-				include_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-			}
-
-			if ( is_admin() || ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-
-				return;
-
-			}
+			$this->lity_options = new Lity_Options();
 
 			add_filter( 'option_lity_options', array( $this, 'woocommerce_exclusions' ), PHP_INT_MAX, 2 );
-			add_filter( 'option_lity_options', array( $this, 'storefront_excludsions' ), PHP_INT_MAX, 2 );
+			add_filter( 'option_lity_options', array( $this, 'storefront_exclusions' ), PHP_INT_MAX, 2 );
 
 		}
 
@@ -54,9 +51,13 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 		 */
 		public function woocommerce_exclusions( $value ) {
 
-			$value['excluded_element_selectors'] .= ',li.type-product .attachment-woocommerce_thumbnail';
+			if ( ! function_exists( 'is_plugin_active' ) ) {
 
-			return $value;
+				include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+			}
+
+			return ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? $value : $this->lity_options->add_selector_exclusion( $value, 'li.type-product .attachment-woocommerce_thumbnail' );
 
 		}
 
@@ -67,19 +68,11 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 		 *
 		 * @return array Filtered lity_options value.
 		 */
-		public function storefront_excludsions( $value ) {
+		public function storefront_exclusions( $value ) {
 
 			$theme = wp_get_theme( 'storefront' );
 
-			if ( ! $theme->exists() ) {
-
-				return $value;
-
-			}
-
-			$value['excluded_element_selectors'] .= ',.storefront-product-pagination img';
-
-			return $value;
+			return ! $theme->exists() ? $value : $this->lity_options->add_selector_exclusion( $value, '.storefront-product-pagination img' );
 
 		}
 

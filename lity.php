@@ -47,8 +47,8 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function __construct() {
 
-			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
+			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 
 			$this->lity_options = new Lity_Options();
 
@@ -236,17 +236,11 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function always_excluded_selectors( $value ) {
 
-			if ( is_admin() ) {
+			$exclusions = array(
+				'#wpadminbar img',
+			);
 
-				return $value;
-
-			}
-
-			// All images in the admin bar.
-			$value['excluded_element_selectors'] .= ',.storefront-product-pagination img';
-			$value['excluded_element_selectors'] .= ',#wpadminbar img';
-
-			return $value;
+			return $this->lity_options->add_selector_exclusion( $value, $exclusions );
 
 		}
 
