@@ -37,11 +37,13 @@ class Test_Lity extends WP_UnitTestCase {
 				'LITY_PLUGIN_VERSION'     => true,
 				'LITY_VERSION'            => true,
 				'LITY_SLIMSELECT_VERSION' => true,
+				'LITY_TAGIFY_VERSION'     => true,
 			],
 			[
 				'LITY_PLUGIN_VERSION'     => defined( 'LITY_PLUGIN_VERSION' ),
 				'LITY_VERSION'            => defined( 'LITY_VERSION' ),
 				'LITY_SLIMSELECT_VERSION' => defined( 'LITY_SLIMSELECT_VERSION' ),
+				'LITY_TAGIFY_VERSION'     => defined( 'LITY_TAGIFY_VERSION' ),
 			]
 		);
 
@@ -128,7 +130,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		global $wp_scripts;
 
-		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","disabled_on":[],"element_selectors":"","excluded_element_selectors":""},"imgSelectors":"img","mediaData":';
+		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","disabled_on":[],"element_selectors":"{}","excluded_element_selectors":"{}"},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
 
 		$this->assertTrue(
 			strpos( $wp_scripts->registered['lity-script']->extra['data'], $expected ) !== false,

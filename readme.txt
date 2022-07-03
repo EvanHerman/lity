@@ -5,7 +5,7 @@ Tags: responsive, lightbox, captions
 Requires at least: 5.0
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 1.0.0
+Stable tag: 0.0.1
 License: GPL-2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,9 @@ Lity is a lightweight plugin to allow for all images to be opened in a responsiv
 
 == Screenshots ==
 
-1.
+1. Lity settings page.
+2. Lightbox with image.
+3. Lightbox with image and image title and caption.
 
 == Installation ==
 
