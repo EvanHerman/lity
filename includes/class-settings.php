@@ -149,7 +149,13 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function options_init() {
 
-			register_setting( 'lity', 'lity_options' );
+			register_setting(
+				'lity',
+				'lity_options',
+				array(
+					'sanitize_callback' => array( $this, 'sanitize_lity_options' ),
+				)
+			);
 
 			add_settings_section(
 				'lity_options',
@@ -245,6 +251,25 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 					'description' => __( "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly.", 'lity' ),
 				)
 			);
+
+		}
+
+		/**
+		 * Sanitize lity_options before saving it to the database
+		 *
+		 * @param array $value The lity_options array.
+		 *
+		 * @since 1.0.0
+		 */
+		public function sanitize_lity_options( $value ) {
+
+			if ( ! array_key_exists( 'disabled_on', $value ) ) {
+
+				$value['disabled_on'] = array();
+
+			}
+
+			return $value;
 
 		}
 
