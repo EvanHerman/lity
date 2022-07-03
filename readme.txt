@@ -33,9 +33,6 @@ With additional granular controls, users can turn on or off lightboxes for speci
 
 == Frequently Asked Questions ==
 
-= Is Lity free? =
-Yes! Lity is 100% free and always will be.
-
 = Where are the plugin settings? =
 The plugins settings are nested inside of the 'Tools' menu item from the WordPress admin dashboard.
 
