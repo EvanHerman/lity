@@ -46,6 +46,7 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function __construct() {
 
+			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 
 			$this->lity_options = new Lity_Options();
