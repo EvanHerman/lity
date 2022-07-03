@@ -36,9 +36,16 @@ if ( ! class_exists( 'Lity' ) ) {
 		/**
 		 * Options class instance.
 		 *
-		 * @var object
+		 * @var Object
 		 */
 		private $lity_options;
+
+		/**
+		 * Default options array.
+		 *
+		 * @var array
+		 */
+		public $default_options;
 
 		/**
 		 * Lity plugin constructor.
@@ -51,7 +58,16 @@ if ( ! class_exists( 'Lity' ) ) {
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 
-			$this->lity_options = new Lity_Options();
+			$this->default_options = array(
+				'show_full_size'             => 'yes',
+				'use_background_image'       => 'yes',
+				'show_image_info'            => 'no',
+				'disabled_on'                => array(),
+				'element_selectors'          => 'img',
+				'excluded_element_selectors' => '',
+			);
+
+			$this->lity_options = new Lity_Options( $this->default_options );
 
 			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
@@ -74,16 +90,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			// Set defaults when the option doesn't exist yet.
 			if ( ! get_option( 'lity_options', false ) ) {
 
-				$option_defaults = array(
-					'show_full_size'             => 'yes',
-					'use_background_image'       => 'yes',
-					'show_image_info'            => 'no',
-					'disabled_on'                => array(),
-					'element_selectors'          => 'img',
-					'excluded_element_selectors' => '',
-				);
-
-				update_option( 'lity_options', $options );
+				update_option( 'lity_options', $this->default_options );
 
 			}
 
