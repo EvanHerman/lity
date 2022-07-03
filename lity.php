@@ -4,7 +4,7 @@
  * Description: Ensure when an image is clicked in the post content it opens in a responsive lightbox.
  * Author: Evan Herman
  * Author URI: https://www.evan-herman.com
- * Version: 1.0.0
+ * Version: 0.0.1
  * Text Domain: lity
  * Domain Path: /languages
  * Tested up to: 6.0
@@ -19,9 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
-define( 'LITY_PLUGIN_VERSION', '1.0.0' );
+define( 'LITY_PLUGIN_VERSION', '0.0.1' );
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
+define( 'LITY_TAGIFY_VERSION', '4.12.0' );
 
 if ( ! class_exists( 'Lity' ) ) {
 
@@ -55,7 +56,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'init', array( $this, 'set_media_transient' ), PHP_INT_MAX );
 
-			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
+			add_action( 'wp_generate_attachment_metadata', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 
 			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
@@ -90,9 +91,10 @@ if ( ! class_exists( 'Lity' ) ) {
 				'lity-script',
 				'lityScriptData',
 				array(
-					'options'      => $options,
-					'imgSelectors' => ! empty( $options['element_selectors'] ) ? $options['element_selectors'] : 'img',
-					'mediaData'    => get_transient( 'lity_media' ),
+					'options'                    => $options,
+					'element_selectors'          => empty( $this->lity_options->get_lity_option( 'element_selectors' ) ) ? 'img' : implode( ',', $this->lity_options->get_lity_option( 'element_selectors' ) ),
+					'excluded_element_selectors' => implode( ',', $this->lity_options->get_lity_option( 'excluded_element_selectors' ) ),
+					'mediaData'                  => get_transient( 'lity_media' ),
 				)
 			);
 

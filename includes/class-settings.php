@@ -40,8 +40,8 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				'use_background_image'       => 'yes',
 				'show_image_info'            => 'no',
 				'disabled_on'                => array(),
-				'element_selectors'          => '',
-				'excluded_element_selectors' => '',
+				'element_selectors'          => '{}',
+				'excluded_element_selectors' => '{}',
 			);
 
 			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
@@ -87,6 +87,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				"admin_print_styles-${submenu}",
 				function() use ( $suffix ) {
 					wp_enqueue_style( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/css/slimselect/slimselect${suffix}.css", array(), LITY_SLIMSELECT_VERSION, 'all' );
+					wp_enqueue_style( 'tagify', plugin_dir_url( __FILE__ ) . "../assets/css/tagify/tagify${suffix}.css", array(), LITY_TAGIFY_VERSION, 'all' );
 				}
 			);
 
@@ -95,14 +96,21 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				function() use ( $suffix ) {
 
 					wp_enqueue_script( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/js/slimselect/slimselect${suffix}.js", array( 'jquery' ), LITY_SLIMSELECT_VERSION, true );
+					wp_enqueue_script( 'tagify', plugin_dir_url( __FILE__ ) . '../assets/js/tagify/jQuery.tagify.min.js', array( 'jquery' ), LITY_TAGIFY_VERSION, true );
 
-					$script = "jQuery( document ).on( 'ready', function() {
-						const slimSelect  = new SlimSelect( {
+					$slimselect = "jQuery( document ).on( 'ready', function() {
+						new SlimSelect( {
 							select: '#disabled_on'
 						} );
 					} );";
 
-					wp_add_inline_script( 'slimselect', $script, 'after' );
+					wp_add_inline_script( 'slimselect', $slimselect, 'after' );
+
+					$tagify = "jQuery( document ).on( 'ready', function() {
+						jQuery( '#element_selectors, #excluded_element_selectors' ).tagify();
+					} );";
+
+					wp_add_inline_script( 'tagify', $tagify, 'after' );
 
 				}
 			);
@@ -137,7 +145,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			}
 
-			return $options[ $name ];
+			return in_array( $name, array( 'element_selectors', 'excluded_element_selectors' ), true ) ? wp_list_pluck( json_decode( $options[ $name ], true ), 'value' ) : $options[ $name ];
 
 		}
 
@@ -496,7 +504,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			}
 
-			$lity_action = filter_input( INPUT_GET, 'lity-action' );
+			$lity_action = filter_input( INPUT_GET, 'lity-action', FILTER_SANITIZE_STRING );
 
 			if ( false !== $lity_action && 'lity-regenerate-transient' === $lity_action ) {
 

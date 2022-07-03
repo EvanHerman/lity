@@ -3,14 +3,15 @@
 .distignore
 .DS_Store
 .gitignore
-.dev
-.husky
 .stylelintrc.json
 .stylelintignore
 .eslintrc.js
+.dev/
+.husky/
 build/
 node_modules/
 vendor/
+.wordpress-org/
 package*.json
 yarn.lock
 composer*

@@ -1,6 +1,6 @@
 <h1 align="center">Lity
 	<a href="https://github.com/EvanHerman/Lity/releases/latest/">
-		<img src="https://img.shields.io/static/v1?lityVersion=&message=v1.0.0&label=&color=999&style=flat-square">
+		<img src="https://img.shields.io/static/v1?lityVersion=&message=v0.0.1&label=&color=999&style=flat-square">
 	</a>
 </h1>
 
@@ -42,7 +42,9 @@
 
 This software uses the following open source packages:
 
-- [Lity](https://sorgalla.com/lity/) by Jan Sorgalla
+- [Lity](https://sorgalla.com/lity/) by [Jan Sorgalla](https://github.com/jsor)
+- [Slimselect](https://github.com/brianvoe/slim-select) by [Brian Voelker](https://github.com/brianvoe)
+- [Tagify](https://github.com/yairEO/tagify) by [Yair Even Or](https://github.com/yairEO)
 
 ## License
 
@@ -52,10 +54,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
----
+_________________
 
-Copyright © 2022 Evan Herman. All Rights Reserved.
-
-[Evan-Herman.com](https://www.evan-herman.com) &nbsp;&middot;&nbsp;
-GitHub [@EvanHerman](https://github.com/EvanHerman) &nbsp;&middot;&nbsp;
-Twitter [@EvanMHerman](https://twitter.com/EvanMHerman)
+<div align="center">Built with <span style="color: #F3A4B2;">&hearts;</span> by Evan Herman in Lancaster, PA.<br /></div>
+<div align="center">Copyright © 2022</div>
