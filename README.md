@@ -1,3 +1,5 @@
+<img src="https://github.com/EvanHerman/lity/blob/main/.wordpress-org/banner-1544x500.png?raw=true" width="100%" />
+
 <h1 align="center">Lity - Responsive Lightboxes
 	<a href="https://github.com/EvanHerman/Lity/releases/latest/">
 		<img src="https://img.shields.io/static/v1?lityVersion=&message=v0.0.1&label=&color=999&style=flat-square">
