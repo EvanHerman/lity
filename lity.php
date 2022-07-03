@@ -110,6 +110,17 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
+			/**
+			 * Allow users to disable lity via a filter.
+			 *
+			 * @var boolean
+			 */
+			if ( (bool) apply_filters( 'lity_is_disabled', false ) ) {
+
+				return;
+
+			}
+
 			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
 			// Styles.
