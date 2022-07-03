@@ -31,18 +31,13 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		/**
 		 * Lity options class constructor.
 		 *
+		 * @param array $default_options Default Lity options array.
+		 *
 		 * @since 1.0.0
 		 */
-		public function __construct() {
+		public function __construct( $default_options ) {
 
-			$this->default_options = array(
-				'show_full_size'             => 'yes',
-				'use_background_image'       => 'yes',
-				'show_image_info'            => 'no',
-				'disabled_on'                => array(),
-				'element_selectors'          => '{}',
-				'excluded_element_selectors' => '{}',
-			);
+			$this->default_options = $default_options;
 
 			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
 
@@ -55,9 +50,9 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		/**
 		 * Add lity-action to the removable query args array.
 		 *
-		 * @param  array $args Core removable query args array.
+		 * @param array $args Core removable query args array.
 		 *
-		 * @return array       Filtered removable query args array.
+		 * @return array Filtered removable query args array.
 		 */
 		public function removable_query_args( $args ) {
 
@@ -124,7 +119,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function get_lity_options() {
 
-			return wp_parse_args( get_option( 'lity_options' ), $this->default_options );
+			return get_option( 'lity_options', $this->default_options );
 
 		}
 

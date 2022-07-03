@@ -36,9 +36,16 @@ if ( ! class_exists( 'Lity' ) ) {
 		/**
 		 * Options class instance.
 		 *
-		 * @var object
+		 * @var Object
 		 */
 		private $lity_options;
+
+		/**
+		 * Default options array.
+		 *
+		 * @var array
+		 */
+		public $default_options;
 
 		/**
 		 * Lity plugin constructor.
@@ -47,9 +54,22 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function __construct() {
 
+			require_once plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
+			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 
-			$this->lity_options = new Lity_Options();
+			$this->default_options = array(
+				'show_full_size'             => 'yes',
+				'use_background_image'       => 'yes',
+				'show_image_info'            => 'no',
+				'disabled_on'                => array(),
+				'element_selectors'          => 'img',
+				'excluded_element_selectors' => '',
+			);
+
+			$this->lity_options = new Lity_Options( $this->default_options );
+
+			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
@@ -57,6 +77,22 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'wp_generate_attachment_metadata', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
+
+			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
+
+		}
+
+		/**
+		 * Actions to take on plugin activation.
+		 */
+		public function plugin_activation() {
+
+			// Set defaults when the option doesn't exist yet.
+			if ( ! get_option( 'lity_options', false ) ) {
+
+				update_option( 'lity_options', $this->default_options );
+
+			}
 
 		}
 
@@ -221,6 +257,25 @@ if ( ! class_exists( 'Lity' ) ) {
 		public function clear_lity_media_transient() {
 
 			delete_transient( 'lity_media' );
+
+		}
+
+		/**
+		 * Remove certain elements from ever opening in a lightbox.
+		 *
+		 * @param array $value lity_options value.
+		 *
+		 * @return array Filtered lity_options value.
+		 */
+		public function always_excluded_selectors( $value ) {
+
+			$lity_helpers = new Lity_Helpers();
+
+			$exclusions = array(
+				'#wpadminbar img',
+			);
+
+			return $lity_helpers->add_selector_exclusion( $value, $exclusions );
 
 		}
 
