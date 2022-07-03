@@ -130,7 +130,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		global $wp_scripts;
 
-		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","disabled_on":[],"element_selectors":"{}","excluded_element_selectors":"{}"},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
+		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","disabled_on":[],"element_selectors":"img","excluded_element_selectors":""},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
 
 		$this->assertTrue(
 			strpos( $wp_scripts->registered['lity-script']->extra['data'], $expected ) !== false,

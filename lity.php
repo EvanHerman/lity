@@ -47,10 +47,13 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function __construct() {
 
+			require_once plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 
 			$this->lity_options = new Lity_Options();
+
+			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
@@ -60,6 +63,29 @@ if ( ! class_exists( 'Lity' ) ) {
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 
 			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
+
+		}
+
+		/**
+		 * Actions to take on plugin activation.
+		 */
+		public function plugin_activation() {
+
+			// Set defaults when the option doesn't exist yet.
+			if ( ! get_option( 'lity_options', false ) ) {
+
+				$option_defaults = array(
+					'show_full_size'             => 'yes',
+					'use_background_image'       => 'yes',
+					'show_image_info'            => 'no',
+					'disabled_on'                => array(),
+					'element_selectors'          => 'img',
+					'excluded_element_selectors' => '',
+				);
+
+				update_option( 'lity_options', $options );
+
+			}
 
 		}
 
@@ -236,11 +262,13 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function always_excluded_selectors( $value ) {
 
+			$lity_helpers = new Lity_Helpers();
+
 			$exclusions = array(
 				'#wpadminbar img',
 			);
 
-			return $this->lity_options->add_selector_exclusion( $value, $exclusions );
+			return $lity_helpers->add_selector_exclusion( $value, $exclusions );
 
 		}
 

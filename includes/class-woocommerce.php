@@ -22,11 +22,11 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 	final class Lity_WooCommerce {
 
 		/**
-		 * Options class instance.
+		 * Helpers class instance.
 		 *
 		 * @var object
 		 */
-		private $lity_options;
+		private $lity_helpers;
 
 		/**
 		 * Lity options class constructor.
@@ -35,7 +35,7 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 		 */
 		public function __construct() {
 
-			$this->lity_options = new Lity_Options();
+			$this->lity_helpers = new Lity_Helpers();
 
 			add_filter( 'option_lity_options', array( $this, 'woocommerce_exclusions' ), PHP_INT_MAX, 2 );
 			add_filter( 'option_lity_options', array( $this, 'storefront_exclusions' ), PHP_INT_MAX, 2 );
@@ -57,7 +57,7 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 
 			}
 
-			return ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? $value : $this->lity_options->add_selector_exclusion( $value, 'li.type-product .attachment-woocommerce_thumbnail' );
+			return ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? $value : $this->lity_helpers->add_selector_exclusion( $value, 'li.type-product .attachment-woocommerce_thumbnail' );
 
 		}
 
@@ -72,7 +72,7 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 
 			$theme = wp_get_theme( 'storefront' );
 
-			return ! $theme->exists() ? $value : $this->lity_options->add_selector_exclusion( $value, '.storefront-product-pagination img' );
+			return ! $theme->exists() ? $value : $this->lity_helpers->add_selector_exclusion( $value, '.storefront-product-pagination img' );
 
 		}
 
