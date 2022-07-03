@@ -464,7 +464,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			</p>
 
 			<p class="description">
-				<strong><?php esc_html_e( 'Note:', 'lity' ); ?></strong> <?php esc_html_e( 'Multiple element selectors should be separated by a comma.' ); ?>
+				<strong><?php esc_html_e( 'Note:', 'lity' ); ?></strong> <?php esc_html_e( 'After you are done adding element selectors hit enter or comma, to add additional selectors.', 'lity' ); ?>
 			</p>
 
 			<?php
@@ -489,7 +489,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			</p>
 
 			<p class="description">
-				<strong><?php esc_html_e( 'Note:', 'lity' ); ?></strong> <?php esc_html_e( 'Multiple element selectors should be separated by a comma.' ); ?>
+				<strong><?php esc_html_e( 'Example:', 'lity' ); ?></strong> <?php esc_html_e( 'Example: <code>.content-area img</code> will disable lightboxes for images in the post content area of your site.', 'lity' ); ?>
+			</p>
+
+			<p class="description">
+				<strong><?php esc_html_e( 'Note:', 'lity' ); ?></strong> <?php esc_html_e( 'After you are done adding element selectors hit enter or comma, to add additional selectors.', 'lity' ); ?>
 			</p>
 
 			<?php
@@ -506,7 +510,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			printf(
 				'<a href="%1$s" class="button delete">%2$s</a>
 				<p class="description">%3$s</p>',
-				esc_url( add_query_arg( 'lity-action', 'lity-regenerate-transient', admin_url( 'options-general.php?page=lity_options' ) ) ),
+				esc_url( add_query_arg( 'lity-action', 'lity-regenerate-transient', menu_page_url( 'lity-options', false ) ) ),
 				esc_html__( 'Clear Lity Transient', 'lity' ),
 				esc_html( $args['description'] )
 			);

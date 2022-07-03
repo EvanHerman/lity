@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-07-03T21:46:32+00:00\n"
+"POT-Creation-Date: 2022-07-03T22:18:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: lity\n"
@@ -149,21 +149,42 @@ msgstr ""
 #: build/lity/includes/class-settings.php:447
 #: build/lity/includes/class-settings.php:472
 #: includes/class-settings.php:467
-#: includes/class-settings.php:492
+#: includes/class-settings.php:496
 msgid "Note:"
 msgstr ""
 
 #: build/lity/includes/class-settings.php:490
-#: includes/class-settings.php:510
+#: includes/class-settings.php:514
 msgid "Clear Lity Transient"
 msgstr ""
 
 #: build/lity/includes/class-settings.php:521
-#: includes/class-settings.php:541
+#: includes/class-settings.php:545
 msgid "Lity transient data successfully regenerated."
 msgstr ""
 
 #: build/lity/includes/class-settings.php:534
-#: includes/class-settings.php:554
+#: includes/class-settings.php:558
 msgid "Save Settings"
+msgstr ""
+
+#: includes/class-settings.php:467
+#: includes/class-settings.php:496
+msgid "After you are done adding element selectors hit enter or comma, to add additional selectors."
+msgstr ""
+
+#: includes/class-settings.php:492
+msgid "Example:"
+msgstr ""
+
+#: includes/class-settings.php:492
+msgid "Example: <code>.content-area img</code> will disable lightboxes for images in the post content area of your site."
+msgstr ""
+
+#: lity.php:115
+msgid "Lity - Responsive Lightboxes Settings"
+msgstr ""
+
+#: lity.php:116
+msgid "Settings"
 msgstr ""

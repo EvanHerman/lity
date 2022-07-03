@@ -110,8 +110,9 @@ if ( ! class_exists( 'Lity' ) ) {
 			$links = array_merge(
 				array(
 					sprintf(
-						'<a href="%1$s">%2$s</a>',
+						'<a href="%1$s" aria-label="%2$s">%3$s</a>',
 						menu_page_url( 'lity-options', false ),
+						esc_html__( 'Lity - Responsive Lightboxes Settings', 'lity' ),
 						esc_html__( 'Settings', 'lity' )
 					),
 				),
