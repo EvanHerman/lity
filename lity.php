@@ -71,6 +71,8 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
+			add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'custom_plugin_action_links' ) );
+
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
 			add_action( 'init', array( $this, 'set_media_transient' ), PHP_INT_MAX );
@@ -93,6 +95,30 @@ if ( ! class_exists( 'Lity' ) ) {
 				update_option( 'lity_options', $this->default_options );
 
 			}
+
+		}
+
+		/**
+		 * Display a custom 'Settings' link on the plugins.php table for Lity.
+		 *
+		 * @param array $links Original array of links.
+		 *
+		 * @return array Filtered array of links to display.
+		 */
+		public function custom_plugin_action_links( $links ) {
+
+			$links = array_merge(
+				array(
+					sprintf(
+						'<a href="%1$s">%2$s</a>',
+						menu_page_url( 'lity-options', false ),
+						esc_html__( 'Settings', 'lity' )
+					),
+				),
+				$links
+			);
+
+			return $links;
 
 		}
 

@@ -9,11 +9,15 @@ Stable tag: 0.0.1
 License: GPL-2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Lity is a lightweight plugin to allow for all images to be opened in a responsive lightbox.
+A lightweight, accessible and responsive <a href="https://wordpress.org" target="_blank">WordPress</a> lightbox plugin.
 
 == Description ==
 
-Lity is a lightweight plugin to allow for all images to be opened in a responsive lightbox.
+Lity - Responsive Lightboxes is a lightweight, accessible and responsive lightbox plugin.
+
+After installation, all images on your site will open up in a beautiful lightbox.
+
+With additional granular controls, users can turn on or off lightboxes for specific images by class, ID or other attribute, or turn them off for specific pages or posts.
 
 == Screenshots ==
 
@@ -31,6 +35,15 @@ Lity is a lightweight plugin to allow for all images to be opened in a responsiv
 
 = Is Lity free? =
 Yes! Lity is 100% free and always will be.
+
+= Where are the plugin settings? =
+The plugins settings are nested inside of the 'Tools' menu item from the WordPress admin dashboard.
+
+= Does Lity - Responsive Lightboxes work with videos or other media types? =
+At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
+
+= Does Lity - Responsive Lightboxes work with videos or other media types? =
+At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
 
 == Changelog ==
 

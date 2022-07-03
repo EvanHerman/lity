@@ -72,7 +72,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				__( 'Lity - Responsive Lightboxes', 'lity' ),
 				__( 'Lity - Responsive Lightboxes', 'lity' ),
 				'manage_options',
-				'lity_options',
+				'lity-options',
 				array( $this, 'lity_options_page' )
 			);
 
