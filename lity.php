@@ -58,6 +58,8 @@ if ( ! class_exists( 'Lity' ) ) {
 			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 
+			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
+
 		}
 
 		/**
@@ -220,6 +222,29 @@ if ( ! class_exists( 'Lity' ) ) {
 		public function clear_lity_media_transient() {
 
 			delete_transient( 'lity_media' );
+
+		}
+
+		/**
+		 * Remove certain elements from ever opening in a lightbox.
+		 *
+		 * @param array $value lity_options value.
+		 *
+		 * @return array Filtered lity_options value.
+		 */
+		public function always_excluded_selectors( $value ) {
+
+			if ( is_admin() ) {
+
+				return $value;
+
+			}
+
+			// All images in the admin bar.
+			$value['excluded_element_selectors'] .= ',.storefront-product-pagination img';
+			$value['excluded_element_selectors'] .= ',#wpadminbar img';
+
+			return $value;
 
 		}
 
