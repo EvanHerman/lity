@@ -55,7 +55,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'init', array( $this, 'set_media_transient' ), PHP_INT_MAX );
 
-			add_action( 'wp_handle_upload', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX );
+			add_action( 'wp_generate_attachment_metadata', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
 
 		}
