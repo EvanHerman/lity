@@ -69,8 +69,8 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			$submenu = add_submenu_page(
 				'options-general.php',
-				__( 'Lity - Responsive Lightbox', 'lity' ),
-				__( 'Lity - Responsive Lightbox', 'lity' ),
+				__( 'Lity - Responsive Lightboxes', 'lity' ),
+				__( 'Lity - Responsive Lightboxes', 'lity' ),
 				'manage_options',
 				'lity_options',
 				array( $this, 'lity_options_page' )

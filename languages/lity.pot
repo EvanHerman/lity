@@ -1,23 +1,23 @@
 # Copyright (C) 2022 Evan Herman
-# This file is distributed under the same license as the Lity - Responsive Lightbox plugin.
+# This file is distributed under the same license as the Lity - Responsive Lightboxes plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Lity - Responsive Lightbox 1.0.0\n"
+"Project-Id-Version: Lity - Responsive Lightboxes 0.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lity\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-07-03T11:54:25+00:00\n"
+"POT-Creation-Date: 2022-07-03T21:43:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: lity\n"
 
 #. Plugin Name of the plugin
-#: includes/class-settings.php:77
-#: includes/class-settings.php:78
-msgid "Lity - Responsive Lightbox"
+#: includes/class-settings.php:72
+#: includes/class-settings.php:73
+msgid "Lity - Responsive Lightboxes"
 msgstr ""
 
 #. Description of the plugin
@@ -32,104 +32,138 @@ msgstr ""
 msgid "https://www.evan-herman.com"
 msgstr ""
 
-#: includes/class-settings.php:161
+#: build/lity/includes/class-settings.php:77
+#: build/lity/includes/class-settings.php:78
+msgid "Lity - Responsive Lightbox"
+msgstr ""
+
+#: build/lity/includes/class-settings.php:161
+#: includes/class-settings.php:162
 msgid "Responsive Lightbox Settings."
 msgstr ""
 
-#: includes/class-settings.php:168
+#: build/lity/includes/class-settings.php:168
+#: includes/class-settings.php:169
 msgid "Show Full Size Image"
 msgstr ""
 
-#: includes/class-settings.php:174
+#: build/lity/includes/class-settings.php:174
+#: includes/class-settings.php:175
 msgid "Should full size images be shown in the lightbox?"
 msgstr ""
 
-#: includes/class-settings.php:180
+#: build/lity/includes/class-settings.php:180
+#: includes/class-settings.php:181
 msgid "Usge Background Image"
 msgstr ""
 
-#: includes/class-settings.php:186
+#: build/lity/includes/class-settings.php:186
+#: includes/class-settings.php:187
 msgid "Should the lightbox use the selected image as a background?"
 msgstr ""
 
-#: includes/class-settings.php:192
+#: build/lity/includes/class-settings.php:192
+#: includes/class-settings.php:193
 msgid "Show Image Info"
 msgstr ""
 
-#: includes/class-settings.php:198
+#: build/lity/includes/class-settings.php:198
+#: includes/class-settings.php:199
 msgid "Should the image title and description be shown in the lightbox?"
 msgstr ""
 
-#: includes/class-settings.php:204
+#: build/lity/includes/class-settings.php:204
+#: includes/class-settings.php:205
 msgid "Disabled on"
 msgstr ""
 
 #. translators: %s is 'not' wrapped in a strong tag.
-#: includes/class-settings.php:212
+#: build/lity/includes/class-settings.php:212
+#: includes/class-settings.php:213
 msgid "Select specific posts or pages that Lity should %s load on."
 msgstr ""
 
-#: includes/class-settings.php:213
+#: build/lity/includes/class-settings.php:213
+#: includes/class-settings.php:214
 msgid "not"
 msgstr ""
 
-#: includes/class-settings.php:220
+#: build/lity/includes/class-settings.php:220
+#: includes/class-settings.php:221
 msgid "Element Selectors"
 msgstr ""
 
-#: includes/class-settings.php:226
+#: build/lity/includes/class-settings.php:226
+#: includes/class-settings.php:227
 msgid "Specify custom element selectors for images on your site. If left empty, this will just be <code>img</code> and target all images on your site."
 msgstr ""
 
-#: includes/class-settings.php:232
+#: build/lity/includes/class-settings.php:232
+#: includes/class-settings.php:233
 msgid "Excluded Element Selectors"
 msgstr ""
 
-#: includes/class-settings.php:238
+#: build/lity/includes/class-settings.php:238
+#: includes/class-settings.php:239
 msgid "Specify element selectors that should be excluded from opening in a lightbox."
 msgstr ""
 
-#: includes/class-settings.php:244
+#: build/lity/includes/class-settings.php:244
+#: includes/class-settings.php:245
 msgid "Clear Lity Transient Data"
 msgstr ""
 
-#: includes/class-settings.php:250
+#: build/lity/includes/class-settings.php:250
+#: includes/class-settings.php:251
 msgid "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly."
 msgstr ""
 
-#: includes/class-settings.php:264
+#: build/lity/includes/class-settings.php:264
+#: includes/class-settings.php:284
 msgid "General Settings"
 msgstr ""
 
-#: includes/class-settings.php:282
-#: includes/class-settings.php:311
-#: includes/class-settings.php:340
+#: build/lity/includes/class-settings.php:282
+#: build/lity/includes/class-settings.php:311
+#: build/lity/includes/class-settings.php:340
+#: includes/class-settings.php:302
+#: includes/class-settings.php:331
+#: includes/class-settings.php:360
 msgid "Yes"
 msgstr ""
 
-#: includes/class-settings.php:286
-#: includes/class-settings.php:315
-#: includes/class-settings.php:344
+#: build/lity/includes/class-settings.php:286
+#: build/lity/includes/class-settings.php:315
+#: build/lity/includes/class-settings.php:344
+#: includes/class-settings.php:306
+#: includes/class-settings.php:335
+#: includes/class-settings.php:364
 msgid "No"
 msgstr ""
 
-#: includes/class-settings.php:408
+#: build/lity/includes/class-settings.php:408
+#: includes/class-settings.php:428
 msgid "(no title)"
 msgstr ""
 
-#: includes/class-settings.php:447
-#: includes/class-settings.php:472
+#: build/lity/includes/class-settings.php:447
+#: build/lity/includes/class-settings.php:472
+#: includes/class-settings.php:467
+#: includes/class-settings.php:492
 msgid "Note:"
 msgstr ""
 
-#: includes/class-settings.php:490
+#: build/lity/includes/class-settings.php:490
+#: includes/class-settings.php:510
 msgid "Clear Lity Transient"
 msgstr ""
 
-#: includes/class-settings.php:521
+#: build/lity/includes/class-settings.php:521
+#: includes/class-settings.php:541
 msgid "Lity transient data successfully regenerated."
 msgstr ""
 
-#: includes/class-settings.php:534
+#: build/lity/includes/class-settings.php:534
+#: includes/class-settings.php:554
 msgid "Save Settings"
 msgstr ""
