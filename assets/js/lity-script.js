@@ -16,8 +16,6 @@
 		 */
 		init: function() {
 
-			console.log( lityScriptData.element_selectors );
-
 			$( lityScriptData.element_selectors ).not( lityScriptData.excluded_element_selectors ).attr( 'data-lity', '' );
 
 		},
