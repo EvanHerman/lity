@@ -286,7 +286,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
-			set_transient( 'lity_media', json_encode( $media ), WEEK_IN_SECONDS );
+			set_transient( 'lity_media', json_encode( $media ) );
 
 		}
 
