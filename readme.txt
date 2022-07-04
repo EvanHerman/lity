@@ -22,8 +22,11 @@ With additional granular controls, users can turn on or off lightboxes for speci
 == Screenshots ==
 
 1. Lity settings page.
-2. Lightbox with image.
-3. Lightbox with image and image title and caption.
+2. Demo of Lity - Respnsive Lightboxes opening a lightbox.
+3. Lightbox open displaying an image.
+4. Lightbox open displaying an image on mobile.
+2. Lightbox with image title and caption displaying an image.
+3. Lightbox with image title and caption displaying an image on mobile.
 
 == Installation ==
 
@@ -39,8 +42,11 @@ The plugins settings are nested inside of the 'Tools' menu item from the WordPre
 = Does Lity - Responsive Lightboxes work with videos or other media types? =
 At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
 
-= Does Lity - Responsive Lightboxes work with videos or other media types? =
-At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
+= Does Lity - Responsive Lightboxes work with galleries? =
+At this time, no. Lity - Responsive Lightboxes only works with single images. Users are not able to navigate through a gallery without closing the lightbox. Users will have to close the lightbox and click on the next image they would like to view. Gallery support and keyboard navigation may come at a later time.
+
+= Is there a GitHub repository that I can submit issues or contribute to? =
+Yes, our GitHub repository can be found at [https://github.com/EvanHerman/lity](https://github.com/EvanHerman/lity).
 
 == Changelog ==
 

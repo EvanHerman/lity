@@ -1,5 +1,6 @@
 ( function( $ ) {
 	const lityMediaData = JSON.parse( lityScriptData.mediaData );
+	const ariaLabel = lityScriptData.a11y_aria_label;
 
 	/**
 	 * Lity Scripts
@@ -10,13 +11,15 @@
 	const lityScript = {
 
 		/**
-		 * Initialize the image with data-lity attributes
+		 * Initialize the image with data-lity attributes.
 		 *
 		 * @since 1.0.0
 		 */
 		init: function() {
 
-			$( lityScriptData.element_selectors ).not( lityScriptData.excluded_element_selectors ).attr( 'data-lity', '' );
+			$( lityScriptData.element_selectors ).not( lityScriptData.excluded_element_selectors ).each( function() {
+				$( this ).wrap( `<a href="#" data-lity-target="${$( this ).attr( 'src' )}" data-lity class="lity-a11y-link" aria-label="${ariaLabel.replace( ':', '' ).replace( '%s', '' ).trim()}"></a>` );
+			} );
 
 		},
 
@@ -36,7 +39,7 @@
 
 				if ( Object.keys( imgObj ).length > 0 ) {
 					// Ensure lity lightboxes show full sized versions of the image.
-					$( this ).attr( 'data-lity-target', imgObj.urls[0] );
+					$( this ).parent( '.lity-a11y-link' ).attr( 'data-lity-target', imgObj.urls[0] );
 				}
 			} );
 
@@ -54,8 +57,22 @@
 			}
 
 			const triggerElement = lightbox.opener();
+			let backgroundImageUrl = false;
 
-			$( '.lity-wrap' ).before( `<div class="lity-lightbox-background" style="background-image: url(${triggerElement[0].currentSrc});"></div>` );
+			if ( triggerElement[0].hasAttribute( 'src' ) ) {
+				backgroundImageUrl = triggerElement[0].currentSrc;
+			} else {
+				// hidden a11y link clicked
+				if ( triggerElement[0].hasAttribute( 'data-lity-target' ) ) {
+					backgroundImageUrl = $( triggerElement[0] ).attr( 'data-lity-target' );
+				}
+			}
+
+			if ( ! backgroundImageUrl ) {
+				return;
+			}
+
+			$( '.lity-wrap' ).before( `<div class="lity-lightbox-background" style="background-image: url(${backgroundImageUrl});"></div>` );
 
 		},
 
@@ -77,17 +94,17 @@
 				if ( Object.keys( imgObj ).length > 0 ) {
 
 					if ( !! imgObj.title ) {
-						$( this ).attr( 'data-lity-title', imgObj.title );
+						$( this ).parent( '.lity-a11y-link' ).attr( 'aria-label', ariaLabel.replace( '%s', imgObj.title ) ).attr( 'data-lity-title', imgObj.title );
 					}
 
 					if ( !! imgObj.caption ) {
-						$( this ).attr( 'data-lity-description', imgObj.caption );
+						$( this ).parent( '.lity-a11y-link' ).attr( 'data-lity-description', imgObj.caption );
 					}
 
 					if ( !! imgObj.custom_data && Object.keys( imgObj.custom_data ).length ) {
 
 						for ( const [ key, value ] of Object.entries( imgObj.custom_data ) ) {
-							$( this ).attr( `data-lity-custom-${key}`, `${value.element_wrap}:${value.content}` );
+							$( this ).parent( '.lity-a11y-link' ).attr( `data-lity-custom-${key}`, `${value.element_wrap}:${value.content}` );
 						}
 
 					}

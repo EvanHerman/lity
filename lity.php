@@ -166,6 +166,7 @@ if ( ! class_exists( 'Lity' ) ) {
 					'element_selectors'          => empty( $this->lity_options->get_lity_option( 'element_selectors' ) ) ? 'img' : implode( ',', $this->lity_options->get_lity_option( 'element_selectors' ) ),
 					'excluded_element_selectors' => implode( ',', $this->lity_options->get_lity_option( 'excluded_element_selectors' ) ),
 					'mediaData'                  => get_transient( 'lity_media' ),
+					'a11y_aria_label'            => /* translators: %s is the title of the image, if it exists. eg: View Image: Beautiful Tree */ __( 'View Image: %s', 'lity' ),
 				)
 			);
 

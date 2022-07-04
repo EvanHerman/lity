@@ -5,7 +5,36 @@ img[data-lity]:hover {
 .lity-content.lity-image-info {
   align-items: center;
   display: flex;
+  flex-direction: row;
   justify-content: center;
+}
+
+.lity-content.lity-image-info img {
+  width: 75%;
+}
+
+.lity-info {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-align: center;
+  align-items: center;
+  background: #4c4c4c63;
+  display: inline-flex;
+  height: inherit;
+  padding: 3em 2em;
+  vertical-align: middle;
+}
+
+.lity-info p:last-child {
+  margin-bottom: 0;
+}
+
+.lity-content.lity-image-info .lity-info {
+  width: 25%;
 }
 
 .lity-lightbox-background {
@@ -23,22 +52,6 @@ img[data-lity]:hover {
   box-shadow: none;
 }
 
-.lity-info {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-flex-pack: center;
-  justify-content: center;
-  -webkit-flex-align: center;
-  align-items: center;
-  background: #4c4c4c63;
-  display: inline-flex;
-  height: inherit;
-  padding: 2em;
-  vertical-align: middle;
-}
-
 .lity-info > * {
   color: #fafafa;
   width: 100%;
@@ -49,29 +62,54 @@ img[data-lity]:hover {
   text-decoration: underline;
 }
 
-body.logged-in .lity-close {
-  top: 32px;
+.lity-close {
+  top: 15px;
+  right: 10px;
 }
 
-@media screen and (max-width: 782px) {
+.lity-close:active {
+  top: 15px;
+  margin-top: 3px;
+}
+
+body.logged-in .lity-close {
+  top: 35px;
+  right: 10px;
+}
+
+a.lity-a11y-link:focus > img {
+  outline: 2px solid;
+  outline-color: inherit;
+}
+
+@media screen and (max-width: 850px) {
+  .lity-content.lity-image-info {
+    flex-direction: column;
+    height: 100vh;
+    margin: 0 auto;
+    width: 95%;
+  }
+
   .lity-info {
-    padding: 1em 2em;
+    padding: 2em;
+  }
+
+  .lity-image img {
+    margin: 0 auto;
+    width: 95%;
+  }
+
+  .lity-content.lity-image-info img {
     width: 100%;
   }
 
-  .lity-content.lity-image-info {
-    height: 100vh;
-    flex-wrap: wrap;
-  }
-
-  .lity-content .lity-info {
-    bottom: 0;
+  .lity-content.lity-image-info .lity-info {
     height: auto;
-    position: absolute;
+    width: 100%;
   }
 
-  .lity-content img {
-    margin-top: -25%;
-    max-width: 70%;
+  body.logged-in .lity-close {
+    right: 10px;
+    top: 55px;
   }
 }
