@@ -27,7 +27,7 @@
 		"lint:js": "yarn eslint 'assets/js/*.js'",
 		"lint:css": "yarn stylelint assets/css/*.css",
 		"phpcs": "./vendor/bin/phpcs .",
-		"generate-pot": "wp i18n make-pot . languages/lity.pot --domain=lity --include=lity.php,includes/*.php",
+		"generate-pot": "wp i18n make-pot . languages/lity.pot --domain=lity --include=lity.php,includes/*.php --subtract-and-merge",
 		"watch": "npm-watch",
 		"prepare": "husky install",
 		"postinstall": "composer install",
