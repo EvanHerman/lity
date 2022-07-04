@@ -62,8 +62,24 @@ img[data-lity]:hover {
   text-decoration: underline;
 }
 
+.lity-close {
+  top: 15px;
+  right: 10px;
+}
+
+.lity-close:active {
+  top: 15px;
+  margin-top: 3px;
+}
+
 body.logged-in .lity-close {
-  top: 32px;
+  top: 35px;
+  right: 10px;
+}
+
+a.lity-a11y-link:focus > img {
+  outline: 2px solid;
+  outline-color: inherit;
 }
 
 @media screen and (max-width: 850px) {
