@@ -530,7 +530,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			</p>
 
 			<p class="description">
-				<strong><?php esc_html_e( 'Example:', 'lity' ); ?></strong> <?php esc_html_e( 'Example: <code>.content-area img</code> will disable lightboxes for images in the post content area of your site.', 'lity' ); ?>
+				<strong><?php esc_html_e( 'Example:', 'lity' ); ?></strong> <?php esc_html_e( '`.content-area img` will disable lightboxes for images in the post content area of your site.', 'lity' ); ?>
 			</p>
 
 			<p class="description">
