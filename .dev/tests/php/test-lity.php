@@ -130,7 +130,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		global $wp_scripts;
 
-		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","disabled_on":[],"element_selectors":"img","excluded_element_selectors":""},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
+		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","caption_type":"caption","disabled_on":[],"element_selectors":"img","excluded_element_selectors":""},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
 
 		$this->assertTrue(
 			strpos( $wp_scripts->registered['lity-script']->extra['data'], $expected ) !== false,
@@ -256,6 +256,7 @@ class Test_Lity extends WP_UnitTestCase {
 			[
 				'post_type'    => 'attachment',
 				'post_title'   => 'Image #1',
+				'post_content' => 'Image description, used for captions',
 				'post_excerpt' => 'Image excerpt, used for captions',
 				'post_status'  => 'inherit',
 			]
@@ -267,7 +268,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		( new Lity() )->set_media_transient();
 
-		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","custom_data":[]}]';
+		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","description":"Image description, used for captions","custom_data":[]}]';
 
 		$this->assertEquals(
 			get_transient( 'lity_media' ),

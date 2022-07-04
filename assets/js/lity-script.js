@@ -98,7 +98,7 @@
 					}
 
 					if ( !! imgObj.caption ) {
-						$( this ).parent( '.lity-a11y-link' ).attr( 'data-lity-description', imgObj.caption );
+						$( this ).parent( '.lity-a11y-link' ).attr( 'data-lity-description', imgObj[ lityScriptData.options.caption_type ] );
 					}
 
 					if ( !! imgObj.custom_data && Object.keys( imgObj.custom_data ).length ) {
