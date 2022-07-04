@@ -39,8 +39,8 @@ The plugins settings are nested inside of the 'Tools' menu item from the WordPre
 = Does Lity - Responsive Lightboxes work with videos or other media types? =
 At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
 
-= Does Lity - Responsive Lightboxes work with videos or other media types? =
-At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
+= Is there a GitHub repository that I can submit issues or contribute to? =
+Yes, our GitHub repository can be found at [https://github.com/EvanHerman/lity](https://github.com/EvanHerman/lity).
 
 == Changelog ==
 
