@@ -19,14 +19,20 @@ After installation, all images on your site will open up in a beautiful lightbox
 
 With additional granular controls, users can turn on or off lightboxes for specific images by class, ID or other attribute, or turn them off for specific pages or posts.
 
+- Lightweight
+- Accessible
+- Responsive
+- Support for Lightbox Captions
+- Translation Ready
+
 == Screenshots ==
 
 1. Lity settings page.
 2. Demo of Lity - Respnsive Lightboxes opening a lightbox.
 3. Lightbox open displaying an image.
 4. Lightbox open displaying an image on mobile.
-2. Lightbox with image title and caption displaying an image.
-3. Lightbox with image title and caption displaying an image on mobile.
+5. Lightbox with image title and caption displaying an image.
+6. Lightbox with image title and caption displaying an image on mobile.
 
 == Installation ==
 

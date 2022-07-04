@@ -201,6 +201,18 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			);
 
 			add_settings_field(
+				'caption_type',
+				__( 'Caption Image Metadata', 'lity' ),
+				array( $this, 'lity_caption_type_dropdown' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'caption_type',
+					'description' => __( 'Lightbox captions should use which image metadata?', 'lity' ),
+				)
+			);
+
+			add_settings_field(
 				'disabled_on',
 				__( 'Disabled on', 'lity' ),
 				array( $this, 'lity_show_disabled_on_input' ),
@@ -333,6 +345,35 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 				<option value="no" <?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
 					<?php esc_html_e( 'No', 'lity' ); ?>
+				</option>
+			</select>
+
+			<p class="description">
+				<?php echo esc_html( $args['description'] ); ?>
+			</p>
+
+			<?php
+
+		}
+
+		/**
+		 * Show caption type dropdown callback.
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_caption_type_dropdown( $args ) {
+
+			$options = $this->get_lity_options();
+
+			?>
+
+			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
+				<option value="caption" <?php selected( $options[ $args['label_for'] ], 'caption', true ); ?>>
+					<?php esc_html_e( 'Caption', 'lity' ); ?>
+				</option>
+
+				<option value="description" <?php selected( $options[ $args['label_for'] ], 'description', true ); ?>>
+					<?php esc_html_e( 'Description', 'lity' ); ?>
 				</option>
 			</select>
 
@@ -489,7 +530,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			</p>
 
 			<p class="description">
-				<strong><?php esc_html_e( 'Example:', 'lity' ); ?></strong> <?php esc_html_e( 'Example: <code>.content-area img</code> will disable lightboxes for images in the post content area of your site.', 'lity' ); ?>
+				<strong><?php esc_html_e( 'Example:', 'lity' ); ?></strong> <?php esc_html_e( '`.content-area img` will disable lightboxes for images in the post content area of your site.', 'lity' ); ?>
 			</p>
 
 			<p class="description">

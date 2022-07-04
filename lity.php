@@ -62,6 +62,7 @@ if ( ! class_exists( 'Lity' ) ) {
 				'show_full_size'             => 'yes',
 				'use_background_image'       => 'yes',
 				'show_image_info'            => 'no',
+				'caption_type'               => 'caption',
 				'disabled_on'                => array(),
 				'element_selectors'          => 'img',
 				'excluded_element_selectors' => '',
@@ -245,9 +246,10 @@ if ( ! class_exists( 'Lity' ) ) {
 				$image_info = (array) apply_filters(
 					'lity_image_info',
 					array(
-						'urls'    => array_values( array_unique( $image_urls ) ),
-						'title'   => get_the_title( $image_id ),
-						'caption' => get_the_excerpt( $image_id ),
+						'urls'        => array_values( array_unique( $image_urls ) ),
+						'title'       => get_the_title( $image_id ),
+						'caption'     => get_the_excerpt( $image_id ),
+						'description' => get_the_content(),
 					),
 					$image_id
 				);
