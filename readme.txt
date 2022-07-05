@@ -54,6 +54,9 @@ At this time no, the plugin will only open up images in a responsive lightbox. V
 = Does Lity - Responsive Lightboxes work with galleries? =
 At this time, no. Lity - Responsive Lightboxes only works with single images. Users are not able to navigate through a gallery without closing the lightbox. Users will have to close the lightbox and click on the next image they would like to view. Gallery support and keyboard navigation may come at a later time.
 
+= I have the option set to use full size images, but it's not working. Why? =
+Double check the URL of the image is correct and matches the URL of your current site. If you migrated your site from another domain you may not have updated the URLs in the database and/or post content.
+
 = Is there a GitHub repository that I can submit issues or contribute to? =
 Yes, our GitHub repository can be found at [https://github.com/EvanHerman/lity](https://github.com/EvanHerman/lity).
 
