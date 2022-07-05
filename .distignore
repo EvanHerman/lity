@@ -8,6 +8,7 @@
 .eslintrc.js
 .dev/
 .husky/
+Gruntfile.js
 build/
 node_modules/
 vendor/
