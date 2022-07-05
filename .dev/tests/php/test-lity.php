@@ -130,7 +130,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		global $wp_scripts;
 
-		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","caption_type":"caption","disabled_on":[],"element_selectors":"img","excluded_element_selectors":""},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
+		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","caption_type":"caption","disabled_on":[],"element_selectors":"img","excluded_element_selectors":"","generating_transient":false},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
 
 		$this->assertTrue(
 			strpos( $wp_scripts->registered['lity-script']->extra['data'], $expected ) !== false,
@@ -190,7 +190,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		update_option( 'lity_options', $options );
 
-		( new Lity() )->set_media_transient();
+		( new Lity() )->set_media_transient( 1 );
 
 		$this->assertFalse(
 			get_transient( 'lity_media' ),
@@ -206,7 +206,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->set_media_transient();
+		( new Lity() )->set_media_transient( 1 );
 
 		$this->assertEquals( get_transient( 'lity_media' ), $this->media_data );
 
@@ -217,7 +217,7 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	function testLityGetMediaReturnsWhenNoAttachmentsOnSite() {
 
-		( new Lity() )->set_media_transient();
+		( new Lity() )->set_media_transient( 1 );
 
 		$this->assertFalse( get_transient( 'lity_media' ) );
 
@@ -237,7 +237,7 @@ class Test_Lity extends WP_UnitTestCase {
 			]
 		);
 
-		( new Lity() )->set_media_transient();
+		( new Lity() )->set_media_transient( 1 );
 
 		$this->assertEquals(
 			get_transient( 'lity_media' ),
@@ -266,9 +266,9 @@ class Test_Lity extends WP_UnitTestCase {
 			return array( 'http://example.org/wp-content/uploads/2022/06/image-1.jpg', '1800', '1224' );
 		}, 10, 4 );
 
-		( new Lity() )->set_media_transient();
+		( new Lity() )->set_media_transient( 1 );
 
-		$expected = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","description":"Image description, used for captions","custom_data":[]}]';
+		$expected = '[{"id":'.$image_id.',"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","description":"Image description, used for captions","custom_data":[]}]';
 
 		$this->assertEquals(
 			get_transient( 'lity_media' ),

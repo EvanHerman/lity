@@ -145,6 +145,31 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		}
 
 		/**
+		 * Update options in the lity_options array.
+		 *
+		 * @param string $options Key value pair of options to update.
+		 *
+		 * @return string Lity option value, or empty if not found.
+		 */
+		public function update_lity_option( $options = array() ) {
+
+			if ( empty( $options ) ) {
+
+				return;
+
+			}
+
+			update_option(
+				'lity_options',
+				wp_parse_args(
+					$options,
+					$this->get_lity_options()
+				)
+			);
+
+		}
+
+		/**
 		 * Register the Lity options.
 		 */
 		public function options_init() {
@@ -575,7 +600,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 				$lity = new Lity();
 				$lity->clear_lity_media_transient();
-				$lity->set_media_transient();
+				$lity->schedule_lity_media();
 
 				printf(
 					'<div class="notice notice-success">
@@ -583,7 +608,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 							<strong>%1$s</strong>
 						</p>
 					</div>',
-					esc_html__( 'Lity transient data successfully regenerated.', 'lity' )
+					esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
 				);
 
 			}

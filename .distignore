@@ -8,6 +8,7 @@
 .eslintrc.js
 .dev/
 .husky/
+Gruntfile.js
 build/
 node_modules/
 vendor/
@@ -20,3 +21,16 @@ phpunit.xml
 .phpunit.result.cache
 README.md
 *.log
+
+includes/action-scheduler/.github
+includes/action-scheduler/docs
+includes/action-scheduler/tests
+includes/action-scheduler/.editorconfig
+includes/action-scheduler/.git*
+includes/action-scheduler/changelog.txt
+includes/action-scheduler/codecov.yml
+includes/action-scheduler/composer*
+includes/action-scheduler/Gruntfile.js
+includes/action-scheduler/package*
+includes/action-scheduler/phpcs.xml
+includes/action-scheduler/README.md

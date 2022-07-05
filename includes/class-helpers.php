@@ -26,6 +26,8 @@ if ( ! class_exists( 'Lity_Helpers' ) ) {
 		 *
 		 * @param array        $value     Lity options array.
 		 * @param string|array $selectors Element selector string or array of selectors to exclude from Lity.
+		 *
+		 * @return array Filtered lity_options with our custom excluded selectors added.
 		 */
 		public function add_selector_exclusion( $value, $selectors ) {
 
@@ -60,6 +62,21 @@ if ( ! class_exists( 'Lity_Helpers' ) ) {
 			$value['excluded_element_selectors'] = json_encode( $excluded_element_selectors );
 
 			return $value;
+
+		}
+
+		/**
+		 * Retreive the number of images on the site.
+		 *
+		 * @return integer Number of images on the site.
+		 */
+		public function get_site_image_count() {
+
+			$attachment_count = wp_count_attachments( 'image' );
+
+			unset( $attachment_count->trash );
+
+			return (int) array_sum( (array) $attachment_count );
 
 		}
 

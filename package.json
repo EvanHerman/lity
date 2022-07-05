@@ -31,6 +31,7 @@
 		"watch": "npm-watch",
 		"prepare": "husky install",
 		"postinstall": "composer install",
+		"update:action-scheduler": "git fetch subtree-action-scheduler trunk && git subtree pull --prefix includes/action-scheduler subtree-action-scheduler trunk --squash",
 		"version": "grunt version && yarn generate-pot && git add -A .",
 		"postversion": "git push && git push --tags"
 	},
