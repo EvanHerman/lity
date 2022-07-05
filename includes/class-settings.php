@@ -608,7 +608,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 							<strong>%1$s</strong>
 						</p>
 					</div>',
-					esc_html__( 'Lity transient data successfully regenerated.', 'lity' )
+					esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
 				);
 
 			}

@@ -212,15 +212,6 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
-			if (
-				'no' === $this->lity_options->get_lity_option( 'show_full_size' ) &&
-				'no' === $this->lity_options->get_lity_option( 'show_image_info' )
-			) {
-
-				return;
-
-			}
-
 			$media = get_transient( 'lity_media' );
 
 			if ( false !== $media ) {
