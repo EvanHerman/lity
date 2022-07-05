@@ -9,6 +9,10 @@ img[data-lity]:hover {
   justify-content: center;
 }
 
+.lity-content.lity-image-info img {
+  width: 70%;
+}
+
 .lity-info {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
