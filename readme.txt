@@ -42,6 +42,9 @@ With additional granular controls, users can turn on or off lightboxes for speci
 
 == Frequently Asked Questions ==
 
+= Will this plugin only work on images I have uploaded to my site? =
+No, any images on the page can be opened in a lightbox. You can copy images from Google images and paste them into your content, and they will also open in a lightbox.
+
 = Where are the plugin settings? =
 The plugins settings are nested inside of the 'Tools' menu item from the WordPress admin dashboard.
 
