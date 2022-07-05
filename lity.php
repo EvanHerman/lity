@@ -34,6 +34,13 @@ if ( ! class_exists( 'Lity' ) ) {
 	final class Lity {
 
 		/**
+		 * Default options array.
+		 *
+		 * @var array
+		 */
+		public $default_options;
+
+		/**
 		 * Options class instance.
 		 *
 		 * @var Object
@@ -41,11 +48,19 @@ if ( ! class_exists( 'Lity' ) ) {
 		private $lity_options;
 
 		/**
-		 * Default options array.
+		 * Helpers class instance.
 		 *
-		 * @var array
+		 * @var Object
 		 */
-		public $default_options;
+		private $helpers;
+
+		/**
+		 * Number of attachments to query for.
+		 * Note: The higher the number, the longer building new transients will take.
+		 *
+		 * @var int
+		 */
+		private $posts_per_page;
 
 		/**
 		 * Lity plugin constructor.
@@ -54,9 +69,12 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function __construct() {
 
+			require_once plugin_dir_path( __FILE__ ) . 'includes/action-scheduler/action-scheduler.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
+
+			$this->update_lity_media_transient( 6789 );
 
 			$this->default_options = array(
 				'show_full_size'             => 'yes',
@@ -66,9 +84,14 @@ if ( ! class_exists( 'Lity' ) ) {
 				'disabled_on'                => array(),
 				'element_selectors'          => 'img',
 				'excluded_element_selectors' => '',
+				'generating_transient'       => false,
 			);
 
 			$this->lity_options = new Lity_Options( $this->default_options );
+
+			$this->helpers = new Lity_Helpers();
+
+			$this->posts_per_page = 30;
 
 			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
@@ -76,10 +99,14 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_lity' ), PHP_INT_MAX );
 
-			add_action( 'init', array( $this, 'set_media_transient' ), PHP_INT_MAX );
+			add_action( 'admin_init', array( $this, 'schedule_lity_media' ), PHP_INT_MAX );
 
-			add_action( 'wp_generate_attachment_metadata', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
-			add_action( 'attachment_updated', array( $this, 'clear_lity_media_transient' ), PHP_INT_MAX, 3 );
+			add_action( 'lity_generate_media', array( $this, 'set_media_transient' ) );
+
+			add_action( 'wp_generate_attachment_metadata', array( $this, 'update_lity_media_transient' ), PHP_INT_MAX, 3 );
+			add_action( 'attachment_updated', array( $this, 'update_lity_media_transient' ), PHP_INT_MAX, 3 );
+
+			add_action( 'admin_notices', array( $this, 'display_generating_transient_notice' ), PHP_INT_MAX );
 
 			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
 
@@ -174,11 +201,16 @@ if ( ! class_exists( 'Lity' ) ) {
 		}
 
 		/**
-		 * Create a transient to track media data.
-		 *
-		 * @since 1.0.0
+		 * Schedule the actions to retrieve image meta in the background.
 		 */
-		public function set_media_transient() {
+		public function schedule_lity_media() {
+
+			// If the task has been scheduled, do not re-schedule it.
+			if ( $this->lity_options->get_lity_option( 'generating_transient' ) ) {
+
+				return;
+
+			}
 
 			if (
 				'no' === $this->lity_options->get_lity_option( 'show_full_size' ) &&
@@ -197,11 +229,53 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
+			$image_count = $this->helpers->get_site_image_count();
+
+			if ( 0 === $image_count ) {
+
+				return;
+
+			}
+
+			$this->lity_options->update_lity_option( array( 'generating_transient' => true ) );
+
+			// Divide $image_count by $this->posts_per_page to give us the number of pages we have to query.
+			$total_pages = ceil( $image_count / $this->posts_per_page );
+
+			$i = 1;
+
+			while ( $i <= $total_pages ) {
+
+				as_schedule_single_action( strtotime( 'now' ), 'lity_generate_media', array( 'page' => (int) $i ) );
+
+				$i++;
+
+			}
+
+		}
+
+		/**
+		 * Create a transient to track media data.
+		 *
+		 * @param integer $page Page number to query in the REST API attachment endpoint.
+		 *
+		 * @since 1.0.0
+		 */
+		public function set_media_transient( int $page ) {
+
+			// We've reached the final page.
+			if ( (int) ceil( $this->helpers->get_site_image_count() / $this->posts_per_page ) === $page ) {
+
+				$this->lity_options->update_lity_option( array( 'generating_transient' => false ) );
+
+			}
+
 			$media_query = new WP_Query(
 				array(
 					'post_type'      => 'attachment',
-					'posts_per_page' => -1,
+					'posts_per_page' => $this->posts_per_page,
 					'post_status'    => 'inherit',
+					'paged'          => $page,
 				)
 			);
 
@@ -246,6 +320,7 @@ if ( ! class_exists( 'Lity' ) ) {
 				$image_info = (array) apply_filters(
 					'lity_image_info',
 					array(
+						'id'          => $image_id,
 						'urls'        => array_values( array_unique( $image_urls ) ),
 						'title'       => get_the_title( $image_id ),
 						'caption'     => get_the_excerpt( $image_id ),
@@ -286,7 +361,74 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			}
 
-			set_transient( 'lity_media', json_encode( $media ) );
+			$existing_transient = get_transient( 'lity_media' );
+
+			if ( false === $existing_transient ) {
+
+				set_transient( 'lity_media', json_encode( $media ) );
+
+				return;
+
+			}
+
+			$existing_transient = json_decode( $existing_transient, true );
+
+			set_transient( 'lity_media', json_encode( array_merge( $existing_transient, $media ) ) );
+
+		}
+
+		/**
+		 * Update the image in the lity_media transient, to avoid having to regenerate the transient each time.
+		 *
+		 * @param int $attachment_id The attachment ID that was updated.
+		 */
+		public function update_lity_media_transient( $attachment_id ) {
+
+			$media_data = get_transient( 'lity_media' );
+
+			if ( false === $media_data ) {
+
+				return;
+
+			}
+
+			$media_data = json_decode( $media_data, true );
+
+			$attachment_index = array_search( $attachment_id, array_column( $media_data, 'id' ), true );
+
+			if ( false === $attachment_index ) {
+
+				return;
+
+			}
+
+			$media_data[ $attachment_index ]['title']       = get_the_title( $attachment_id );
+			$media_data[ $attachment_index ]['caption']     = get_the_excerpt( $attachment_id );
+			$media_data[ $attachment_index ]['description'] = get_post_field( 'post_content', $attachment_id );
+
+			set_transient( 'lity_media', json_encode( $media_data ) );
+
+		}
+
+		/**
+		 * Display an admin notice about the transient being rebuilt in the background.
+		 */
+		public function display_generating_transient_notice() {
+
+			if ( ! $this->lity_options->get_lity_option( 'generating_transient' ) ) {
+
+				return;
+
+			}
+
+			$message = __( 'Lity - Responsive Lightboxes is fetching your image metadata and caching a few things to improve performance. This all happens in the background. This notice will disappear when the process is complete.', 'lity' );
+
+			printf(
+				'<div class="notice notice-info">
+					<p>%1$s</p>
+				</div>',
+				esc_html( $message )
+			);
 
 		}
 
@@ -310,13 +452,11 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function always_excluded_selectors( $value ) {
 
-			$lity_helpers = new Lity_Helpers();
-
 			$exclusions = array(
 				'#wpadminbar img',
 			);
 
-			return $lity_helpers->add_selector_exclusion( $value, $exclusions );
+			return $this->helpers->add_selector_exclusion( $value, $exclusions );
 
 		}
 
