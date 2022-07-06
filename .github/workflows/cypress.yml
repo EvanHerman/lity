@@ -27,21 +27,8 @@ jobs:
       - name: Update hosts
         run: echo 127.0.0.1 lity.test | sudo tee -a /etc/hosts
 
-      - name: Cache node modules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: |
-            ~/.npm
-            ./node_modules
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+      - name: Yarn Install
+        run: sudo yarn install
 
       - name: Install WordPress
         run: |
@@ -52,15 +39,18 @@ jobs:
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
 
-      - name: Start WPCLI Server
-        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
-
-      - name: Yarn Install, Activate Lity and Run Cypress Tests
+      - name: Activate Lity
         run: |
-          sudo yarn install
           yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
           sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
+
+      - name: Start WPCLI Server
+        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
+
+      - name: Run Cypress tests
+        run: |
+          ./node_modules/.bin/cypress install
           ./node_modules/.bin/cypress run --browser chrome --record --group e2e-chrome --headed
