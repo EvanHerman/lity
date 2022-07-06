@@ -39,15 +39,13 @@ jobs:
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
 
-      - name: Check /tmp
-        run: ls -la /tmp
-
       - name: Activate Lity
         run: |
           yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
+          cd ./build
+          sudo mv ./lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
 
       - name: Start WPCLI Server
