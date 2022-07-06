@@ -5,7 +5,7 @@ on: push
 
 jobs:
   cypress:
-    name: Cypress e2e
+    name: Cypress e2e - (PHP ${{ matrix.php }} - WP ${{ matrix.wp }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -60,11 +60,13 @@ jobs:
         run: |
           sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y subversion default-mysql-client
           mkdir -p /tmp/wordpress
-          ./vendor/bin/wp core download --version=latest --path=/tmp/wordpress
+          ./vendor/bin/wp core download --version=${{ env.WP_VERSION }} --path=/tmp/wordpress
           ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass=password --path=/tmp/wordpress
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
           ./vendor/bin/wp media import "https://s.w.org/style/images/wp-header-logo.png" --title="WordPress Logo" --desc="WordPress Header Logo" --caption="Header image with the WordPress logo" --path=/tmp/wordpress
+        env:
+          WP_VERSION: ${{ matrix.wp }}
 
       - name: Activate Lity
         run: |
