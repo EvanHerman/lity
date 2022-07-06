@@ -23,7 +23,7 @@ describe( 'Test Lity lightbox', () => {
 		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin' );
 		cy.location('pathname').should( 'match', /^\/wp-admin/ );
 
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/post-new.php?post_type=page' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/post-new.php?post_type=page' );
 		cy.disableGutenbergFeatures();
 
 		cy.get( '.wp-block-post-title' ).type( 'Test Image' );
@@ -61,7 +61,7 @@ describe( 'Test Lity lightbox', () => {
 	it( 'shows title and caption', () => {
 		const { imageBase } = helpers.upload.spec;
 
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/options-general.php?page=lity-options' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
 		cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
 
 		cy.get( '#show_image_info').select( 'yes' );
@@ -70,7 +70,7 @@ describe( 'Test Lity lightbox', () => {
 
 		cy.get( 'div.notice-success' ).should( 'contain', 'Settings saved.' );
 
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/upload.php' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/upload.php' );
 
 		cy.get( 'h1' ).should( 'contain', 'Media Library' );
 
@@ -84,7 +84,7 @@ describe( 'Test Lity lightbox', () => {
 		cy.get( '.save-complete' );
 
 		// Navigate back to the page listings in descending order
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
 
 		// First page in the list. Force click becuase the 'view' link is hidden.
 		cy.get( '#the-list tr:first-child .column-title span.view a' ).click( { force: true } );
@@ -100,7 +100,7 @@ describe( 'Test Lity lightbox', () => {
 
 	it( 'shows title and description', () => {
 
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/options-general.php?page=lity-options' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
 		cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
 
 		cy.get( '#caption_type').select( 'description' );
@@ -110,7 +110,7 @@ describe( 'Test Lity lightbox', () => {
 		cy.get( 'div.notice-success' ).should( 'contain', 'Settings saved.' );
 
 		// Navigate back to the page listings in descending order
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
 
 		// First page in the list. Force click becuase the 'view' link is hidden.
 		cy.get( '#the-list tr:first-child .column-title span.view a' ).click( { force: true } );
@@ -127,7 +127,7 @@ describe( 'Test Lity lightbox', () => {
 	it( 'closes when x is clicked', () => {
 
 		// Navigate back to the page listings in descending order
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
 
 		// First page in the list. Force click becuase the 'view' link is hidden.
 		cy.get( '#the-list tr:first-child .column-title span.view a' ).click( { force: true } );
@@ -145,7 +145,7 @@ describe( 'Test Lity lightbox', () => {
 	it( 'closes when the escape key is pressed', () => {
 
 		// Navigate back to the page listings in descending order
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
 
 		// First page in the list. Force click becuase the 'view' link is hidden.
 		cy.get( '#the-list tr:first-child .column-title span.view a' ).click( { force: true } );
