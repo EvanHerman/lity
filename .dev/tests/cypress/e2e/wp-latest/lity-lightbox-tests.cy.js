@@ -3,14 +3,14 @@
  * Lightbox Tests
  */
 
-import * as helpers from '../helpers';
+import * as helpers from '../../helpers';
 
 describe( 'Test Lity lightbox', () => {
 
 	before( () => {
 		cy.manualWordPressLogin();
 		cy.getWordPressCookies();
-		cy.resetPluginSettings();
+		// cy.resetPluginSettings();
 	} );
 
 	after( () => {
@@ -157,6 +157,72 @@ describe( 'Test Lity lightbox', () => {
 		cy.get( 'body' ).type( '{esc}' );
 
 		cy.get( '.lity-opened' ).should( 'not.exist' );
+
+	} );
+
+	it( "doesn't open img elements when excluded", () => {
+
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
+		cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
+
+		cy.get( 'label[for="excluded_element_selectors"]' ).parents( 'tr' ).find( '.tagify__input' ).click( { force: true } ).clear().type( 'img{enter}' );
+
+		cy.get( 'input[type="submit"]' ).click();
+
+		cy.get( 'div.notice-success' ).should( 'contain', 'Settings saved.' );
+
+		// Navigate back to the page listings in descending order
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/edit.php?post_type=page&orderby=date&order=desc' );
+
+		// First page in the list. Force click becuase the 'view' link is hidden.
+		cy.get( '#the-list tr:first-child .column-title span.view a' ).click( { force: true } );
+
+		cy.get( '.lity-a11y-link' ).should( 'not.exist' );
+		cy.get( '.wp-block-image img' ).click();
+		cy.get( '.lity-opened' ).should( 'not.exist' );
+
+	} );
+
+	it( "settings save as expected", () => {
+
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
+		cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
+
+		cy.resetPluginSettings( false );
+
+		// Use Full Size Images.
+		cy.get( '#show_full_size' ).select( 'no' );
+
+		// Use Background Images.
+		cy.get( '#use_background_image' ).select( 'no' );
+
+		// Show Image Info.
+		cy.get( '#show_image_info' ).select( 'yes' );
+
+		// Caption Type.
+		cy.get( '#caption_type' ).select( 'description' );
+
+		// Disabled On (Hello World!, Sample Page)
+		cy.get( '#disabled_on' ).select( [ '1', '2' ], { force: true } );
+
+		// Element Selectors.
+		cy.get( 'label[for="element_selectors"]' ).parents( 'tr' ).find( '.tagify__input' ).click( { force: true } ).clear().type( '.include-element' );
+
+		// Excluded Element Selectors.
+		cy.get( 'label[for="excluded_element_selectors"]' ).parents( 'tr' ).find( '.tagify__input' ).click( { force: true } ).clear().type( '.exclude-element' );
+
+		cy.get( 'input[type="submit"]' ).click();
+
+		cy.get( 'div.notice-success' ).should( 'contain', 'Settings saved.' );
+
+		// Verify the values saved from above.
+		cy.get( '#show_full_size' ).should( 'have.value', 'no' );
+		cy.get( '#use_background_image' ).should( 'have.value', 'no' );
+		cy.get( '#show_image_info' ).should( 'have.value', 'yes' );
+		cy.get( '#caption_type' ).should( 'have.value', 'description' );
+		cy.get( '#disabled_on' ).invoke( 'val' ).should( 'deep.equal', [ '2', '1' ] );
+		cy.get( '#element_selectors' ).invoke( 'val' ).should( 'equal', '[{"value":"img"},{"value":".include-element"}]' );
+		cy.get( '#excluded_element_selectors' ).invoke( 'val' ).should( 'equal', '[{"value":".exclude-element"}]' );
 
 	} );
 

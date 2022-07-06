@@ -44,6 +44,7 @@
 		-->
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Security.NonceVerification.Recommended"/>
 	</rule>
 
 	<!-- Let's also check that everything is properly documented. -->

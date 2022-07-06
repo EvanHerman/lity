@@ -39,16 +39,19 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			$this->default_options = $default_options;
 
-			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
+			add_filter( 'removable_query_args', array( $this, 'removable_query_args' ) );
+
+			add_action( 'admin_init', array( $this, 'clear_lity_transient_button_clicked' ) );
+			add_action( 'admin_init', array( $this, 'reset_lity_settings_button_clicked' ) );
 
 			add_action( 'admin_init', array( $this, 'options_init' ) );
 
-			add_filter( 'removable_query_args', array( $this, 'removable_query_args' ) );
+			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
 
 		}
 
 		/**
-		 * Add lity-action to the removable query args array.
+		 * Add custom query args to be removed.
 		 *
 		 * @param array $args Core removable query args array.
 		 *
@@ -56,9 +59,82 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function removable_query_args( $args ) {
 
-			$args[] = 'lity-action';
+			return array_merge( $args, array( 'lity-transient-clearedl', 'lity-settings-reset' ) );
 
-			return $args;
+		}
+
+		/**
+		 * Catch the clear lity transient button click, and redirect.
+		 */
+		public function clear_lity_transient_button_clicked() {
+
+			if ( ! isset( $_GET['action'] ) ) {
+
+				return;
+
+			}
+
+			$action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
+
+			if ( 'lity-regenerate-transient' !== $action ) {
+
+				return;
+
+			}
+
+			$lity = new Lity();
+			$lity->clear_lity_media_transient();
+
+			wp_safe_redirect(
+				add_query_arg(
+					'lity-transient-cleared',
+					true,
+					menu_page_url( 'lity-options', false )
+				),
+				302,
+				'WordPress - Lity - Responsive Lightboxes Plugin'
+			);
+
+			exit;
+
+		}
+
+		/**
+		 * Catch the reset lity plugin settings button click, and redirect.
+		 */
+		public function reset_lity_settings_button_clicked() {
+
+			if ( ! isset( $_GET['action'] ) || ! isset( $_GET['_wpnonce'] ) ) {
+
+				return;
+
+			}
+
+			$action = filter_var( $_GET['action'], FILTER_SANITIZE_STRING );
+			$nonce  = filter_var( $_GET['_wpnonce'], FILTER_SANITIZE_STRING );
+
+			if ( 'lity-reset-plugin-settings' !== $action || ! wp_verify_nonce( $nonce, 'lity-reset-plugin-settings' ) ) {
+
+				return;
+
+			}
+
+			$lity = new Lity();
+			$lity->clear_lity_media_transient();
+
+			update_option( 'lity_options', $this->default_options );
+
+			wp_safe_redirect(
+				add_query_arg(
+					'lity-settings-reset',
+					true,
+					menu_page_url( 'lity-options', false )
+				),
+				302,
+				'WordPress - Lity - Responsive Lightboxes Plugin'
+			);
+
+			exit;
 
 		}
 
@@ -586,7 +662,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			printf(
 				'<a href="%1$s" class="button delete">%2$s</a>
 				<p class="description">%3$s</p>',
-				esc_url( add_query_arg( 'lity-action', 'lity-regenerate-transient', menu_page_url( 'lity-options', false ) ) ),
+				esc_url( add_query_arg( 'action', 'lity-regenerate-transient', menu_page_url( 'lity-options', false ) ) ),
 				esc_html__( 'Clear Lity Transient', 'lity' ),
 				esc_html( $args['description'] )
 			);
@@ -600,10 +676,20 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function lity_reset_plugin_settings_button( $args ) {
 
+			$url = wp_nonce_url(
+				add_query_arg(
+					array(
+						'action' => 'lity-reset-plugin-settings',
+					),
+					menu_page_url( 'lity-options', false )
+				),
+				'lity-reset-plugin-settings'
+			);
+
 			printf(
 				'<a href="%1$s" id="lity-reset-plugin-settings" class="button delete" onclick="if (confirm(\'%2$s\')){return true;}else{event.stopPropagation(); event.preventDefault();};">%3$s</a>
 				<p class="description">%4$s</p>',
-				esc_url( add_query_arg( 'lity-action', 'lity-reset-plugin-settings', menu_page_url( 'lity-options', false ) ) ),
+				esc_url( $url ),
 				esc_attr__( 'Are you sure you want to reset the plugin settings? This cannot be undone.', 'lity' ),
 				esc_html__( 'Reset Plugin Settings', 'lity' ),
 				esc_html( $args['description'] )
@@ -622,40 +708,40 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			}
 
-			$lity_action = filter_input( INPUT_GET, 'lity-action', FILTER_SANITIZE_STRING );
+			if ( isset( $_GET['lity-transient-cleared'] ) ) {
 
-			if ( false !== $lity_action && 'lity-regenerate-transient' === $lity_action ) {
+				$transient_cleared = filter_var( $_GET['lity-transient-cleared'], FILTER_VALIDATE_BOOLEAN );
 
-				$lity = new Lity();
-				$lity->clear_lity_media_transient();
+				if ( $transient_cleared ) {
 
-				printf(
-					'<div id="lity-transient-data-cleared-notice" class="notice notice-success">
-						<p>
-							<strong>%1$s</strong>
-						</p>
-					</div>',
-					esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
-				);
+					printf(
+						'<div id="lity-transient-data-cleared-notice" class="notice notice-success">
+							<p>
+								<strong>%1$s</strong>
+							</p>
+						</div>',
+						esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
+					);
 
+				}
 			}
 
-			if ( false !== $lity_action && 'lity-reset-plugin-settings' === $lity_action ) {
+			if ( isset( $_GET['lity-settings-reset'] ) ) {
 
-				$lity = new Lity();
-				$lity->clear_lity_media_transient();
+				$settings_reset = filter_var( $_GET['lity-settings-reset'], FILTER_VALIDATE_BOOLEAN );
 
-				update_option( 'lity_options', $this->default_options );
+				if ( $settings_reset ) {
 
-				printf(
-					'<div id="lity-settings-reset-notice" class="notice notice-success">
-						<p>
-							<strong>%1$s</strong>
-						</p>
-					</div>',
-					esc_html__( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.', 'lity' )
-				);
+					printf(
+						'<div id="lity-settings-reset-notice" class="notice notice-success">
+							<p>
+								<strong>%1$s</strong>
+							</p>
+						</div>',
+						esc_html__( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.', 'lity' )
+					);
 
+				}
 			}
 
 			?>

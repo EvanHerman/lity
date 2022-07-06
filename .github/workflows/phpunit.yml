@@ -55,7 +55,13 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Composer Install
-        run: sudo composer install
+        run: |
+          if [ "${{ env.WP_VERSION }}" == '5.4' ]; then
+            composer require phpunit/phpunit:^7.5.20 -W --dev
+          fi
+          sudo composer install
+        env:
+          WP_VERSION: ${{ matrix.wp }}
 
       - name: Run unit tests
         run: yarn test:php

@@ -115,10 +115,10 @@ Cypress.Commands.add( 'addBlockToPost', ( blockName, clearEditor = false ) => {
 	}
 
 	cy.get( '.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle' ).click();
-	cy.get( '.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input' ).click().type( blockName );
+	cy.get( '.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input, .editor-inserter__menu input[type="search"]' ).click( { force: true } ).type( blockID, { force: true } );
 
 	const targetClassName = ( blockCategory === 'core' ? '' : `-${ blockCategory }` ) + `-${ blockID }`;
-	cy.get( '.editor-block-list-item' + targetClassName ).first().click();
+	cy.get( '.block-editor-block-types-list__item-title, .editor-block-types-list__item-title' ).contains( 'Image' ).click( { force: true } );
 
 	// Make sure the block was added to our page
 	cy.get( `[class*="-visual-editor"] [data-type="${ blockName }"]` ).should( 'exist' ).then( () => {
@@ -142,12 +142,26 @@ Cypress.Commands.add( 'clearBlocks', () => {
 } );
 
 /**
- * From inside the WordPress editor open the CoBlocks Gutenberg editor panel.
+ * From inside the WordPress editor open the editor panel.
  */
 Cypress.Commands.add( 'savePage', () => {
 	cy.get( '.edit-post-header__settings button.is-primary' ).click();
 
 	cy.get( '.components-editor-notices__snackbar', { timeout: 120000 } ).should( 'not.be.empty' );
+
+	// Reload the page to ensure that we're not hitting any block errors
+	cy.reload();
+} );
+
+/**
+ * From inside the WordPress editor open the editor panel.
+ * To be used on: WordPress 5.4
+ */
+Cypress.Commands.add( 'savePage54', () => {
+	cy.get( '.edit-post-header__settings button.is-primary' ).click();
+	cy.get( 'button.editor-post-publish-button' ).click();
+
+	cy.get( '.components-notice.is-success', { timeout: 120000 } ).should( 'not.be.empty' );
 
 	// Reload the page to ensure that we're not hitting any block errors
 	cy.reload();
@@ -188,16 +202,32 @@ Cypress.Commands.add( 'openSettingsPanel', ( panelText ) => {
 } );
 
 /**
+ * Close a certain settings panel in the right hand sidebar of the editor.
+ *
+ * @param {RegExp} panelText The panel label text to open. eg: Color Settings
+ */
+Cypress.Commands.add( 'closeSettingsPanel', ( panelText ) => {
+	cy.get( '.components-panel__body' )
+		.contains( panelText )
+		.then( ( $panelTop ) => {
+			const $parentPanel = Cypress.$( $panelTop ).closest( 'div.components-panel__body' );
+			if ( $parentPanel.hasClass( 'is-opened' ) ) {
+				$panelTop.trigger( 'click' );
+			}
+		} );
+} );
+
+/**
  * Reset the plugin settings back to the defaults.
  */
-Cypress.Commands.add( 'resetPluginSettings', () => {
+Cypress.Commands.add( 'resetPluginSettings', ( waitForCache = true ) => {
 	cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
 	cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
 
 	cy.get( '#lity-reset-plugin-settings' ).click();
 
 	cy.on( 'window:alert', ( str ) => {
-		expect( str ).to.equal( 'huhAre you sure you want to reset the plugin settings? This cannot be undone.' );
+		expect( str ).to.equal( 'Are you sure you want to reset the plugin settings? This cannot be undone.' );
 	} );
 
 	cy.get( '.notice.notice-success' ).contains( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.' );
@@ -209,7 +239,9 @@ Cypress.Commands.add( 'resetPluginSettings', () => {
 
 	cy.get( '#lity-cache-rebuilding-notice' ).should( 'exist' );
 
-	cy.waitForCache();
+	if ( waitForCache ) {
+		cy.waitForCache();
+	}
 } );
 
 /**

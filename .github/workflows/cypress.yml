@@ -82,4 +82,6 @@ jobs:
       - name: Run Cypress tests
         run: |
           ./node_modules/.bin/cypress install
-          ./node_modules/.bin/cypress run --browser chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --group e2e-chrome-php-${{ matrix.php }}-wp-${{ matrix.wp }} --headed
+          ./node_modules/.bin/cypress run --spec .dev/tests/cypress/e2e/wp-${{ env.WP_VERSION }}/*.cy.js --browser chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --group e2e-chrome-php-${{ matrix.php }}-wp-${{ matrix.wp }} --headed
+        env:
+          WP_VERSION: ${{ matrix.wp }}

@@ -11,9 +11,9 @@ module.exports = defineConfig( {
   viewportHeight: 1080,
 
   env: {
-    localTestURL: "http://lity.test",
-    wpUsername: "admin",
-    wpPassword: "password",
+    localTestURL: "https://taxonomy-ordering.wp",
+    wpUsername: "evan",
+    wpPassword: "evan",
   },
 
   retries: {
@@ -22,7 +22,7 @@ module.exports = defineConfig( {
   },
 
   e2e: {
-    specPattern: ".dev/tests/cypress/e2e/*.cy.js",
+    specPattern: ".dev/tests/cypress/e2e/**/*.cy.js",
     supportFile: ".dev/tests/cypress/support/e2e.js",
   },
 } );
