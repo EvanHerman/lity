@@ -44,7 +44,6 @@ jobs:
           yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          cd ./build
           sudo mv ./lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
 
