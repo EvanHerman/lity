@@ -415,6 +415,13 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function lity_handle_new_image( $image_meta, $attachment_id ) {
 
+			// Do not add attachments that are not images to the transient.
+			if ( ! wp_attachment_is_image( $attachment_id ) ) {
+
+				return;
+
+			}
+
 			$image_urls  = array();
 			$image_sizes = array_keys( $image_meta['sizes'] );
 
