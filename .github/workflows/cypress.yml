@@ -38,7 +38,7 @@ jobs:
           ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass=password --path=/tmp/wordpress
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
-          ./vendor/bin/wp media import https://s.w.org/style/images/wp-header-logo.png --path=/tmp/wordpress --title="EMC2" --description="Albert Einsteins Equation" --caption="Chalk board with E=MC2"
+          ./vendor/bin/wp media import --path=/tmp/wordpress "https://s.w.org/style/images/wp-header-logo.png" --title="EMC2" --description="Albert Einsteins Equation" --caption="Chalk board with E=MC2"
 
       - name: Activate Lity
         run: |
