@@ -50,7 +50,5 @@ jobs:
       - name: Start WPCLI Server
         run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v4
-        with:
-          start: ./node_modules/.bin/cypress run --config integrationFolder=./ --browser chrome --record --group e2e-chrome --headed
+      - name: Run Cypress tests
+        run: ./node_modules/.bin/cypress run --config integrationFolder=./ --browser chrome --record --group e2e-chrome --headed
