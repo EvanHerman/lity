@@ -23,8 +23,8 @@ README.md
 *.log
 cypress.config.js
 adminUserLoginCookiesFromCypress.json
-.dev/tests/cypress/screenshots/
-.dev/tests/cypress/videos/
+.dev/tests/cypress/screenshots/*
+.dev/tests/cypress/videos/*
 
 includes/action-scheduler/.github
 includes/action-scheduler/docs
