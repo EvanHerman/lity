@@ -77,10 +77,10 @@ describe( 'Test Lity lightbox', () => {
 
 		cy.get( '.attachments .attachment:first-child' ).click();
 
-		cy.get( 'label[data-setting="title"] input[type="text"]' ).clear().type( 'Tree Image' );
-		cy.get( 'label[data-setting="caption"] textarea' ).clear().type( 'Tree Caption' );
-		cy.get( 'label[data-setting="description"] textarea' ).clear().type( 'Tree Description' );
-		cy.get( 'label[data-setting="title"] input[type="text"]' ).click();
+		cy.get( 'span[data-setting="title"] input[type="text"]' ).clear().type( 'Tree Image' );
+		cy.get( 'span[data-setting="caption"] textarea' ).clear().type( 'Tree Caption' );
+		cy.get( 'span[data-setting="description"] textarea' ).clear().type( 'Tree Description' );
+		cy.get( 'span[data-setting="title"] input[type="text"]' ).click();
 
 		cy.get( '.save-complete' );
 
