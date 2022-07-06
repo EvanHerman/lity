@@ -27,6 +27,14 @@ jobs:
       - name: Update hosts
         run: echo 127.0.0.1 lity.test | sudo tee -a /etc/hosts
 
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-yarn-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-yarn-cache-
+
       - name: Yarn Install
         run: sudo yarn install
 
@@ -51,4 +59,4 @@ jobs:
         run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
 
       - name: Run Cypress tests
-        run: ./node_modules/.bin/cypress run --config integrationFolder=./ --browser chrome --record --group e2e-chrome --headed
+        run: ./node_modules/.bin/cypress run --browser chrome --record --group e2e-chrome --headed
