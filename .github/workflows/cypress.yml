@@ -48,14 +48,15 @@ jobs:
       - name: Check /tmp/wordpress/wp-content/plugins
         run: ls -la /tmp/wordpress/wp-content/plugins
 
+      - name: Run minification
+        run: yarn min
+
       - name: Activate Lity
         run: |
-          pwd
-          yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
           cd ./build
-          mv ./lity /tmp/wordpress/wp-content/plugins/lity-testing
+          sudo mv ./lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
 
       - name: Start WPCLI Server
