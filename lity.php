@@ -89,7 +89,12 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$this->helpers = new Lity_Helpers();
 
-			$this->posts_per_page = 30;
+			/**
+			 * Filter the number of posts_per_page in the WP_Query when building the transient.
+			 *
+			 * @var int
+			 */
+			$this->posts_per_page = (int) apply_filters( 'lity_transient_image_query_count', 30 );
 
 			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
@@ -332,7 +337,7 @@ if ( ! class_exists( 'Lity' ) ) {
 				 *
 				 * @var array
 				 */
-				$image_info['custom_data'] = apply_filters( 'lity_image_info_custom_data', array(), $image_id );
+				$image_info['custom_data'] = (array) apply_filters( 'lity_image_info_custom_data', array(), $image_id );
 
 				// Filter out any custom_data that contains no content.
 				foreach ( $image_info['custom_data'] as $class => &$custom_data ) {
