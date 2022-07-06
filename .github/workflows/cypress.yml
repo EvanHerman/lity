@@ -43,9 +43,7 @@ jobs:
         run: |
           yarn min
           sudo mkdir -p ./build/lity
-          ls -la
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          ls -la
           cd ./build
           ls -la
           sudo zip -r lity.zip lity/.
