@@ -284,8 +284,18 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				'lity',
 				'lity_options',
 				array(
-					'label_for'   => 'excluded_element_selectors',
 					'description' => __( "Clearing the transient data will generate new media data. This can be helpful if data isn't displaying properly.", 'lity' ),
+				)
+			);
+
+			add_settings_field(
+				'reset_plugin_settings',
+				__( 'Reset Plugin Settings', 'lity' ),
+				array( $this, 'lity_reset_plugin_settings_button' ),
+				'lity',
+				'lity_options',
+				array(
+					'description' => __( "Reset the plugin settings back to 'factory settings'. All options will be reset and cache will be cleared.", 'lity' ),
 				)
 			);
 
@@ -584,6 +594,24 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		}
 
 		/**
+		 * Button to reset the plugin back to "factory settings".
+		 *
+		 * @param array $args Field args.
+		 */
+		public function lity_reset_plugin_settings_button( $args ) {
+
+			printf(
+				'<a href="%1$s" id="lity-reset-plugin-settings" class="button delete" onclick="if (confirm(\'%2$s\')){return true;}else{event.stopPropagation(); event.preventDefault();};">%3$s</a>
+				<p class="description">%4$s</p>',
+				esc_url( add_query_arg( 'lity-action', 'lity-reset-plugin-settings', menu_page_url( 'lity-options', false ) ) ),
+				esc_attr__( 'Are you sure you want to reset the plugin settings? This cannot be undone.', 'lity' ),
+				esc_html__( 'Reset Plugin Settings', 'lity' ),
+				esc_html( $args['description'] )
+			);
+
+		}
+
+		/**
 		 * Lity options page markup.
 		 */
 		public function lity_options_page() {
@@ -600,15 +628,32 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 				$lity = new Lity();
 				$lity->clear_lity_media_transient();
-				$lity->schedule_lity_media();
 
 				printf(
-					'<div class="notice notice-success">
+					'<div id="lity-transient-data-cleared-notice" class="notice notice-success">
 						<p>
 							<strong>%1$s</strong>
 						</p>
 					</div>',
 					esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
+				);
+
+			}
+
+			if ( false !== $lity_action && 'lity-reset-plugin-settings' === $lity_action ) {
+
+				$lity = new Lity();
+				$lity->clear_lity_media_transient();
+
+				update_option( 'lity_options', $this->default_options );
+
+				printf(
+					'<div id="lity-settings-reset-notice" class="notice notice-success">
+						<p>
+							<strong>%1$s</strong>
+						</p>
+					</div>',
+					esc_html__( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.', 'lity' )
 				);
 
 			}

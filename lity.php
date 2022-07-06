@@ -434,11 +434,14 @@ if ( ! class_exists( 'Lity' ) ) {
 				}
 			}
 
+			// Ensure 'full' image size is first in the array.
+			array_unshift( $image_urls, wp_get_attachment_image_url( $attachment_id, 'full' ) );
+
 			$new_image_info = array(
 				array(
 					'id'          => $attachment_id,
 					'urls'        => array_values( array_unique( $image_urls ) ),
-					'title'       => '',
+					'title'       => basename( $image_meta['file'] ),
 					'caption'     => '',
 					'description' => '',
 				),
@@ -515,7 +518,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			$message = __( 'Lity - Responsive Lightboxes is fetching your image metadata and caching a few things to improve performance. This all happens in the background. This notice will disappear when the process is complete.', 'lity' );
 
 			printf(
-				'<div class="notice notice-info">
+				'<div id="lity-cache-rebuilding-notice" class="notice notice-info">
 					<p>%1$s</p>
 				</div>',
 				esc_html( $message )
