@@ -53,4 +53,4 @@ jobs:
       - name: Run Cypress tests
         run: |
           ./node_modules/.bin/cypress install
-          ./node_modules/.bin/cypress run --browser chrome --record --group e2e-chrome --headed
+          ./node_modules/.bin/cypress run --browser chrome --record ${{ secrets.CYPRESS_RECORD_KEY }} --group e2e-chrome --headed
