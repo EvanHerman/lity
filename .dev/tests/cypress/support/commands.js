@@ -50,7 +50,6 @@ Cypress.Commands.add( 'setWordPressCookies', () => {
  * Login to the WordPRess site.
  */
 Cypress.Commands.add( 'manualWordPressLogin', () => {
-	cy.clearWordPressCookies();
 	cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin' );
 	cy.get( '#user_login' ).type( Cypress.env( 'wpUsername' ) , { force: true } );
 	cy.get( '#user_pass' ).type( Cypress.env( 'wpPassword' ), { force: true } );
