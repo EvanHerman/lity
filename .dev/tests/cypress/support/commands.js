@@ -163,6 +163,9 @@ Cypress.Commands.add( 'savePage54', () => {
 
 	cy.get( '.components-notice.is-success', { timeout: 120000 } ).should( 'not.be.empty' );
 
+	// Give it 2 seconds for permalink to refresh.
+	cy.wait( 2000 );
+
 	// Reload the page to ensure that we're not hitting any block errors
 	cy.reload();
 } );
