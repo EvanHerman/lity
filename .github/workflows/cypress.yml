@@ -74,7 +74,6 @@ jobs:
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
           sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity
-          ./vendor/bin/wp theme activate twentynineteen --path=/tmp/wordpress
           ./vendor/bin/wp plugin activate lity --path=/tmp/wordpress
 
       - name: Start WPCLI Server
