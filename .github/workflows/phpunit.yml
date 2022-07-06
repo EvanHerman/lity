@@ -57,7 +57,7 @@ jobs:
       - name: Composer Install
         run: |
           if [ "${{ env.WP_VERSION }}" == '5.4' ]; then
-            composer require phpunit/phpunit:^7.5.20 -W --dev
+            sudo composer require phpunit/phpunit:^7.5.20 -W --dev
           fi
           sudo composer install
         env:
