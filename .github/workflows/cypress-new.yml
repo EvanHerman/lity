@@ -1,5 +1,5 @@
 ---
-name: Build And Test
+name: Cypress - New
 
 on: [push, pull_request]
 
@@ -18,7 +18,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_DATABASE: wordpress
-          MYSQL_USER: root
+          MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306:3306
