@@ -42,11 +42,11 @@ jobs:
       - name: Check /tmp
         run: ls -la /tmp
 
-      - name: Check /tmp/wp-content
-        run: ls -la /tmp/wp-content
+      - name: Check /tmp/wordpress/wp-content
+        run: ls -la /tmp/wordpress/wp-content
 
-      - name: Check /tmp/wp-content/plugins
-        run: ls -la /tmp/wp-content/plugins
+      - name: Check /tmp/wordpress/wp-content/plugins
+        run: ls -la /tmp/wordpress/wp-content/plugins
 
       - name: Activate Lity
         run: |
