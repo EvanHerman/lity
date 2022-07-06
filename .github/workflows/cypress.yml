@@ -39,6 +39,15 @@ jobs:
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
 
+      - name: Check /tmp
+        run: ls -la /tmp
+
+      - name: Check /tmp/wp-content
+        run: ls -la /tmp/wp-content
+
+      - name: Check /tmp/wp-content/plugins
+        run: ls -la /tmp/wp-content/plugins
+
       - name: Activate Lity
         run: |
           pwd
