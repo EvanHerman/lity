@@ -20,7 +20,7 @@ describe( 'Test Lity lightbox', () => {
 	it( 'opens', () => {
 		const { imageBase } = helpers.upload.spec;
 
-		cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin' );
+		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin' );
 		cy.location('pathname').should( 'match', /^\/wp-admin/ );
 
 		cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/post-new.php?post_type=page' );
