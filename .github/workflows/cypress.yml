@@ -44,8 +44,8 @@ jobs:
           yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
-          ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
+          sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity
+          ./vendor/bin/wp plugin activate lity --path=/tmp/wordpress
 
       - name: Start WPCLI Server
         run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &

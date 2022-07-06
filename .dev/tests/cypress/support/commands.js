@@ -191,7 +191,7 @@ Cypress.Commands.add( 'openSettingsPanel', ( panelText ) => {
  * Reset the plugin settings back to the defaults.
  */
 Cypress.Commands.add( 'resetPluginSettings', () => {
-	cy.visit( Cypress.env( 'localTestURL' ) + 'wp-admin/options-general.php?page=lity-options' );
+	cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin/options-general.php?page=lity-options' );
 	cy.get( 'h1' ).should( 'contain', 'Lity - Responsive Lightboxes' );
 
 	cy.get( '#lity-reset-plugin-settings' ).click();
