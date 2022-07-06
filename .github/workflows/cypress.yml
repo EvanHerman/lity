@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4, 8.0]
-        wp: ['5.0', 'latest']
+        wp: ['5.4', 'latest']
 
     services:
       mysql:
