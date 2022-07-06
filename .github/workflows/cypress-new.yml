@@ -54,25 +54,15 @@ jobs:
 
       - name: Prepare test database
         run: |
-          export MYQSL_HOST=127.0.0.1
-          export MYSQL_TCP_PORT=${{ job.services.mysql.ports['3306'] }}
-          mysql -e 'CREATE DATABASE IF NOT EXISTS wordpress;' -uroot -proot
-          mysql -e 'GRANT ALL PRIVILEGES ON wordpress.* TO "wordpress"@"127.0.0.1" IDENTIFIED BY "password1"' -uroot -proot
-          mysql -e 'GRANT ALL PRIVILEGES ON wordpress_scaffold.* TO "wordpress"@"127.0.0.1" IDENTIFIED BY "password1"' -uroot -proot
-
-      - name: Install WordPress
-        run: |
-          sudo mkdir -p /usr/src/wordpress/
-          sudo chmod o+w /usr/src/wordpress/
-          cd /usr/src/wordpress/
-          wp core download --version=${{ env.WP_VERSION }}
-          wp config create --dbname=wordpress --dbuser=root --dbpass=password --allow-root --debug
-          wp core install --url=http://localhost:8080 --title=Test --admin_user=admin --admin_password=password \
-            --admin_email=admin@local.test --skip-email --allow-root
-          wp rewrite structure '/%postname%'
-          cd ${{ github.workspace }}
+          sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y subversion default-mysql-client
+          mkdir -p /tmp/wordpress
+          ./vendor/bin/wp core download --version=latest --path=/tmp/wordpress
+          ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass=password --path=/tmp/wordpress
+          ./vendor/bin/wp db create --path=/tmp/wordpress
+          ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
+          ./vendor/bin/wp rewrite structure '/%postname%'
           cp -R ${{ github.workspace }} /usr/src/wordpress/wp-content/plugins/lity
-          sudo mv /usr/src/wordpress/* ${{ github.workspace }}
+          ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
         env:
           WP_VERSION: ${{ matrix.wp }}
 
