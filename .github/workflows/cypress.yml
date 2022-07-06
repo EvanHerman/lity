@@ -42,21 +42,12 @@ jobs:
       - name: Check /tmp
         run: ls -la /tmp
 
-      - name: Check /tmp/wordpress/wp-content
-        run: ls -la /tmp/wordpress/wp-content
-
-      - name: Check /tmp/wordpress/wp-content/plugins
-        run: ls -la /tmp/wordpress/wp-content/plugins
-
-      - name: Run minification
-        run: yarn min
-
       - name: Activate Lity
         run: |
+          yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
-          cd ./build
-          sudo mv ./lity /tmp/wordpress/wp-content/plugins/lity-testing
+          sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
 
       - name: Start WPCLI Server
