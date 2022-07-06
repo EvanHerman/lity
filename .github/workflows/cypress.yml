@@ -32,7 +32,7 @@ jobs:
           sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y subversion default-mysql-client
           mkdir -p /tmp/wordpress
           ./vendor/bin/wp core download --version=latest --path=/tmp/wordpress
-          ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass='' --path=/tmp/wordpress
+          ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass=password --path=/tmp/wordpress
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
 
