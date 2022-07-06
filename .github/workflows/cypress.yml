@@ -43,11 +43,17 @@ jobs:
         run: |
           yarn min
           sudo mkdir -p ./build/lity
+          ls -la
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
+          ls -la
           cd ./build
+          ls -la
           sudo zip -r lity.zip lity/.
           mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
+
+      - name: Start WPCLI Server
+        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
 
       - name: Cypress run
         uses: cypress-io/github-action@v4

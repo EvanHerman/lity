@@ -11,10 +11,9 @@ module.exports = defineConfig( {
   viewportHeight: 1080,
 
   env: {
-    localTestURL: "https://taxonomy-ordering.wp/",
-    wpUsername: "evan",
-    wpPassword: "evan",
-    templateLang: "en_US",
+    localTestURL: "http://lity.test",
+    wpUsername: "admin",
+    wpPassword: "password",
   },
 
   retries: {
