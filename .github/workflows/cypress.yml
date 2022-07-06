@@ -43,9 +43,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Yarn Install
-        run: sudo yarn install
-
       - name: Install WordPress
         run: |
           sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y subversion default-mysql-client
@@ -55,16 +52,15 @@ jobs:
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
 
-      - name: Activate Lity
+      - name: Start WPCLI Server
+        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
+
+      - name: Yarn Install, Activate Lity and Run Cypress Tests
         run: |
+          sudo yarn install
           yarn min
           sudo mkdir -p ./build/lity
           sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
           sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity-testing
           ./vendor/bin/wp plugin activate lity-testing --path=/tmp/wordpress
-
-      - name: Start WPCLI Server
-        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
-
-      - name: Run Cypress tests
-        run: ./node_modules/.bin/cypress run --browser chrome --record --group e2e-chrome --headed
+          ./node_modules/.bin/cypress run --browser chrome --record --group e2e-chrome --headed
