@@ -42,6 +42,9 @@ With additional granular controls, users can turn on or off lightboxes for speci
 
 == Frequently Asked Questions ==
 
+= Will this plugin only work on images I have uploaded to my site? =
+No, any images on the page can be opened in a lightbox. You can copy images from Google images and paste them into your content, and they will also open in a lightbox.
+
 = Where are the plugin settings? =
 The plugins settings are nested inside of the 'Tools' menu item from the WordPress admin dashboard.
 
@@ -50,6 +53,9 @@ At this time no, the plugin will only open up images in a responsive lightbox. V
 
 = Does Lity - Responsive Lightboxes work with galleries? =
 At this time, no. Lity - Responsive Lightboxes only works with single images. Users are not able to navigate through a gallery without closing the lightbox. Users will have to close the lightbox and click on the next image they would like to view. Gallery support and keyboard navigation may come at a later time.
+
+= I have the option set to use full size images, but it's not working. Why? =
+Double check the URL of the image is correct and matches the URL of your current site. If you migrated your site from another domain you may not have updated the URLs in the database and/or post content.
 
 = Is there a GitHub repository that I can submit issues or contribute to? =
 Yes, our GitHub repository can be found at [https://github.com/EvanHerman/lity](https://github.com/EvanHerman/lity).

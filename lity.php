@@ -74,8 +74,6 @@ if ( ! class_exists( 'Lity' ) ) {
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
 
-			$this->update_lity_media_transient( 6789 );
-
 			$this->default_options = array(
 				'show_full_size'             => 'yes',
 				'use_background_image'       => 'yes',
@@ -91,7 +89,12 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$this->helpers = new Lity_Helpers();
 
-			$this->posts_per_page = 30;
+			/**
+			 * Filter the number of posts_per_page in the WP_Query when building the transient.
+			 *
+			 * @var int
+			 */
+			$this->posts_per_page = (int) apply_filters( 'lity_transient_image_query_count', 30 );
 
 			register_activation_hook( __FILE__, array( $this, 'plugin_activation' ) );
 
@@ -103,8 +106,11 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'lity_generate_media', array( $this, 'set_media_transient' ) );
 
-			add_action( 'wp_generate_attachment_metadata', array( $this, 'update_lity_media_transient' ), PHP_INT_MAX, 3 );
 			add_action( 'attachment_updated', array( $this, 'update_lity_media_transient' ), PHP_INT_MAX, 3 );
+
+			add_filter( 'wp_generate_attachment_metadata', array( $this, 'lity_handle_new_image' ), PHP_INT_MAX, 3 );
+
+			add_action( 'deleted_post', array( $this, 'lity_remove_image_from_transient' ), PHP_INT_MAX, 2 );
 
 			add_action( 'admin_notices', array( $this, 'display_generating_transient_notice' ), PHP_INT_MAX );
 
@@ -135,7 +141,8 @@ if ( ! class_exists( 'Lity' ) ) {
 		 */
 		public function custom_plugin_action_links( $links ) {
 
-			$links = array_merge(
+			return array_merge(
+				$links,
 				array(
 					sprintf(
 						'<a href="%1$s" aria-label="%2$s">%3$s</a>',
@@ -143,11 +150,8 @@ if ( ! class_exists( 'Lity' ) ) {
 						esc_html__( 'Lity - Responsive Lightboxes Settings', 'lity' ),
 						esc_html__( 'Settings', 'lity' )
 					),
-				),
-				$links
+				)
 			);
-
-			return $links;
 
 		}
 
@@ -333,7 +337,7 @@ if ( ! class_exists( 'Lity' ) ) {
 				 *
 				 * @var array
 				 */
-				$image_info['custom_data'] = apply_filters( 'lity_image_info_custom_data', array(), $image_id );
+				$image_info['custom_data'] = (array) apply_filters( 'lity_image_info_custom_data', array(), $image_id );
 
 				// Filter out any custom_data that contains no content.
 				foreach ( $image_info['custom_data'] as $class => &$custom_data ) {
@@ -398,6 +402,102 @@ if ( ! class_exists( 'Lity' ) ) {
 			$media_data[ $attachment_index ]['description'] = get_post_field( 'post_content', $attachment_id );
 
 			set_transient( 'lity_media', json_encode( $media_data ) );
+
+		}
+
+		/**
+		 * Handle new image uploads. Update our transient with the new image meta.
+		 *
+		 * @param array $image_meta    Array of attachment meta.
+		 * @param int   $attachment_id Current attachment ID.
+		 *
+		 * @return array Original image_meta array.
+		 */
+		public function lity_handle_new_image( $image_meta, $attachment_id ) {
+
+			// Do not add attachments that are not images to the transient.
+			if ( ! wp_attachment_is_image( $attachment_id ) ) {
+
+				return;
+
+			}
+
+			$image_urls  = array();
+			$image_sizes = array_keys( $image_meta['sizes'] );
+
+			if ( ! empty( $image_sizes ) ) {
+
+				foreach ( $image_sizes as $image_size ) {
+
+					$image_urls[] = wp_get_attachment_image_url( $attachment_id, $image_size );
+
+				}
+			}
+
+			$new_image_info = array(
+				array(
+					'id'          => $attachment_id,
+					'urls'        => array_values( array_unique( $image_urls ) ),
+					'title'       => '',
+					'caption'     => '',
+					'description' => '',
+				),
+			);
+
+			$existing_transient = get_transient( 'lity_media' );
+
+			if ( false === $existing_transient ) {
+
+				set_transient( 'lity_media', json_encode( $new_image_info ) );
+
+				return $image_meta;
+
+			}
+
+			$existing_transient = json_decode( $existing_transient, true );
+
+			set_transient( 'lity_media', json_encode( array_merge( $existing_transient, $new_image_info ) ) );
+
+			return $image_meta;
+
+		}
+
+		/**
+		 * Remove the image from the lity_transient when it is deleted from the site.
+		 *
+		 * @param int $post_id The post_id that was deleted.
+		 */
+		public function lity_remove_image_from_transient( $post_id ) {
+
+			$post_type = get_post_type( $post_id );
+
+			if ( 'attachment' !== $post_type ) {
+
+				return;
+
+			}
+
+			$lity_media = get_transient( 'lity_media' );
+
+			if ( false === $lity_media ) {
+
+				return;
+
+			}
+
+			$lity_media = json_decode( $lity_media, true );
+
+			$attachment_index = array_search( $post_id, array_column( $lity_media, 'id' ), true );
+
+			if ( false === $attachment_index ) {
+
+				return;
+
+			}
+
+			unset( $lity_media[ $attachment_index ] );
+
+			set_transient( 'lity_media', json_encode( $lity_media ) );
 
 		}
 
