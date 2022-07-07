@@ -490,7 +490,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$lity_media = json_decode( $lity_media, true );
 
-			$attachment_index = array_search( $post_id, array_column( $lity_media, 'id' ), true );
+			$attachment_index = array_search( (int) $post_id, array_column( $lity_media, 'id' ), true );
 
 			if ( false === $attachment_index ) {
 
