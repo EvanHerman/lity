@@ -155,9 +155,9 @@ Cypress.Commands.add( 'savePage', () => {
 
 /**
  * From inside the WordPress editor open the editor panel.
- * To be used on: WordPress 5.4
+ * To be used on: WordPress 5.6
  */
-Cypress.Commands.add( 'savePage54', () => {
+Cypress.Commands.add( 'savePage56', () => {
 	cy.get( '.edit-post-header__settings button.is-primary' ).click();
 	cy.get( 'button.editor-post-publish-button' ).click();
 

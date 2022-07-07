@@ -45,7 +45,7 @@ describe( 'Test Lity lightbox', () => {
 		// Image size select field.
 		cy.get( '.components-panel__body.is-opened:first-child select[id^=inspector-select-control-]' ).select( 'Full Size' );
 
-		cy.savePage54();
+		cy.savePage56();
 
 		cy.viewPage();
 
