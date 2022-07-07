@@ -65,7 +65,7 @@ jobs:
           ./vendor/bin/wp db create --path=/tmp/wordpress
           ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
           ./vendor/bin/wp media import "https://s.w.org/style/images/wp-header-logo.png" --title="WordPress Logo" --desc="WordPress Header Logo" --caption="Header image with the WordPress logo" --path=/tmp/wordpress
-          ./vendor/bin/wp theme install twentytwentytwo --activate --path=/tmp/wordpress
+          ./vendor/bin/wp theme install twentytwentyone --activate --path=/tmp/wordpress
           ./vendor/bin/wp option update permalink_structure '/%postname%' --path=/tmp/wordpress
         env:
           WP_VERSION: ${{ matrix.wp }}
