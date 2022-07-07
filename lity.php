@@ -80,8 +80,8 @@ if ( ! class_exists( 'Lity' ) ) {
 				'show_image_info'            => 'no',
 				'caption_type'               => 'caption',
 				'disabled_on'                => array(),
-				'element_selectors'          => 'img',
-				'excluded_element_selectors' => '',
+				'element_selectors'          => '[{"value":"img"}]',
+				'excluded_element_selectors' => '[]',
 				'generating_transient'       => false,
 			);
 

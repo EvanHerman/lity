@@ -9,6 +9,11 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	private $media_data;
 
+	/**
+	 * Lity class instance.
+	 */
+	private $lity;
+
 	function setUp(): void {
 
 		parent::setUp();
@@ -16,6 +21,8 @@ class Test_Lity extends WP_UnitTestCase {
 		$this->media_data = '[{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-1536x1044.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-600x408.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-5-100x100.jpg"],"title":"Image 5","caption":"Image description"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-4-100x100.jpg"],"title":"Image 4","caption":"hello"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-3-100x100.jpg"],"title":"Image 3","caption":"Image description"},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-1097x1536.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-600x840.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-2-100x100.jpg"],"title":"Image 2","caption":"This is the image caption."},{"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-1536x1044.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-300x300.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-600x408.jpg","http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1-100x100.jpg"],"title":"","caption":""}]';
 
 		require_once dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/lity.php';
+
+		$this->lity = new Lity();
 
 	}
 
@@ -65,7 +72,7 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	function testEnqueueLityNoMediaData() {
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
 		$this->assertTrue( ! wp_script_is( 'lity' ) );
 
@@ -78,7 +85,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
 		global $wp_scripts;
 
@@ -93,7 +100,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
 		global $wp_scripts;
 
@@ -108,7 +115,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
 		global $wp_scripts;
 
@@ -126,11 +133,11 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
 		global $wp_scripts;
 
-		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","caption_type":"caption","disabled_on":[],"element_selectors":"img","excluded_element_selectors":"","generating_transient":false},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
+		$expected = 'var lityScriptData = {"options":{"show_full_size":"yes","use_background_image":"yes","show_image_info":"no","caption_type":"caption","disabled_on":[],"element_selectors":"[{\"value\":\"img\"}]","excluded_element_selectors":"[]","generating_transient":false},"element_selectors":"img","excluded_element_selectors":"","mediaData":';
 
 		$this->assertTrue(
 			strpos( $wp_scripts->registered['lity-script']->extra['data'], $expected ) !== false,
@@ -146,9 +153,9 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
-		global $wp_styles;
+		$wp_styles = wp_styles();
 
 		$this->assertArrayHasKey(
 			'lity',
@@ -165,9 +172,9 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->enqueue_lity();
+		$this->lity->enqueue_lity();
 
-		global $wp_styles;
+		$wp_styles = wp_styles();
 
 		$this->assertArrayHasKey(
 			'lity-styles',
@@ -184,13 +191,13 @@ class Test_Lity extends WP_UnitTestCase {
 
 		delete_transient( 'lity_media' );
 
-		$options = ( new Lity() )->default_options;
+		$options = $this->lity->default_options;
 
 		$options['show_full_size'] = 'no';
 
 		update_option( 'lity_options', $options );
 
-		( new Lity() )->set_media_transient( 1 );
+		$this->lity->set_media_transient( 1 );
 
 		$this->assertFalse(
 			get_transient( 'lity_media' ),
@@ -206,7 +213,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->set_media_transient( 1 );
+		$this->lity->set_media_transient( 1 );
 
 		$this->assertEquals( get_transient( 'lity_media' ), $this->media_data );
 
@@ -217,7 +224,7 @@ class Test_Lity extends WP_UnitTestCase {
 	 */
 	function testLityGetMediaReturnsWhenNoAttachmentsOnSite() {
 
-		( new Lity() )->set_media_transient( 1 );
+		$this->lity->set_media_transient( 1 );
 
 		$this->assertFalse( get_transient( 'lity_media' ) );
 
@@ -237,7 +244,7 @@ class Test_Lity extends WP_UnitTestCase {
 			]
 		);
 
-		( new Lity() )->set_media_transient( 1 );
+		$this->lity->set_media_transient( 1 );
 
 		$this->assertEquals(
 			get_transient( 'lity_media' ),
@@ -266,7 +273,7 @@ class Test_Lity extends WP_UnitTestCase {
 			return array( 'http://example.org/wp-content/uploads/2022/06/image-1.jpg', '1800', '1224' );
 		}, 10, 4 );
 
-		( new Lity() )->set_media_transient( 1 );
+		$this->lity->set_media_transient( 1 );
 
 		$expected = '[{"id":'.$image_id.',"urls":["http:\/\/example.org\/wp-content\/uploads\/2022\/06\/image-1.jpg"],"title":"Image #1","caption":"Image excerpt, used for captions","description":"Image description, used for captions","custom_data":[]}]';
 
@@ -285,7 +292,7 @@ class Test_Lity extends WP_UnitTestCase {
 
 		set_transient( 'lity_media', $this->media_data );
 
-		( new Lity() )->clear_lity_media_transient();
+		$this->lity->clear_lity_media_transient();
 
 		$this->assertFalse(
 			get_transient( 'lity_media' ),
