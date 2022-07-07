@@ -11,9 +11,9 @@ module.exports = defineConfig( {
   viewportHeight: 1080,
 
   env: {
-    localTestURL: "http://lity.test",
-    wpUsername: "admin",
-    wpPassword: "password",
+    localTestURL: "https://wp-54.wp",
+    wpUsername: "evan",
+    wpPassword: "evan",
   },
 
   retries: {

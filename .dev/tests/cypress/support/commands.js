@@ -51,10 +51,15 @@ Cypress.Commands.add( 'setWordPressCookies', () => {
  */
 Cypress.Commands.add( 'manualWordPressLogin', () => {
 	cy.visit( Cypress.env( 'localTestURL' ) + '/wp-admin' );
-	cy.get( '#user_login' ).type( Cypress.env( 'wpUsername' ) , { force: true } );
-	cy.get( '#user_pass' ).type( Cypress.env( 'wpPassword' ), { force: true } );
-	cy.get( '#wp-submit' ).click();
-	cy.get( 'h1' ).contains( 'Dashboard' );
+
+	cy.url().then( url => {
+		if ( url.indexOf( 'wp-login.php' ) > -1 ) {
+			cy.get( '#user_login' ).type( Cypress.env( 'wpUsername' ) , { force: true } );
+			cy.get( '#user_pass' ).type( Cypress.env( 'wpPassword' ), { force: true } );
+			cy.get( '#wp-submit' ).click();
+			cy.get( 'h1' ).contains( 'Dashboard' );
+		}
+	} );
 } );
 
 /**
@@ -148,23 +153,6 @@ Cypress.Commands.add( 'savePage', () => {
 	cy.get( '.edit-post-header__settings button.is-primary' ).click();
 
 	cy.get( '.components-editor-notices__snackbar', { timeout: 120000 } ).should( 'not.be.empty' );
-
-	// Reload the page to ensure that we're not hitting any block errors
-	cy.reload();
-} );
-
-/**
- * From inside the WordPress editor open the editor panel.
- * To be used on: WordPress 5.6
- */
-Cypress.Commands.add( 'savePage56', () => {
-	cy.get( '.edit-post-header__settings button.is-primary' ).click();
-	cy.get( 'button.editor-post-publish-button' ).click();
-
-	cy.get( '.components-notice.is-success .components-notice__content', { timeout: 120000 } ).contains( 'Page published.' );
-
-	// Give it 2 seconds for permalink to refresh.
-	cy.wait( 2000 );
 
 	// Reload the page to ensure that we're not hitting any block errors
 	cy.reload();

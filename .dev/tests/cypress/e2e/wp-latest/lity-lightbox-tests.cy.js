@@ -10,7 +10,7 @@ describe( 'Test Lity lightbox', () => {
 	before( () => {
 		cy.manualWordPressLogin();
 		cy.getWordPressCookies();
-		// cy.resetPluginSettings();
+		cy.resetPluginSettings();
 	} );
 
 	after( () => {

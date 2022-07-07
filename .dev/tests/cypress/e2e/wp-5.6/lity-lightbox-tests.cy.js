@@ -14,7 +14,7 @@ describe( 'Test Lity lightbox', () => {
 	} );
 
 	after( () => {
-		cy.clearWordPressCookies();
+		// cy.clearWordPressCookies();
 	} );
 
 	it( 'opens', () => {
@@ -32,9 +32,9 @@ describe( 'Test Lity lightbox', () => {
 
 		helpers.upload.imageToBlock( 'core/image' );
 
-		cy.get( 'figure.wp-block-image img[src*="http"]' ).should( 'have.attr', 'src' ).should( 'include', imageBase );
+		cy.get( '.block-editor-writing-flow figure.wp-block.wp-block-image img[src*="http"]' ).should( 'have.attr', 'src' ).should( 'include', imageBase );
 
-		cy.get( 'figure.wp-block-image' ).click();
+		cy.get( '.block-editor-writing-flow figure.wp-block.wp-block-image img' ).click();
 
 		cy.get( 'button[aria-label="Settings"]' ).then( ( settingsButton ) => {
 			if ( ! Cypress.$( settingsButton ).hasClass( 'is-pressed' ) && ! Cypress.$( settingsButton ).hasClass( 'is-toggled' ) ) {
@@ -42,10 +42,15 @@ describe( 'Test Lity lightbox', () => {
 			}
 		} );
 
+		cy.closeSettingsPanel( 'Styles' );
+
 		// Image size select field.
 		cy.get( '.components-panel__body.is-opened:first-child select[id^=inspector-select-control-]' ).select( 'Full Size' );
 
-		cy.savePage56();
+		cy.savePage();
+
+		cy.log( 'Waiting for Permalinks panel to initialize.' );
+		cy.wait( 3000 );
 
 		cy.viewPage();
 
