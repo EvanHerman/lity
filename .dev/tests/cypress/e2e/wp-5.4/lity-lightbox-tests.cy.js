@@ -169,7 +169,7 @@ describe( 'Test Lity lightbox', () => {
 		cy.resetPluginSettings( false );
 
 		// Wait for js to initialize the fields
-		cy.wait( 1000  );
+		cy.wait( 1000 );
 
 		cy.get( 'label[for="excluded_element_selectors"]' ).parents( 'tr' ).find( '.tagify__input' ).click( { force: true } ).clear().type( 'img' );
 

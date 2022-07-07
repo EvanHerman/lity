@@ -161,7 +161,7 @@ Cypress.Commands.add( 'savePage54', () => {
 	cy.get( '.edit-post-header__settings button.is-primary' ).click();
 	cy.get( 'button.editor-post-publish-button' ).click();
 
-	cy.get( '.components-notice.is-success', { timeout: 120000 } ).should( 'not.be.empty' );
+	cy.get( '.components-notice.is-success .components-notice__content', { timeout: 120000 } ).contains( 'Page published.' );
 
 	// Give it 2 seconds for permalink to refresh.
 	cy.wait( 2000 );
