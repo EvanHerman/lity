@@ -2,7 +2,7 @@
 
 <h1 align="center">Lity - Responsive Lightboxes
 	<a href="https://github.com/EvanHerman/Lity/releases/latest/">
-		<img src="https://img.shields.io/static/v1?lityVersion=&message=v0.0.1&label=&color=999&style=flat-square">
+		<img src="https://img.shields.io/static/v1?lityVersion=&message=v1.0.0&label=&color=999&style=flat-square">
 	</a>
 </h1>
 

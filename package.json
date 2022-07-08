@@ -2,7 +2,7 @@
 	"name": "lity",
 	"title": "Lity",
 	"description": "Lity is a lightweight responsive lightbox plugin that allows for any and/or all images on your site open in a lightbox.",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"slimselect_version": "1.27.1",
 	"tagify_version": "4.12.0",
 	"tested_up_to": "6.0",
