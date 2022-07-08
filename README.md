@@ -51,6 +51,8 @@ This software uses the following open source packages:
 - [Slimselect](https://github.com/brianvoe/slim-select) by [Brian Voelker](https://github.com/brianvoe)
 - [Tagify](https://github.com/yairEO/tagify) by [Yair Even Or](https://github.com/yairEO)
 
+Props to [Ben Rothman](https://profiles.wordpress.org/brothman01/) for the plugin idea and testing.
+
 ## License
 
 This plugin, like WordPress, is licensed under the GPL. Use it to make something cool, have fun, and share what you've learned with others.

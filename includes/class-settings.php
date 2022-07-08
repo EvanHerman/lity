@@ -287,7 +287,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			add_settings_field(
 				'use_background_image',
-				__( 'Usge Background Image', 'lity' ),
+				__( 'Use Background Image', 'lity' ),
 				array( $this, 'lity_use_background_image_dropdown' ),
 				'lity',
 				'lity_options',

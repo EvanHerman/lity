@@ -55,6 +55,7 @@ img[data-lity]:hover {
 .lity-info > * {
   color: #fafafa;
   width: 100%;
+  word-break: break-all;
 }
 
 .lity-info > h4 {
