@@ -5,3 +5,4 @@ node_modules/
 vendor/
 .dev/tests/php/coverage/
 .phpunit.result.cache
+adminUserLoginCookiesFromCypress.json

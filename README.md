@@ -15,6 +15,9 @@
 	<a href="https://github.com/EvanHerman/lity/actions/workflows/wpcs.yml" target="_blank">
 		<img src="https://github.com/EvanHerman/Lity/actions/workflows/wpcs.yml/badge.svg">
 	</a>
+	<a href="https://github.com/EvanHerman/lity/actions/workflows/cypress.yml" target="_blank">
+		<img src="https://github.com/EvanHerman/lity/actions/workflows/cypress.yml/badge.svg">
+	</a>
 </p>
 
 <p align="center">

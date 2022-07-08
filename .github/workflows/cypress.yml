@@ -1,0 +1,89 @@
+---
+name: Cypress Tests
+
+on: push
+
+jobs:
+  cypress:
+    name: Cypress e2e - (PHP ${{ matrix.php }} - WP ${{ matrix.wp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4, 8.0]
+        wp: ['5.6', 'latest']
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: php-actions/composer@v5
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          extensions: mysql, zip
+          coverage: none
+          tools: composer, wp-cli
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Use Composer cache
+        uses: actions/cache@master
+        with:
+          path: ${{ steps['composer-cache'].outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Yarn Install
+        run: sudo yarn install
+
+      - name: Update hosts
+        run: echo 127.0.0.1 lity.test | sudo tee -a /etc/hosts
+
+      - name: Install WordPress
+        run: |
+          sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y subversion default-mysql-client
+          mkdir -p /tmp/wordpress
+          ./vendor/bin/wp core download --version=${{ env.WP_VERSION }} --path=/tmp/wordpress
+          ./vendor/bin/wp config create --dbhost=127.0.0.1 --dbname=lity --dbuser=root --dbpass=password --path=/tmp/wordpress
+          ./vendor/bin/wp db create --path=/tmp/wordpress
+          ./vendor/bin/wp core install --url="http://lity.test" --title=Lity --admin_user=admin --admin_password=password --admin_email=test@admin.com --skip-email --path=/tmp/wordpress
+          ./vendor/bin/wp media import "https://s.w.org/style/images/wp-header-logo.png" --title="WordPress Logo" --desc="WordPress Header Logo" --caption="Header image with the WordPress logo" --path=/tmp/wordpress
+          ./vendor/bin/wp theme install twentytwentyone --activate --path=/tmp/wordpress
+          ./vendor/bin/wp option update permalink_structure '/%postname%' --path=/tmp/wordpress
+        env:
+          WP_VERSION: ${{ matrix.wp }}
+
+      - name: Activate Lity
+        run: |
+          yarn min
+          sudo mkdir -p ./build/lity
+          sudo rsync -av --exclude-from .distignore --delete . ./build/lity/
+          sudo mv ./build/lity /tmp/wordpress/wp-content/plugins/lity
+          ./vendor/bin/wp plugin activate lity --path=/tmp/wordpress
+
+      - name: Start WPCLI Server
+        run: sudo ./vendor/bin/wp server --host=0.0.0.0 --port=80 --allow-root  --path=/tmp/wordpress &
+
+      - name: Run Cypress tests
+        run: |
+          ./node_modules/.bin/cypress install
+          ./node_modules/.bin/cypress run --spec .dev/tests/cypress/e2e/wp-${{ env.WP_VERSION }}/*.cy.js --browser chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --group e2e-chrome-php-${{ matrix.php }}-wp-${{ matrix.wp }} --headed
+        env:
+          WP_VERSION: ${{ matrix.wp }}

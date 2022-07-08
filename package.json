@@ -20,6 +20,8 @@
 		"min:css": "minify ./assets/css/lity-styles.css > ./assets/css/lity-styles.min.css && minify ./assets/css/tagify/tagify.css > ./assets/css/tagify/tagify.min.css",
 		"install:tests": ".dev/scripts/install-wp-tests.sh wordpress_test root password 127.0.0.1 latest",
 		"install:tests-local": ".dev/scripts/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest",
+		"test:e2e": "npx cypress run --browser=chrome --spec .dev/tests/cypress/e2e/wp-latest/*.cy.js",
+		"test:e2e-54": "npx cypress run --browser=chrome --spec .dev/tests/cypress/e2e/wp-5.4/*.cy.js",
 		"test:php": "./vendor/bin/phpunit",
 		"test:php-coverage": "./vendor/bin/phpunit --coverage-html .dev/tests/php/coverage/",
 		"test:php-coverage-text": "./vendor/bin/phpunit --coverage-text",
@@ -48,6 +50,8 @@
 		}
 	},
 	"devDependencies": {
+		"cypress": "^10.3.0",
+		"cypress-file-upload": "^5.0.8",
 		"eslint": "^8.17.0",
 		"grunt": "^1.5.3",
 		"grunt-text-replace": "^0.4.0",

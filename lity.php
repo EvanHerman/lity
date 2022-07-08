@@ -72,7 +72,9 @@ if ( ! class_exists( 'Lity' ) ) {
 			require_once plugin_dir_path( __FILE__ ) . 'includes/action-scheduler/action-scheduler.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
-			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
+
+			// Compatibility files.
+			require_once plugin_dir_path( __FILE__ ) . 'includes/compat/class-woocommerce.php';
 
 			$this->default_options = array(
 				'show_full_size'             => 'yes',
@@ -80,8 +82,8 @@ if ( ! class_exists( 'Lity' ) ) {
 				'show_image_info'            => 'no',
 				'caption_type'               => 'caption',
 				'disabled_on'                => array(),
-				'element_selectors'          => 'img',
-				'excluded_element_selectors' => '',
+				'element_selectors'          => '[{"value":"img"}]',
+				'excluded_element_selectors' => '[]',
 				'generating_transient'       => false,
 			);
 
@@ -114,7 +116,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'display_generating_transient_notice' ), PHP_INT_MAX );
 
-			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
+			add_filter( 'lity_excluded_element_selectors', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
 
 		}
 
@@ -190,13 +192,23 @@ if ( ! class_exists( 'Lity' ) ) {
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
 			wp_enqueue_script( 'lity-script', plugin_dir_url( __FILE__ ) . "assets/js/lity-script${suffix}.js", array( 'lity' ), LITY_PLUGIN_VERSION, true );
 
+			/**
+			 * Filter the array of exlcuded element selectors.
+			 *
+			 * @var array
+			 */
+			$excluded_element_selectors = (array) apply_filters(
+				'lity_excluded_element_selectors',
+				$this->lity_options->get_lity_option( 'excluded_element_selectors' )
+			);
+
 			wp_localize_script(
 				'lity-script',
 				'lityScriptData',
 				array(
 					'options'                    => $options,
 					'element_selectors'          => empty( $this->lity_options->get_lity_option( 'element_selectors' ) ) ? 'img' : implode( ',', $this->lity_options->get_lity_option( 'element_selectors' ) ),
-					'excluded_element_selectors' => implode( ',', $this->lity_options->get_lity_option( 'excluded_element_selectors' ) ),
+					'excluded_element_selectors' => implode( ',', array_unique( $excluded_element_selectors ) ),
 					'mediaData'                  => get_transient( 'lity_media' ),
 					'a11y_aria_label'            => /* translators: %s is the title of the image, if it exists. eg: View Image: Beautiful Tree */ __( 'View Image: %s', 'lity' ),
 				)
@@ -434,11 +446,14 @@ if ( ! class_exists( 'Lity' ) ) {
 				}
 			}
 
+			// Ensure 'full' image size is first in the array.
+			array_unshift( $image_urls, wp_get_attachment_image_url( $attachment_id, 'full' ) );
+
 			$new_image_info = array(
 				array(
 					'id'          => $attachment_id,
 					'urls'        => array_values( array_unique( $image_urls ) ),
-					'title'       => '',
+					'title'       => basename( $image_meta['file'] ),
 					'caption'     => '',
 					'description' => '',
 				),
@@ -456,7 +471,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$existing_transient = json_decode( $existing_transient, true );
 
-			set_transient( 'lity_media', json_encode( array_merge( $existing_transient, $new_image_info ) ) );
+			set_transient( 'lity_media', json_encode( array_merge( $new_image_info, $existing_transient ) ) );
 
 			return $image_meta;
 
@@ -487,7 +502,12 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$lity_media = json_decode( $lity_media, true );
 
-			$attachment_index = array_search( $post_id, array_column( $lity_media, 'id' ), true );
+			/**
+			 * The $post_id must be typecast as an integer value. This is a bug in core when multiple
+			 * images are deleted at once using the bulk action dropdown.
+			 * https://core.trac.wordpress.org/ticket/56170
+			 */
+			$attachment_index = array_search( (int) $post_id, array_column( $lity_media, 'id' ), true );
 
 			if ( false === $attachment_index ) {
 
@@ -496,6 +516,9 @@ if ( ! class_exists( 'Lity' ) ) {
 			}
 
 			unset( $lity_media[ $attachment_index ] );
+
+			// Reset array keys.
+			$lity_media = array_values( $lity_media );
 
 			set_transient( 'lity_media', json_encode( $lity_media ) );
 
@@ -515,7 +538,7 @@ if ( ! class_exists( 'Lity' ) ) {
 			$message = __( 'Lity - Responsive Lightboxes is fetching your image metadata and caching a few things to improve performance. This all happens in the background. This notice will disappear when the process is complete.', 'lity' );
 
 			printf(
-				'<div class="notice notice-info">
+				'<div id="lity-cache-rebuilding-notice" class="notice notice-info">
 					<p>%1$s</p>
 				</div>',
 				esc_html( $message )
@@ -537,17 +560,17 @@ if ( ! class_exists( 'Lity' ) ) {
 		/**
 		 * Remove certain elements from ever opening in a lightbox.
 		 *
-		 * @param array $value lity_options value.
+		 * @param array $excluded_selectors Excluded selectors array.
 		 *
-		 * @return array Filtered lity_options value.
+		 * @return array Filtered excluded_selectors value.
 		 */
-		public function always_excluded_selectors( $value ) {
+		public function always_excluded_selectors( $excluded_selectors ) {
 
 			$exclusions = array(
 				'#wpadminbar img',
 			);
 
-			return $this->helpers->add_selector_exclusion( $value, $exclusions );
+			return array_merge( $excluded_selectors, $exclusions );
 
 		}
 
