@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lity - Responsive Lightboxes
- * Description: Ensure when an image is clicked in the post content it opens in a responsive lightbox.
+ * Description: Enables beautiful and responsive lightboxes on every image on your site.
  * Author: Evan Herman
  * Author URI: https://www.evan-herman.com
  * Version: 0.0.1
