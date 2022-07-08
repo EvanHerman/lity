@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-07-08T15:56:21+00:00\n"
+"POT-Creation-Date: 2022-07-08T22:49:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: lity\n"
@@ -50,8 +50,7 @@ msgid "Should full size images be shown in the lightbox?"
 msgstr ""
 
 #: build/lity/includes/class-settings.php:290
-#: includes/class-settings.php:290
-msgid "Use Background Image"
+msgid "Usge Background Image"
 msgstr ""
 
 #: build/lity/includes/class-settings.php:296
@@ -243,4 +242,8 @@ msgstr ""
 #: build/lity/lity.php:538
 #: lity.php:538
 msgid "Lity - Responsive Lightboxes is fetching your image metadata and caching a few things to improve performance. This all happens in the background. This notice will disappear when the process is complete."
+msgstr ""
+
+#: includes/class-settings.php:290
+msgid "Use Background Image"
 msgstr ""
