@@ -4,7 +4,7 @@
  * Description: Enables beautiful and responsive lightboxes on every image on your site.
  * Author: Evan Herman
  * Author URI: https://www.evan-herman.com
- * Version: 1.0.0
+ * Version: 0.0.1
  * Text Domain: lity
  * Domain Path: /languages
  * Tested up to: 6.0
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
-define( 'LITY_PLUGIN_VERSION', '1.0.0' );
+define( 'LITY_PLUGIN_VERSION', '0.0.1' );
 define( 'LITY_VERSION', '2.4.1' );
 define( 'LITY_SLIMSELECT_VERSION', '1.27.1' );
 define( 'LITY_TAGIFY_VERSION', '4.12.0' );
