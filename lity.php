@@ -72,7 +72,9 @@ if ( ! class_exists( 'Lity' ) ) {
 			require_once plugin_dir_path( __FILE__ ) . 'includes/action-scheduler/action-scheduler.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-helpers.php';
 			require_once plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
-			require_once plugin_dir_path( __FILE__ ) . 'includes/class-woocommerce.php';
+
+			// Compatibility files.
+			require_once plugin_dir_path( __FILE__ ) . 'includes/compat/class-woocommerce.php';
 
 			$this->default_options = array(
 				'show_full_size'             => 'yes',
@@ -114,7 +116,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'display_generating_transient_notice' ), PHP_INT_MAX );
 
-			add_filter( 'option_lity_options', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
+			add_filter( 'lity_excluded_element_selectors', array( $this, 'always_excluded_selectors' ), PHP_INT_MAX, 2 );
 
 		}
 
@@ -190,13 +192,23 @@ if ( ! class_exists( 'Lity' ) ) {
 			wp_enqueue_script( 'lity', plugin_dir_url( __FILE__ ) . "assets/js/lity/lity${suffix}.js", array( 'jquery' ), LITY_VERSION, true );
 			wp_enqueue_script( 'lity-script', plugin_dir_url( __FILE__ ) . "assets/js/lity-script${suffix}.js", array( 'lity' ), LITY_PLUGIN_VERSION, true );
 
+			/**
+			 * Filter the array of exlcuded element selectors.
+			 *
+			 * @var array
+			 */
+			$excluded_element_selectors = (array) apply_filters(
+				'lity_excluded_element_selectors',
+				$this->lity_options->get_lity_option( 'excluded_element_selectors' )
+			);
+
 			wp_localize_script(
 				'lity-script',
 				'lityScriptData',
 				array(
 					'options'                    => $options,
 					'element_selectors'          => empty( $this->lity_options->get_lity_option( 'element_selectors' ) ) ? 'img' : implode( ',', $this->lity_options->get_lity_option( 'element_selectors' ) ),
-					'excluded_element_selectors' => implode( ',', $this->lity_options->get_lity_option( 'excluded_element_selectors' ) ),
+					'excluded_element_selectors' => implode( ',', array_unique( $excluded_element_selectors ) ),
 					'mediaData'                  => get_transient( 'lity_media' ),
 					'a11y_aria_label'            => /* translators: %s is the title of the image, if it exists. eg: View Image: Beautiful Tree */ __( 'View Image: %s', 'lity' ),
 				)
@@ -548,17 +560,17 @@ if ( ! class_exists( 'Lity' ) ) {
 		/**
 		 * Remove certain elements from ever opening in a lightbox.
 		 *
-		 * @param array $value lity_options value.
+		 * @param array $excluded_selectors Excluded selectors array.
 		 *
-		 * @return array Filtered lity_options value.
+		 * @return array Filtered excluded_selectors value.
 		 */
-		public function always_excluded_selectors( $value ) {
+		public function always_excluded_selectors( $excluded_selectors ) {
 
 			$exclusions = array(
 				'#wpadminbar img',
 			);
 
-			return $this->helpers->add_selector_exclusion( $value, $exclusions );
+			return array_merge( $excluded_selectors, $exclusions );
 
 		}
 

@@ -59,7 +59,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function removable_query_args( $args ) {
 
-			return array_merge( $args, array( 'lity-transient-clearedl', 'lity-settings-reset' ) );
+			return array_merge( $args, array( 'lity-transient-cleared', 'lity-settings-reset' ) );
 
 		}
 
@@ -68,15 +68,23 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function clear_lity_transient_button_clicked() {
 
-			if ( ! isset( $_GET['action'] ) ) {
+			if ( ! isset( $_GET['action'] ) || ! isset( $_GET['_wpnonce'] ) ) {
 
 				return;
 
 			}
 
-			$action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
+			$action = filter_var( $_GET['action'], FILTER_SANITIZE_STRING );
+			$nonce  = filter_var( $_GET['_wpnonce'], FILTER_SANITIZE_STRING );
 
-			if ( 'lity-regenerate-transient' !== $action ) {
+			if ( 'lity-regenerate-transient' !== $action || ! wp_verify_nonce( $nonce, 'lity-regenerate-transient' ) ) {
+
+				return;
+
+			}
+
+			// If the transient is already being built, do nothing.
+			if ( (bool) $this->get_lity_option( 'generating_transient' ) ) {
 
 				return;
 
@@ -659,10 +667,20 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function lity_clear_transient_button( $args ) {
 
+			$url = wp_nonce_url(
+				add_query_arg(
+					array(
+						'action' => 'lity-regenerate-transient',
+					),
+					menu_page_url( 'lity-options', false )
+				),
+				'lity-regenerate-transient'
+			);
+
 			printf(
 				'<a href="%1$s" class="button delete">%2$s</a>
 				<p class="description">%3$s</p>',
-				esc_url( add_query_arg( 'action', 'lity-regenerate-transient', menu_page_url( 'lity-options', false ) ) ),
+				esc_url( $url ),
 				esc_html__( 'Clear Lity Transient', 'lity' ),
 				esc_html( $args['description'] )
 			);
@@ -708,40 +726,30 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			}
 
-			if ( isset( $_GET['lity-transient-cleared'] ) ) {
+			if ( isset( $_GET['lity-transient-cleared'] ) ) { // phpcs:ignore
 
-				$transient_cleared = filter_var( $_GET['lity-transient-cleared'], FILTER_VALIDATE_BOOLEAN );
+				printf(
+					'<div id="lity-transient-data-cleared-notice" class="notice notice-success">
+						<p>
+							<strong>%1$s</strong>
+						</p>
+					</div>',
+					esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
+				);
 
-				if ( $transient_cleared ) {
-
-					printf(
-						'<div id="lity-transient-data-cleared-notice" class="notice notice-success">
-							<p>
-								<strong>%1$s</strong>
-							</p>
-						</div>',
-						esc_html__( 'Lity - Responsive Lightboxes transient data successfully cleared.', 'lity' )
-					);
-
-				}
 			}
 
-			if ( isset( $_GET['lity-settings-reset'] ) ) {
+			if ( isset( $_GET['lity-settings-reset'] ) ) { // phpcs:ignore
 
-				$settings_reset = filter_var( $_GET['lity-settings-reset'], FILTER_VALIDATE_BOOLEAN );
+				printf(
+					'<div id="lity-settings-reset-notice" class="notice notice-success">
+						<p>
+							<strong>%1$s</strong>
+						</p>
+					</div>',
+					esc_html__( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.', 'lity' )
+				);
 
-				if ( $settings_reset ) {
-
-					printf(
-						'<div id="lity-settings-reset-notice" class="notice notice-success">
-							<p>
-								<strong>%1$s</strong>
-							</p>
-						</div>',
-						esc_html__( 'Lity - Responsive Lightboxes settings successfully reset, and the cache has been cleared.', 'lity' )
-					);
-
-				}
 			}
 
 			?>
