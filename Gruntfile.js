@@ -12,6 +12,7 @@ module.exports = function( grunt ) {
 				src: [
 					'lity.php',
 					'includes/**/*.php',
+					'! includes/action-scheduler/**/*',
 				],
 				overwrite: true,
 				replacements: [
