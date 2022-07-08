@@ -459,7 +459,7 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$existing_transient = json_decode( $existing_transient, true );
 
-			set_transient( 'lity_media', json_encode( array_merge( $existing_transient, $new_image_info ) ) );
+			set_transient( 'lity_media', json_encode( array_merge( $new_image_info, $existing_transient ) ) );
 
 			return $image_meta;
 
@@ -490,6 +490,11 @@ if ( ! class_exists( 'Lity' ) ) {
 
 			$lity_media = json_decode( $lity_media, true );
 
+			/**
+			 * The $post_id must be typecast as an integer value. This is a bug in core when multiple
+			 * images are deleted at once using the bulk action dropdown.
+			 * https://core.trac.wordpress.org/ticket/56170
+			 */
 			$attachment_index = array_search( (int) $post_id, array_column( $lity_media, 'id' ), true );
 
 			if ( false === $attachment_index ) {
@@ -499,6 +504,9 @@ if ( ! class_exists( 'Lity' ) ) {
 			}
 
 			unset( $lity_media[ $attachment_index ] );
+
+			// Reset array keys.
+			$lity_media = array_values( $lity_media );
 
 			set_transient( 'lity_media', json_encode( $lity_media ) );
 
