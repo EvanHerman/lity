@@ -51,7 +51,7 @@ msgstr ""
 
 #: build/lity/includes/class-settings.php:290
 #: includes/class-settings.php:290
-msgid "Usge Background Image"
+msgid "Use Background Image"
 msgstr ""
 
 #: build/lity/includes/class-settings.php:296

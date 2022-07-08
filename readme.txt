@@ -40,6 +40,16 @@ With additional granular controls, users can turn on or off lightboxes for speci
 2. Activate the Lity - Responsive Lightboxes WordPress plugin through the 'Plugins' menu in WordPress.
 4. Navigate to 'Settings > Lity - Responsive Lightboxes' to alter the plugin settings.
 
+== Credits ==
+
+This software uses the following open source packages:
+
+- [Lity](https://sorgalla.com/lity/) by [Jan Sorgalla](https://github.com/jsor)
+- [Slimselect](https://github.com/brianvoe/slim-select) by [Brian Voelker](https://github.com/brianvoe)
+- [Tagify](https://github.com/yairEO/tagify) by [Yair Even Or](https://github.com/yairEO)
+
+Props to [Ben Rothman](https://profiles.wordpress.org/brothman01/) for the plugin idea and testing.
+
 == Frequently Asked Questions ==
 
 = Will this plugin only work on images I have uploaded to my site? =
@@ -47,6 +57,9 @@ No, any images on the page can be opened in a lightbox. You can copy images from
 
 = Where are the plugin settings? =
 The plugins settings are nested inside of the 'Tools' menu item from the WordPress admin dashboard.
+
+= The metadata and cache notice won't go away. Why? =
+If the notice at the top of dashboard about fetching your image metadata and caching won't go away, head into 'Tools > Scheduled Actions'. In the list, find the `lity_generate_media` action that has a `pending` status, hover over it and click on 'Run'. If all `lity_generate_media` are all set to 'Complete' and the notice is still visible, head back to the Lity options page and click on 'Clear Lity Transient'.
 
 = Does Lity - Responsive Lightboxes work with videos or other media types? =
 At this time no, the plugin will only open up images in a responsive lightbox. Videos and other media types may come at a later time.
