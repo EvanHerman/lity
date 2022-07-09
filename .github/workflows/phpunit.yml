@@ -28,7 +28,7 @@ jobs:
 
       - uses: php-actions/composer@v5
 
-      - name: Setup PHP (${{ matrix.php }})
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
