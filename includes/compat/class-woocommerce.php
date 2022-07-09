@@ -43,11 +43,13 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 		 */
 		public function woocommerce_exclusions( $excluded_selectors ) {
 
+			// @codeCoverageIgnoreStart
 			if ( ! function_exists( 'is_plugin_active' ) ) {
 
 				include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 			}
+			// @codeCoverageIgnoreEnd
 
 			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 
