@@ -2,7 +2,7 @@
 	"name": "lity",
 	"title": "Lity",
 	"description": "Lity is a lightweight responsive lightbox plugin that allows for any and/or all images on your site open in a lightbox.",
-	"version": "1.0.0",
+	"version": "0.0.9",
 	"slimselect_version": "1.27.1",
 	"tagify_version": "4.12.0",
 	"tested_up_to": "6.0",
@@ -35,7 +35,7 @@
 		"postinstall": "composer install",
 		"update:action-scheduler": "git fetch subtree-action-scheduler trunk && git subtree pull --prefix includes/action-scheduler subtree-action-scheduler trunk --squash",
 		"version": "grunt version && yarn generate-pot && git add -A .",
-		"postversion": "git push && git push -f --tags"
+		"postversion": "git push && git push -f u--tags"
 	},
 	"watch": {
 		"min": {
