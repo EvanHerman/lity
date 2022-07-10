@@ -17,16 +17,15 @@ class Test_Lity_WooCommerce extends WP_UnitTestCase {
 
 		update_option( 'active_plugins', array( 'woocommerce/woocommerce.php' ) );
 
-		update_option( 'template', array( 'twentytwentyone' ) );
-		update_option( 'stylesheet', array( 'twentytwentyone' ) );
-
-		// $this->woocommerce = new Lity_WooCommerce();
-
 	}
 
 	function tearDown(): void {
 
 		parent::tearDown();
+
+		update_option( 'active_plugins', array( 'woocommerce/woocommerce.php' ) );
+
+		switch_theme( 'twentytwentytwo' );
 
 	}
 
@@ -35,16 +34,17 @@ class Test_Lity_WooCommerce extends WP_UnitTestCase {
 	 */
 	public function testWoocommerceExclusions() {
 
-		$woocommerce_exclusions = apply_filters( 'lity_excluded_element_selectors', array() );
+		$this->woocommerce = new Lity_WooCommerce();
 
 		$lity = new Lity();
+
+		$woocommerce_exclusions = $this->woocommerce->woocommerce_exclusions( array() );
 
 		$this->assertEquals(
 			array(
 				'li.type-product .attachment-woocommerce_thumbnail',
-				'#wpadminbar img',
 			),
-			$woocommerce_exclusions
+			array_unique( $woocommerce_exclusions )
 		);
 
 	}
@@ -54,19 +54,22 @@ class Test_Lity_WooCommerce extends WP_UnitTestCase {
 	 */
 	public function testStorefrontExclusions() {
 
-		$this->markTestSkipped( 'Revisit after we install the Storefront theme in the CI/CD pipeline.' );
-
 		$woocommerce_exclusions = apply_filters( 'lity_excluded_element_selectors', array() );
+
+		switch_theme( 'storefront' );
 
 		$lity = new Lity();
 
 		$this->assertEquals(
 			array(
 				'li.type-product .attachment-woocommerce_thumbnail',
+				'.storefront-product-pagination img',
 				'#wpadminbar img',
 			),
 			$woocommerce_exclusions
 		);
+
+		switch_theme( 'twentytwentytwo' );
 
 	}
 

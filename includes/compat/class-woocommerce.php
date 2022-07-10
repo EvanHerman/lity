@@ -74,11 +74,13 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 
 			$theme = wp_get_theme( 'storefront' );
 
+			// @codeCoverageIgnoreStart
 			if ( ! $theme->exists() ) {
 
 				return $excluded_selectors;
 
 			}
+			// @codeCoverageIgnoreEnd
 
 			array_push( $excluded_selectors, '.storefront-product-pagination img' );
 
