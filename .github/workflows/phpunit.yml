@@ -65,7 +65,6 @@ jobs:
 
       - name: Run unit tests
         run: |
-
           if [[ "${{ env.WP_VERSION }}" == 8.0 &&  "${{ env.WP_VERSION }}" == 'latest' ]];
             ./vendor/bin/phpunit --coverage-clover=clover.xml --log-junit=junit.xml
           then
