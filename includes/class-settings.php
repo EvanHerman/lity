@@ -48,6 +48,9 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 			add_action( 'admin_menu', array( $this, 'register_menu_item' ) );
 
+			add_action( 'admin_print_styles-settings_page_lity-options', array( $this, 'enqueue_settings_styles' ) );
+			add_action( 'admin_print_scripts-settings_page_lity-options', array( $this, 'enqueue_settings_scripts' ) );
+
 		}
 
 		/**
@@ -65,6 +68,8 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 		/**
 		 * Catch the clear lity transient button click, and redirect.
+		 *
+		 * @codeCoverageIgnore
 		 */
 		public function clear_lity_transient_button_clicked() {
 
@@ -100,7 +105,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 					menu_page_url( 'lity-options', false )
 				),
 				302,
-				'WordPress - Lity - Responsive Lightboxes Plugin'
+				__( 'WordPress - Lity - Responsive Lightboxes Plugin', 'lity' )
 			);
 
 			exit;
@@ -109,6 +114,8 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 		/**
 		 * Catch the reset lity plugin settings button click, and redirect.
+		 *
+		 * @codeCoverageIgnore
 		 */
 		public function reset_lity_settings_button_clicked() {
 
@@ -139,7 +146,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 					menu_page_url( 'lity-options', false )
 				),
 				302,
-				'WordPress - Lity - Responsive Lightboxes Plugin'
+				__( 'WordPress - Lity - Responsive Lightboxes Plugin', 'lity' )
 			);
 
 			exit;
@@ -151,7 +158,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 */
 		public function register_menu_item() {
 
-			$submenu = add_submenu_page(
+			add_submenu_page(
 				'options-general.php',
 				__( 'Lity - Responsive Lightboxes', 'lity' ),
 				__( 'Lity - Responsive Lightboxes', 'lity' ),
@@ -160,39 +167,43 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 				array( $this, 'lity_options_page' )
 			);
 
+		}
+
+		/**
+		 * Enqueue the Settings page styles.
+		 */
+		public function enqueue_settings_styles() {
+
 			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
-			add_action(
-				"admin_print_styles-${submenu}",
-				function() use ( $suffix ) {
-					wp_enqueue_style( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/css/slimselect/slimselect${suffix}.css", array(), LITY_SLIMSELECT_VERSION, 'all' );
-					wp_enqueue_style( 'tagify', plugin_dir_url( __FILE__ ) . "../assets/css/tagify/tagify${suffix}.css", array(), LITY_TAGIFY_VERSION, 'all' );
-				}
-			);
+			wp_enqueue_style( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/css/slimselect/slimselect${suffix}.css", array(), LITY_SLIMSELECT_VERSION, 'all' );
+			wp_enqueue_style( 'tagify', plugin_dir_url( __FILE__ ) . "../assets/css/tagify/tagify${suffix}.css", array(), LITY_TAGIFY_VERSION, 'all' );
 
-			add_action(
-				"admin_print_scripts-${submenu}",
-				function() use ( $suffix ) {
+		}
 
-					wp_enqueue_script( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/js/slimselect/slimselect${suffix}.js", array( 'jquery' ), LITY_SLIMSELECT_VERSION, true );
-					wp_enqueue_script( 'tagify', plugin_dir_url( __FILE__ ) . '../assets/js/tagify/jQuery.tagify.min.js', array( 'jquery' ), LITY_TAGIFY_VERSION, true );
+		/**
+		 * Enqueue the Settings page scripts.
+		 */
+		public function enqueue_settings_scripts() {
 
-					$slimselect = "jQuery( document ).on( 'ready', function() {
-						new SlimSelect( {
-							select: '#disabled_on'
-						} );
-					} );";
+			$suffix = SCRIPT_DEBUG ? '' : '.min';
 
-					wp_add_inline_script( 'slimselect', $slimselect, 'after' );
+			wp_enqueue_script( 'slimselect', plugin_dir_url( __FILE__ ) . "../assets/js/slimselect/slimselect${suffix}.js", array( 'jquery' ), LITY_SLIMSELECT_VERSION, true );
+			wp_enqueue_script( 'tagify', plugin_dir_url( __FILE__ ) . '../assets/js/tagify/jQuery.tagify.min.js', array( 'jquery' ), LITY_TAGIFY_VERSION, true );
 
-					$tagify = "jQuery( document ).on( 'ready', function() {
-						jQuery( '#element_selectors, #excluded_element_selectors' ).tagify();
-					} );";
+			$slimselect = "jQuery( document ).on( 'ready', function() {
+				new SlimSelect( {
+					select: '#disabled_on'
+				} );
+			} );";
 
-					wp_add_inline_script( 'tagify', $tagify, 'after' );
+			wp_add_inline_script( 'slimselect', $slimselect, 'after' );
 
-				}
-			);
+			$tagify = "jQuery( document ).on( 'ready', function() {
+				jQuery( '#element_selectors, #excluded_element_selectors' ).tagify();
+			} );";
+
+			wp_add_inline_script( 'tagify', $tagify, 'after' );
 
 		}
 
@@ -286,18 +297,6 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			);
 
 			add_settings_field(
-				'use_background_image',
-				__( 'Use Background Image', 'lity' ),
-				array( $this, 'lity_use_background_image_dropdown' ),
-				'lity',
-				'lity_options',
-				array(
-					'label_for'   => 'use_background_image',
-					'description' => __( 'Should the lightbox use the selected image as a background?', 'lity' ),
-				)
-			);
-
-			add_settings_field(
 				'show_image_info',
 				__( 'Show Image Info', 'lity' ),
 				array( $this, 'lity_show_image_info_dropdown' ),
@@ -322,9 +321,21 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			);
 
 			add_settings_field(
+				'use_background_image',
+				__( 'Use Background Image', 'lity' ),
+				array( $this, 'lity_use_background_image_dropdown' ),
+				'lity',
+				'lity_options',
+				array(
+					'label_for'   => 'use_background_image',
+					'description' => __( 'Should the lightbox use the selected image as a background?', 'lity' ),
+				)
+			);
+
+			add_settings_field(
 				'disabled_on',
 				__( 'Disabled on', 'lity' ),
-				array( $this, 'lity_show_disabled_on_input' ),
+				array( $this, 'lity_show_disabled_on_dropdown' ),
 				'lity',
 				'lity_options',
 				array(
@@ -429,11 +440,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			?>
 
 			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
-				<option value="yes" <?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
+				<option value="yes"<?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
 					<?php esc_html_e( 'Yes', 'lity' ); ?>
 				</option>
 
-				<option value="no" <?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
+				<option value="no"<?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
 					<?php esc_html_e( 'No', 'lity' ); ?>
 				</option>
 			</select>
@@ -458,11 +469,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			?>
 
 			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
-				<option value="yes" <?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
+				<option value="yes"<?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
 					<?php esc_html_e( 'Yes', 'lity' ); ?>
 				</option>
 
-				<option value="no" <?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
+				<option value="no"<?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
 					<?php esc_html_e( 'No', 'lity' ); ?>
 				</option>
 			</select>
@@ -487,11 +498,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			?>
 
 			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
-				<option value="caption" <?php selected( $options[ $args['label_for'] ], 'caption', true ); ?>>
+				<option value="caption"<?php selected( $options[ $args['label_for'] ], 'caption', true ); ?>>
 					<?php esc_html_e( 'Caption', 'lity' ); ?>
 				</option>
 
-				<option value="description" <?php selected( $options[ $args['label_for'] ], 'description', true ); ?>>
+				<option value="description"<?php selected( $options[ $args['label_for'] ], 'description', true ); ?>>
 					<?php esc_html_e( 'Description', 'lity' ); ?>
 				</option>
 			</select>
@@ -516,11 +527,11 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 			?>
 
 			<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="lity_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
-				<option value="yes" <?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
+				<option value="yes"<?php selected( $options[ $args['label_for'] ], 'yes', true ); ?>>
 					<?php esc_html_e( 'Yes', 'lity' ); ?>
 				</option>
 
-				<option value="no" <?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
+				<option value="no"<?php selected( $options[ $args['label_for'] ], 'no', true ); ?>>
 					<?php esc_html_e( 'No', 'lity' ); ?>
 				</option>
 			</select>
@@ -538,7 +549,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 		 *
 		 * @param array $args Field args.
 		 */
-		public function lity_show_disabled_on_input( $args ) {
+		public function lity_show_disabled_on_dropdown( $args ) {
 
 			$options = $this->get_lity_options();
 
@@ -584,7 +595,7 @@ if ( ! class_exists( 'Lity_Options' ) ) {
 
 							?>
 
-							<option value="<?php echo esc_attr( $post_id ); ?>" <?php echo esc_attr( $selected ); ?>>
+							<option value="<?php echo esc_attr( $post_id ); ?>"<?php echo esc_attr( $selected ); ?>>
 								<?php echo empty( $post_title ) ? esc_html__( '(no title)', 'lity' ) : esc_html( $post_title ); ?>
 							</option>
 

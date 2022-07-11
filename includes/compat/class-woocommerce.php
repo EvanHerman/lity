@@ -43,11 +43,13 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 		 */
 		public function woocommerce_exclusions( $excluded_selectors ) {
 
+			// @codeCoverageIgnoreStart
 			if ( ! function_exists( 'is_plugin_active' ) ) {
 
 				include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 			}
+			// @codeCoverageIgnoreEnd
 
 			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 
@@ -72,11 +74,13 @@ if ( ! class_exists( 'Lity_WooCommerce' ) ) {
 
 			$theme = wp_get_theme( 'storefront' );
 
+			// @codeCoverageIgnoreStart
 			if ( ! $theme->exists() ) {
 
 				return $excluded_selectors;
 
 			}
+			// @codeCoverageIgnoreEnd
 
 			array_push( $excluded_selectors, '.storefront-product-pagination img' );
 

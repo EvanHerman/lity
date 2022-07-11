@@ -21,6 +21,11 @@
 </p>
 
 <p align="center">
+	<a href="https://codeclimate.com/github/EvanHerman/lity/maintainability"><img src="https://api.codeclimate.com/v1/badges/19eb1086b1170a259f0c/maintainability" /></a>
+	<a href="https://codeclimate.com/github/EvanHerman/lity/test_coverage"><img src="https://api.codeclimate.com/v1/badges/19eb1086b1170a259f0c/test_coverage" /></a>
+</p>
+
+<p align="center">
 	<a href="https://wordpress.org/" target="_blank">
 		<img src="https://img.shields.io/static/v1?label=&message=5.0+-+6.0&color=blue&style=flat-square&logo=wordpress&logoColor=white" alt="WordPress Versions">
 	</a>
